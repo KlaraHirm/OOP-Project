@@ -10,6 +10,7 @@ Add your own name (do not add the names for others!) to the section below.
 
 | Profile Picture | Name | Email |
 |---|---|---|
+| <img src="https://secure.gravatar.com/avatar/f004a03bd72f9a2f9595a4676d567d20?s=192&d=identicon" width="50px" height="50px" /> | Alexander Nitters | A.F.Nitters@student.tudelft.nl |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here | Y.NameHere@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->

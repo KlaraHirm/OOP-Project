@@ -8,9 +8,10 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## Group members
 
-| Profile Picture | Name | Email |
-|---|---|---|
-| ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here | Y.NameHere@student.tudelft.nl |
+| Profile Picture | Name            | Email                          |
+|---|-----------------|--------------------------------|
+| ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here  | Y.NameHere@student.tudelft.nl  |
+| <img src="https://secure.gravatar.com/avatar/d77dd5f4f470c381b393d8123415b8a3?s=800&d=identicon" width="50px" height="50px" />  | Klara Hirmanova | K.Hirmanova@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->

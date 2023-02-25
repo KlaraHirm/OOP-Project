@@ -14,6 +14,7 @@ Add your own name (do not add the names for others!) to the section below.
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here | Y.NameHere@student.tudelft.nl |
 | <img src="https://secure.gravatar.com/avatar/d77dd5f4f470c381b393d8123415b8a3?s=800&d=identicon" width="50px" height="50px" />  | Klara Hirmanova | K.Hirmanova@student.tudelft.nl |
 | <img src="https://secure.gravatar.com/avatar/9c78da19bcf3e83ba08e2e24267c050a?s=46&d=identicon" width="50px" height="50px" />  | Karsten van der Deijl | K.C.vanderDeijl@student.tudelft.nl |
+| <img src="https://secure.gravatar.com/avatar/30fa1bf669762f82e8d5d55a841f46f9?s=800&d=identicon" width="50px" height="50px" />  | Daniel Langov | D.Langov@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->

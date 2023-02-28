@@ -15,6 +15,7 @@ Add your own name (do not add the names for others!) to the section below.
 | <img src="https://secure.gravatar.com/avatar/d77dd5f4f470c381b393d8123415b8a3?s=800&d=identicon" width="50px" height="50px" /> | Klara Hirmanova       | K.Hirmanova@student.tudelft.nl     |
 | <img src="https://secure.gravatar.com/avatar/9c78da19bcf3e83ba08e2e24267c050a?s=46&d=identicon" width="50px" height="50px" />  | Karsten van der Deijl | K.C.vanderDeijl@student.tudelft.nl |
 | <img src="https://secure.gravatar.com/avatar/30fa1bf669762f82e8d5d55a841f46f9?s=800&d=identicon" width="50px" height="50px" /> | Daniel Langov         | D.Langov@student.tudelft.nl        |
+| <img src="https://secure.gravatar.com/avatar/d016c356cb0344fc940a7c625ee631e0?s=192&d=identicon" width="50px" height="50px" /> | Kars de Jong         | k.o.dejong@student.tudelft.nl        |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->

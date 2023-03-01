@@ -11,6 +11,19 @@ public class Board
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
-   @ElementCollection
-   public List<CardList> cardLists = new ArrayList<CardList>();
+    public String title;
+
+   @OneToMany
+   public List<CardList> cardLists;
+
+   @SuppressWarnings("unused")
+   private Board() {
+       // for object mappers
+   }
+
+   public Board(String title){
+       this.title = title;
+       this.cardLists = new ArrayList<CardList>();
+   }
+
 }

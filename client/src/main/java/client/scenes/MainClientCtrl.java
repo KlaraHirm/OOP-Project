@@ -2,6 +2,9 @@ package client.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -37,5 +40,13 @@ public class MainClientCtrl {
         primaryStage.setTitle("Main Page: Adding Board");
         primaryStage.setScene(add);
 //        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void addList(){
+        SplitPane board = (SplitPane) add.lookup("#board");
+        AnchorPane child = new AnchorPane();
+        child.setStyle("-fx-background-color: #CAE2F0");
+        child.getChildren().add(new Label("Title"));
+        board.getItems().add(child);
     }
 }

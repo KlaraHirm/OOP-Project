@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.Initializable;
+import javafx.scene.control.SplitPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,6 +24,10 @@ public class NewBoardCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void addNewList() {
+        mainCtrl.addList();
     }
 
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="empty_board" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="375.0" prefWidth="700.0" style="-fx-background-color: e9ecef;" AnchorPane.bottomAnchor="0.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
+   <children>
+      <Label alignment="CENTER" layoutY="22.0" prefHeight="18.0" prefWidth="600.0" text="Untitled" textAlignment="CENTER" textFill="#2274a5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <SplitPane id="board" dividerPositions="0.5" layoutX="25.0" layoutY="56.0" prefHeight="223.0" prefWidth="650.0" style="-fx-background-color: #CAE2F0;" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="55.0">
+         <items>
+            <AnchorPane fx:id="board" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #CAE2F0;" />
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="182.0" prefWidth="320.0" style="-fx-background-color: #CAE2F0;" />
+         </items>
+      </SplitPane>
+      <Button fx:id="new_list" layoutX="25.0" layoutY="342.0" mnemonicParsing="false" text="Add New List" textFill="#2274a5" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="25.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>

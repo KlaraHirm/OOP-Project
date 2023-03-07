@@ -1,7 +1,10 @@
 package client.scenes;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
@@ -14,36 +17,43 @@ public class MainClientCtrl {
     private MainPageCtrl overviewCtrl;
     private Scene overview;
 
-    private NewBoardCtrl addCtrl;
-    private Scene add;
+    private BoardCtrl boardCtrl;
+    private Scene board;
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<NewBoardCtrl, Parent> add) {
+                           Pair<BoardCtrl, Parent> board) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+
+        this.boardCtrl = board.getKey();
+        this.board = new Scene(board.getValue());
 
         showOverview();
         primaryStage.show();
+
     }
 
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-//        overviewCtrl.refresh();
     }
 
     public void showAdd() {
         primaryStage.setTitle("Main Page: Adding Board");
-        primaryStage.setScene(add);
-//        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+        AnchorPane page = (AnchorPane) overview.lookup("#main_page");
+        AnchorPane empty_board = (AnchorPane) board.lookup("#empty_board");
+        AnchorPane.setBottomAnchor(page,0.0);
+        page.getChildren().add(empty_board);
+        Button newList = (Button) overview.lookup("#new_list");
+        newList.setOnAction(e->{
+            addList();
+        });
     }
 
     public void addList(){
-        SplitPane board = (SplitPane) add.lookup("#board");
+        SplitPane board = (SplitPane) overview.lookup("#board");
         AnchorPane child = new AnchorPane();
         child.setStyle("-fx-background-color: #CAE2F0");
         child.getChildren().add(new Label("Title"));

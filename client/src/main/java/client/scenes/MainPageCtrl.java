@@ -28,4 +28,5 @@ public class MainPageCtrl implements Initializable {
     public void addBoard() {
         mainCtrl.showAdd();
     }
+
 }

@@ -6,18 +6,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane accessibleRole="BUTTON" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainPageCtrl">
+<AnchorPane fx:id="main_page" accessibleRole="BUTTON" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainPageCtrl">
    <children>
-      <AnchorPane prefHeight="70.0" prefWidth="600.0" style="-fx-background-color: f8f9fa;">
+      <AnchorPane prefHeight="70.0" prefWidth="600.0" style="-fx-background-color: f8f9fa;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="166.0" layoutY="24.0" text="Welcome to your digital workspace!" textFill="#2274a5">
+            <Label alignment="CENTER" layoutY="24.0" maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="600.0" text="Welcome to your digital workspace!" textFill="#2274a5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#addBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5">
+      <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#addBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="26.0">
          <font>
             <Font size="18.0" />
          </font>

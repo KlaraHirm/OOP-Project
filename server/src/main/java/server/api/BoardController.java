@@ -19,30 +19,27 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import commons.Quote;
 import server.database.BoardRepository;
-import server.database.QuoteRepository;
+import server.database.CardListRepository;
 
 import commons.*;
 
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/api/board")
 public class BoardController
 {
 
     private final Random random;
     private final BoardRepository repo;
 
-    public BoardController(Random random, BoardRepository repo) {
+    private final CardListRepository cardListRepo;
+
+    public BoardController(Random random, BoardRepository repo, CardListRepository cardListRepo) {
         this.random = random;
         this.repo = repo;
+        this.cardListRepo = cardListRepo;
     }
 
     @GetMapping(path = { "", "/" })
@@ -51,30 +48,36 @@ public class BoardController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Board> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Board> getBoard(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-//    @PostMapping(path = { "", "/" })
-//    public ResponseEntity<Board> add(@RequestBody Board board) {
-//
-//        if (board.person == null || isNullOrEmpty(board.person.firstName) || isNullOrEmpty(board.person.lastName)
-//                || isNullOrEmpty(board.quote)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        Board saved = repo.save(Board);
-//        return ResponseEntity.ok(saved);
-//    }
-
-    @GetMapping(path = {"", "/createBoard"})
-    public ResponseEntity<Board>  addTest()
+    @PostMapping(path = { "", "" })
+    public ResponseEntity<Board> addBoard(@RequestBody Board board)
     {
-        Board board = new Board("test");
+        if (board.title == null)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+
         Board saved = repo.save(board);
         return ResponseEntity.ok(saved);
+    }
+
+    @GetMapping("board/{id}/createcardlist")
+    public ResponseEntity<CardList> addTestCardlist(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Board board = repo.findById(id).get();
+        CardList cardList = new CardList("testList");
+        CardList saved = cardListRepo.save(cardList);
+        board.cardLists.add(saved);
+        repo.save(board);
+        return ResponseEntity.ok(cardList);
     }
 }

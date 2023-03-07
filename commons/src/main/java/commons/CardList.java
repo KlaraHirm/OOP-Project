@@ -13,10 +13,9 @@ public class CardList
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
+    public String title;
 
-    String title;
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Card> cards;
 
     @SuppressWarnings("unused")

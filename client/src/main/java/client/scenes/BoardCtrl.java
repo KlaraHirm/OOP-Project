@@ -9,13 +9,13 @@ import javafx.scene.layout.AnchorPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for Board.fxml scene
+ */
 public class BoardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
-
-    @FXML
-    private AnchorPane empty_board;
 
 
     @Inject

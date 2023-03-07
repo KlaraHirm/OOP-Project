@@ -14,6 +14,9 @@ public class MainPageCtrl implements Initializable {
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
 
+    private int boards;
+
+
 
     @Inject
     public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
@@ -27,7 +30,9 @@ public class MainPageCtrl implements Initializable {
     }
 
     public void addBoard() throws IOException {
-        mainCtrl.showAdd();
+        mainCtrl.showOverview();
+        mainCtrl.showAdd(boards);
+        boards++;
     }
 
 }

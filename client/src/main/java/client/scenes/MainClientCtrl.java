@@ -29,6 +29,7 @@ public class MainClientCtrl {
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
                            Pair<BoardCtrl, Parent> board) {
         this.primaryStage = primaryStage;
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -51,22 +52,31 @@ public class MainClientCtrl {
 
     /**
      * Add new empty board
+     * @param board_count number of boards in application
      * @throws IOException
      */
     public void showAdd(int board_count) throws IOException {
         primaryStage.setTitle("Main Page: Adding Board");
+
+        //load board template into main page using FXMLLoader
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent root = loader.load();
         page.getChildren().addAll(root);
+
+        //select template board elements
         AnchorPane container = (AnchorPane) overview.lookup("#board_container");
         AnchorPane.setTopAnchor(container,130.0);
-        container.setId("board_container_"+board_count);
         Button newList = (Button) overview.lookup("#new_list");
-        newList.setId("new_list_"+board_count);
         HBox box = (HBox) overview.lookup("#board");
+
+        //rename board element ids to their specific ids
+        newList.setId("new_list_"+board_count);
+        container.setId("board_container_"+board_count);
         box.setId("board_"+board_count);
+
+        //set action on click of new list
         newList.setOnAction(e->{
             addList(board_count);
         });
@@ -74,9 +84,11 @@ public class MainClientCtrl {
 
     /**
      * Add new empty list
+     * @param board_count number of boards in application
      */
     public void addList(int board_count){
         HBox board = (HBox) overview.lookup("#board_"+board_count);
+        // for now new list is AnchorPane will be a template
         AnchorPane child = new AnchorPane();
         child.setStyle("-fx-background-color: #9ea0a5");
         child.getChildren().add(new Label("Title"));

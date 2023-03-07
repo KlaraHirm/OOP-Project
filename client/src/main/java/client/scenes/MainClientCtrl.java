@@ -2,14 +2,21 @@ package client.scenes;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import java.io.IOException;
+import java.net.URL;
+
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
 
 public class MainClientCtrl {
     private Stage primaryStage;
@@ -40,12 +47,13 @@ public class MainClientCtrl {
         primaryStage.setScene(overview);
     }
 
-    public void showAdd() {
+    public void showAdd() throws IOException {
         primaryStage.setTitle("Main Page: Adding Board");
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
-        AnchorPane empty_board = (AnchorPane) board.lookup("#empty_board");
-        AnchorPane.setBottomAnchor(page,0.0);
-        page.getChildren().add(empty_board);
+        URL location = getClass().getResource("Board.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent root = loader.load();
+        page.getChildren().addAll(root);
         Button newList = (Button) overview.lookup("#new_list");
         newList.setOnAction(e->{
             addList();
@@ -53,10 +61,10 @@ public class MainClientCtrl {
     }
 
     public void addList(){
-        SplitPane board = (SplitPane) overview.lookup("#board");
+        HBox board = (HBox) overview.lookup("#board");
         AnchorPane child = new AnchorPane();
-        child.setStyle("-fx-background-color: #CAE2F0");
+        child.setStyle("-fx-background-color: #9ea0a5");
         child.getChildren().add(new Label("Title"));
-        board.getItems().add(child);
+        board.getChildren().add(child);
     }
 }

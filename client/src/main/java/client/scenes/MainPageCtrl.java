@@ -1,5 +1,6 @@
 package client.scenes;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,7 +26,7 @@ public class MainPageCtrl implements Initializable {
 
     }
 
-    public void addBoard() {
+    public void addBoard() throws IOException {
         mainCtrl.showAdd();
     }
 

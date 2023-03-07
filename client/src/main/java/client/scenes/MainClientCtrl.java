@@ -54,6 +54,10 @@ public class MainClientCtrl {
         FXMLLoader loader = new FXMLLoader(location);
         Parent root = loader.load();
         page.getChildren().addAll(root);
+        AnchorPane container = (AnchorPane) overview.lookup("#board_container");
+        AnchorPane.setLeftAnchor(container,0.0);
+        AnchorPane.setRightAnchor(container,0.0);
+        AnchorPane.setTopAnchor(container,130.0);
         Button newList = (Button) overview.lookup("#new_list");
         newList.setOnAction(e->{
             addList();

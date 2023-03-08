@@ -99,6 +99,7 @@ public class MainClientCtrl {
      * @param board_id number of boards in application
      */
     public void addList(int board_id, int list_id) throws IOException {
+        primaryStage.setTitle("Main Page: Adding List");
         HBox board = (HBox) overview.lookup("#board_"+board_id);
 
         //load list template into board using FXMLLoader
@@ -128,6 +129,7 @@ public class MainClientCtrl {
     }
 
     public void addCard(int board_id, int list_id, int card_id) throws IOException {
+        primaryStage.setTitle("Main Page: Adding Card");
         VBox list = (VBox) overview.lookup("#list_"+list_id);
 
         //load card template into list using FXMLLoader

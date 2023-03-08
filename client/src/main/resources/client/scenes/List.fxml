@@ -4,12 +4,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="240.0" prefWidth="700.0" style="-fx-border-color: #2274A5; -fx-background-color: #eff6fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label text="Untitled" textFill="#2274a5">
          <font>
-            <Font size="18.0" />
+            <Font size="14.0" />
          </font>
       </Label>
    </children>

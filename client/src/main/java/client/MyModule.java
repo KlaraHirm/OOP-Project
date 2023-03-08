@@ -27,6 +27,7 @@ public class MyModule implements Module {
         binder.bind(MainClientCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MainPageCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
     }
 
 }

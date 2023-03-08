@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -25,8 +26,11 @@ public class MainClientCtrl {
     private BoardCtrl boardCtrl;
     private Scene board;  //empty board template
 
+    private ListCtrl listCtrl;
+    private Scene list;  //empty board template
+
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<BoardCtrl, Parent> board) {
+                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -35,6 +39,9 @@ public class MainClientCtrl {
 
         this.boardCtrl = board.getKey();
         this.board = new Scene(board.getValue());
+
+        this.listCtrl = list.getKey();
+        this.list = new Scene(list.getValue());
 
         showOverview();
         primaryStage.show();
@@ -77,7 +84,11 @@ public class MainClientCtrl {
 
         //set action on click of new list
         newList.setOnAction(e->{
-            addList(board_count);
+            try {
+                addList(board_count);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
     }
 
@@ -85,12 +96,14 @@ public class MainClientCtrl {
      * Add new empty list
      * @param board_count number of boards in application
      */
-    public void addList(int board_count){
+    public void addList(int board_count) throws IOException {
         HBox board = (HBox) overview.lookup("#board_"+board_count);
-        // for now new list is AnchorPane will be a template
-        AnchorPane child = new AnchorPane();
-        child.setStyle("-fx-background-color: #9ea0a5");
-        child.getChildren().add(new Label("Title"));
-        board.getChildren().add(child);
+
+        //load board template into main page using FXMLLoader
+        URL location = getClass().getResource("List.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent root = loader.load();
+        board.getChildren().addAll(root);
+        HBox.setHgrow(root, Priority.ALWAYS);
     }
 }

@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -57,16 +59,17 @@ public class MainClientCtrl {
 
     /**
      * Add new empty board
-     * @param board_count number of boards in application
+     * @param board_id number of boards in application
      * @throws IOException
      */
-    public void showAdd(int board_count) throws IOException {
+    public void showAdd(int board_id) throws IOException {
         primaryStage.setTitle("Main Page: Adding Board");
 
         //load board template into main page using FXMLLoader
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
+        loader.setController(overviewCtrl); // setting controller to MainPage before adding it
         Parent root = loader.load();
         page.getChildren().addAll(root);
 
@@ -77,14 +80,14 @@ public class MainClientCtrl {
         HBox box = (HBox) overview.lookup("#board");
 
         //rename board element ids to their specific ids
-        newList.setId("new_list_"+board_count);
-        container.setId("board_container_"+board_count);
-        box.setId("board_"+board_count);
+        newList.setId("new_list_"+board_id);
+        container.setId("board_container_"+board_id);
+        box.setId("board_"+board_id);
 
         //set action on click of new list
         newList.setOnAction(e->{
             try {
-                addList(board_count);
+                overviewCtrl.addList(board_id);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -93,10 +96,10 @@ public class MainClientCtrl {
 
     /**
      * Add new empty list
-     * @param board_count number of boards in application
+     * @param board_id number of boards in application
      */
-    public void addList(int board_count) throws IOException {
-        HBox board = (HBox) overview.lookup("#board_"+board_count);
+    public void addList(int board_id, int list_id) throws IOException {
+        HBox board = (HBox) overview.lookup("#board_"+board_id);
 
         //load list template into board using FXMLLoader
         URL location = getClass().getResource("List.fxml");
@@ -105,5 +108,36 @@ public class MainClientCtrl {
         board.getChildren().addAll(root);
         // margin of lists when added to board
         HBox.setMargin(root, new Insets(10, 10, 10, 10));
+        root.autosize();
+        HBox.setHgrow(root, Priority.ALWAYS);  // resizing of child elements to fit HBox
+
+        //rename list elements to be identified by their id (for now random int generated in MainPageCtrl)
+        VBox box = (VBox) overview.lookup("#list");
+        Button new_card = (Button) overview.lookup("#new_card");
+        box.setId("list_"+list_id);
+        new_card.setId("new_card_"+list_id);
+
+        //set action on click of new card
+        new_card.setOnAction(e->{
+            try {
+                overviewCtrl.addCard(board_id, list_id);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    public void addCard(int board_id, int list_id, int card_id) throws IOException {
+        VBox list = (VBox) overview.lookup("#list_"+list_id);
+
+        //load card template into list using FXMLLoader
+        URL location = getClass().getResource("Card.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent root = loader.load();
+        list.getChildren().addAll(root);
+        VBox.setVgrow(root, Priority.ALWAYS); // resizing of child elements to fit VBox
+
+        // rename card elements to be identified by their id
+        //set action on click
     }
 }

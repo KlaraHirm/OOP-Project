@@ -1,6 +1,7 @@
 package client.scenes;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -99,11 +100,12 @@ public class MainClientCtrl {
     public void addList(int board_count) throws IOException {
         HBox board = (HBox) overview.lookup("#board_"+board_count);
 
-        //load board template into main page using FXMLLoader
+        //load list template into board using FXMLLoader
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent root = loader.load();
         board.getChildren().addAll(root);
-        HBox.setHgrow(root, Priority.ALWAYS);
+        // margin of lists when added to board
+        HBox.setMargin(root, new Insets(10, 10, 10, 10));
     }
 }

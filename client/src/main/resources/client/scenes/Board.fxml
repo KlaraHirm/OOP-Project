@@ -19,6 +19,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <HBox fx:id="board" alignment="CENTER" layoutX="5.0" layoutY="67.0" prefHeight="240.0" prefWidth="700.0" spacing="10.0" style="-fx-background-color: #CAE2F0;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
+      <HBox fx:id="board" alignment="CENTER" layoutX="5.0" layoutY="67.0" prefHeight="240.0" prefWidth="700.0" style="-fx-background-color: #CAE2F0;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
    </children>
 </AnchorPane>

@@ -31,15 +31,24 @@ public class ServerConnectionCtrl {
     private TextField server_address_field;
 
 
-
+    /**
+     * constructor
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public ServerConnectionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * method to execute when the connect server button is clicked
+     * should connect to the given server address and go to the main page of that address
+     */
     public void connectServer() {
         server_address = server_address_field.getText();
         server_address_field.clear();
+        //will then go to main page onAction
     }
 }

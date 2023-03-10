@@ -25,10 +25,16 @@ public class MainCtrl {
     private Stage primaryStage;
 
     private ServerConnectionCtrl overviewCtrl;
+    //might need to be changed to refer to main page
     private Scene overview;
 
     private Scene add;
 
+    /**
+     * the initialize method for the primary stage
+     * @param primaryStage
+     * @param overview
+     */
     public void initialize(Stage primaryStage, Pair<ServerConnectionCtrl, Parent> overview) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -38,6 +44,9 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * overview method
+     */
     public void showOverview() {
         primaryStage.setTitle("Server Connection");
         primaryStage.setScene(overview);

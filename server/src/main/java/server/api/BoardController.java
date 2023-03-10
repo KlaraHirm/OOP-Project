@@ -56,7 +56,7 @@ public class BoardController
     }
 
     @PostMapping(path = { "", "/" })
-    public ResponseEntity<Board> postBoard(@RequestBody Board board)
+    public ResponseEntity<Board> addBoard(@RequestBody Board board)
     {
         if (board.title == null)
         {

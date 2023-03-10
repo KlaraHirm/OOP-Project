@@ -34,8 +34,12 @@ public class MainClientCtrl {
     //might need to be changed to refer to main page
     private Scene server;
 
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list, Pair<ServerConnectionCtrl, Parent> server) {
+                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list,
+                           Pair<ServerConnectionCtrl, Parent> server, Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -50,6 +54,9 @@ public class MainClientCtrl {
 
         this.serverCtrl = server.getKey();
         this.server = new Scene(server.getValue());
+
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
         showOverview();
         primaryStage.show();

@@ -20,8 +20,6 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 
-
-
 public class MyModule implements Module {
 
     @Override
@@ -31,6 +29,6 @@ public class MyModule implements Module {
         binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
-
+        binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
     }
 }

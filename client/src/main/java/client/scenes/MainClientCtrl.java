@@ -30,8 +30,12 @@ public class MainClientCtrl {
     private ListCtrl listCtrl;
     private Scene list;  //empty board template
 
+    private ServerConnectionCtrl serverCtrl;
+    //might need to be changed to refer to main page
+    private Scene server;
+
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list) {
+                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list, Pair<ServerConnectionCtrl, Parent> server) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -44,6 +48,9 @@ public class MainClientCtrl {
         this.listCtrl = list.getKey();
         this.list = new Scene(list.getValue());
 
+        this.serverCtrl = server.getKey();
+        this.server = new Scene(server.getValue());
+
         showOverview();
         primaryStage.show();
 
@@ -54,6 +61,14 @@ public class MainClientCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
+        primaryStage.setScene(overview);
+    }
+
+    /**
+     * Show server window
+     */
+    public void showServer() {
+        primaryStage.setTitle("Server Connection");
         primaryStage.setScene(overview);
     }
 

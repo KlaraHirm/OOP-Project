@@ -20,14 +20,17 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 
+
+
 public class MyModule implements Module {
 
     @Override
     public void configure(Binder binder) {
         binder.bind(MainClientCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MainPageCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
-    }
 
+    }
 }

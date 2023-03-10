@@ -15,20 +15,19 @@
  */
 package client;
 
+import client.scenes.*;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
 
 public class MyModule implements Module {
 
     @Override
     public void configure(Binder binder) {
-        binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MainClientCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MainPageCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
     }
+
 }

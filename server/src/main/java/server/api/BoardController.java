@@ -68,7 +68,7 @@ public class BoardController
     }
 
     @PostMapping(path = { "/{id}", "/{id}/" })
-    public ResponseEntity<Board> postBoardWithID(@RequestBody Board board, @PathVariable("id") long id)
+    public ResponseEntity<Board> addBoardWithID(@RequestBody Board board, @PathVariable("id") long id)
     {
         if (board.title == null || id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();

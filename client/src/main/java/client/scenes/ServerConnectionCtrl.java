@@ -24,7 +24,7 @@ import javafx.scene.control.TextField;
 public class ServerConnectionCtrl {
 
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final MainClientCtrl mainCtrl;
     private String server_address;
 
     @FXML
@@ -37,7 +37,7 @@ public class ServerConnectionCtrl {
      * @param mainCtrl
      */
     @Inject
-    public ServerConnectionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ServerConnectionCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }

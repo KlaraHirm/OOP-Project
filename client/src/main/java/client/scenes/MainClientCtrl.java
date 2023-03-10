@@ -67,10 +67,7 @@ public class MainClientCtrl {
 
         //load board template into main page using FXMLLoader
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
-        URL location = getClass().getResource("Board.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
-        loader.setController(overviewCtrl); // setting controller to MainPage before adding it
-        Parent root = loader.load();
+        Parent root = loadFXML("Board.fxml");
         page.getChildren().addAll(root);
 
         //select template board elements
@@ -102,10 +99,8 @@ public class MainClientCtrl {
         primaryStage.setTitle("Main Page: Adding List");
         HBox board = (HBox) overview.lookup("#board_"+board_id);
 
-        //load list template into board using FXMLLoader
-        URL location = getClass().getResource("List.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
-        Parent root = loader.load();
+        //load list template into board using loadFXML
+        Parent root = loadFXML("List.fxml");
         board.getChildren().addAll(root);
         // margin of lists when added to board
         HBox.setMargin(root, new Insets(10, 10, 10, 10));
@@ -128,18 +123,36 @@ public class MainClientCtrl {
         });
     }
 
+    /**
+     * method which creates a card to specified list
+     * @param board_id id of a board in a scene
+     * @param list_id id of a list in a scene
+     * @param card_id id of a card in a scene
+     * @throws IOException
+     */
     public void addCard(int board_id, int list_id, int card_id) throws IOException {
         primaryStage.setTitle("Main Page: Adding Card");
         VBox list = (VBox) overview.lookup("#list_"+list_id);
 
-        //load card template into list using FXMLLoader
-        URL location = getClass().getResource("Card.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
-        Parent root = loader.load();
+        //load card template into list using loadFXML method
+        Parent root = loadFXML("Card.fxml");
         list.getChildren().addAll(root);
         VBox.setVgrow(root, Priority.ALWAYS); // resizing of child elements to fit VBox
 
         // rename card elements to be identified by their id
         //set action on click
     }
+
+    /**
+     * method which loads fxml resource using FXMLLoader and returns it as JavaFX Parent object
+     * @param resource resource where fxml file is
+     * @return JavaFX PArent object of fxml file
+     */
+    public Parent loadFXML(String resource) throws IOException {
+        URL location = getClass().getResource(resource);
+        FXMLLoader loader = new FXMLLoader(location);
+        return loader.load();
+    }
+
+
 }

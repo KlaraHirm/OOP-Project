@@ -79,6 +79,16 @@ public class BoardController
         return ResponseEntity.ok(saved);
     }
 
+    @DeleteMapping(path = { "/{id}", "/{id}/" })
+    public ResponseEntity<Integer> deleteBoardWithID(@PathVariable("id") long id)
+    {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        repo.deleteById(id);
+        return ResponseEntity.ok(1);
+    }
+
     @PostMapping(path = { "/{id}/cardlist", "/{id}/cardlist/" })
     public ResponseEntity<CardList> postCardlist(@RequestBody CardList cardList, @PathVariable("id") long id)
     {

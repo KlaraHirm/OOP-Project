@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,7 +37,7 @@ public class MainPageCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        boards_list.setItems(data);
+        // convertor for board_list (dropdown menu field with board names)
         boards_list.setConverter(new StringConverter<Board>() {
 
             @Override
@@ -53,13 +54,13 @@ public class MainPageCtrl implements Initializable {
     }
 
     /**
-     * Method which shows existing board
+     * method which shows existing board
      * @param board object of class Board
      * @throws IOException
      */
     public void addBoard(Board board) throws IOException {
+        refresh();
         mainCtrl.showBoard(board);
-        boards_list.setItems(data);
     }
 
     /**
@@ -71,6 +72,16 @@ public class MainPageCtrl implements Initializable {
         server.addBoard(board);
         mainCtrl.hideCurrentBoard();
         addBoard(board);
+    }
+
+    /**
+     * deletes board currently shown from server and client
+     * @param board board to be deleted
+     */
+    public void deleteBoard(Board board) {
+        server.deleteBoard(board);
+        mainCtrl.hideCurrentBoard();
+        refresh();
     }
 
     /**
@@ -90,9 +101,14 @@ public class MainPageCtrl implements Initializable {
      */
     public void newList(Board board) throws IOException {
         CardList list = new CardList("Untitled");
+//        board.cardLists.add(list);
+//        server.addList(board, list); // TODO - Bad Request Error
+        refresh();
         list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now randomly generated id because id of new CardList is always 0
         addList(board, list);
     }
+
+    //TODO - public void deleteList(CardList list)
 
     /**
      * method which shows existing card
@@ -113,7 +129,19 @@ public class MainPageCtrl implements Initializable {
      */
     public void newCard(Board board, CardList list) throws IOException {
         Card card = new Card("Untitled");
+        list.cards.add(card);
         addCard(board, list, card);
+    }
+
+    //TODO - public void deleteCard(Card card)
+
+    /**
+     * refreshes data variable
+     */
+    public void refresh() {
+        var boards = server.getBoards();
+        data = FXCollections.observableList(boards);
+        boards_list.setItems(data);
     }
 
 

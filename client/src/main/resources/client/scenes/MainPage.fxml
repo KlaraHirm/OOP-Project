@@ -16,7 +16,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="44.0" layoutY="12.0" mnemonicParsing="false" onAction="#refresh" text="Button" />
+            <Button layoutX="33.0" layoutY="22.0" mnemonicParsing="false" onAction="#refresh" text="Button" />
          </children>
       </AnchorPane>
       <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#newBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="26.0">
@@ -27,7 +27,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ComboBox layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">
+      <ComboBox fx:id="boards_list" layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

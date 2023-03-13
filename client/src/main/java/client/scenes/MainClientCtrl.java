@@ -30,11 +30,11 @@ public class MainClientCtrl {
 
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-
 
         showOverview();
         primaryStage.show();
@@ -46,6 +46,14 @@ public class MainClientCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
+        primaryStage.setScene(overview);
+    }
+
+    /**
+     * Show server window
+     */
+    public void showServer() {
+        primaryStage.setTitle("Server Connection");
         primaryStage.setScene(overview);
     }
 
@@ -156,7 +164,6 @@ public class MainClientCtrl {
     public Parent loadFXML(String resource) throws IOException {
         URL location = getClass().getResource(resource);
         FXMLLoader loader = new FXMLLoader(location);
-//        loader.setController(overviewCtrl);
         return loader.load();
     }
 

@@ -55,7 +55,7 @@ public class BoardController
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping(path = { "", "" })
+    @PostMapping(path = { "", "/" })
     public ResponseEntity<Board> addBoard(@RequestBody Board board)
     {
         if (board.title == null)
@@ -67,17 +67,39 @@ public class BoardController
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("board/{id}/createcardlist")
-    public ResponseEntity<CardList> addTestCardlist(@PathVariable("id") long id) {
+    @PostMapping(path = { "/{id}", "/{id}/" })
+    public ResponseEntity<Board> addBoardWithID(@RequestBody Board board, @PathVariable("id") long id)
+    {
+        if (board.title == null || id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        board.id = id;
+        Board saved = repo.save(board);
+        return ResponseEntity.ok(saved);
+    }
+
+    @DeleteMapping(path = { "/{id}", "/{id}/" })
+    public ResponseEntity<Integer> deleteBoardWithID(@PathVariable("id") long id)
+    {
         if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        repo.deleteById(id);
+        return ResponseEntity.ok(1);
+    }
+
+    @PostMapping(path = { "/{id}/cardlist", "/{id}/cardlist/" })
+    public ResponseEntity<CardList> postCardlist(@RequestBody CardList cardList, @PathVariable("id") long id)
+    {
+        if (cardList.title == null || id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
 
         Board board = repo.findById(id).get();
-        CardList cardList = new CardList("testList");
-        CardList saved = cardListRepo.save(cardList);
-        board.cardLists.add(saved);
-        repo.save(board);
+        board.cardLists.add(cardList);
+
+        Board saved = repo.save(board);
         return ResponseEntity.ok(cardList);
     }
 }

@@ -7,7 +7,8 @@ import java.util.ResourceBundle;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import javafx.beans.property.SimpleStringProperty;
+import commons.Card;
+import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -52,32 +53,69 @@ public class MainPageCtrl implements Initializable {
         });
     }
 
-    public void addBoard(long board_id) throws IOException {
-        mainCtrl.showAdd(board_id);
+    /**
+     * Method which shows existing board
+     * @param board object of class Board
+     * @throws IOException
+     */
+    public void addBoard(Board board) throws IOException {
+        mainCtrl.showBoard(board);
         boards_list.setItems(data);
     }
 
+    /**
+     * method which creates new board (used as onAction) and adds id to db
+     * @throws IOException
+     */
     public void newBoard() throws IOException {
         Board board = new Board("Untitled");
         server.addBoard(board);
-        addBoard(board.id);
-        refresh();
+        mainCtrl.hideCurrentBoard();
+        addBoard(board);
     }
 
-    public void addList(long board_id) throws IOException {
-        mainCtrl.addList((int) board_id, (int)(Math.random()*(Integer.MAX_VALUE)));
+    /**
+     * method which shows existing list
+     * @param board object of class Board where list is
+     * @param list object of class CardList which is to be shown
+     * @throws IOException
+     */
+    public void addList(Board board, CardList list) throws IOException {
+        mainCtrl.showList(board, list);
     }
 
-    public void addCard(int board_id, int list_id) throws IOException {
-        mainCtrl.addCard(board_id, list_id, (int)(Math.random()*(Integer.MAX_VALUE)));
+    /**
+     * method which creates new list (used as onAction) to a board specified by id
+     * @param board object of class Board where list is added
+     * @throws IOException
+     */
+    public void newList(Board board) throws IOException {
+        CardList list = new CardList("Untitled");
+        list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now randomly generated id because id of new CardList is always 0
+        addList(board, list);
     }
 
-    public void refresh() throws IOException {
-        var boards = server.getBoards();
-        data = FXCollections.observableList(boards);
-        for(Board b:data){
-            addBoard(b.id);
-        }
+    /**
+     * method which shows existing card
+     * @param board object of class Board where card is
+     * @param list object of class CardList where card is
+     * @param card object of class Card which is to be shown
+     * @throws IOException
+     */
+    public void addCard(Board board, CardList list, Card card) throws IOException {
+        mainCtrl.showCard(board, list, card);
     }
+
+    /**
+     * method which creates new card (used as onAction)
+     * @param board object of class Board where card is
+     * @param list object of class CardList where card is
+     * @throws IOException
+     */
+    public void newCard(Board board, CardList list) throws IOException {
+        Card card = new Card("Untitled");
+        addCard(board, list, card);
+    }
+
 
 }

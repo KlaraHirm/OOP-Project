@@ -16,7 +16,6 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="33.0" layoutY="22.0" mnemonicParsing="false" onAction="#refresh" text="Button" />
          </children>
       </AnchorPane>
       <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#newBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="26.0">

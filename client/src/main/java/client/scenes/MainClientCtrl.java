@@ -1,5 +1,8 @@
 package client.scenes;
 
+import commons.Board;
+import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -58,11 +61,11 @@ public class MainClientCtrl {
     }
 
     /**
-     * Add new empty board
-     * @param board_id number of boards in application
+     * Shows board
+     * @param board object of class Board to be shown
      * @throws IOException
      */
-    public void showAdd(long board_id) throws IOException {
+    public void showBoard(Board board) throws IOException {
         primaryStage.setTitle("Main Page: Adding Board");
 
         //load board template into main page using FXMLLoader
@@ -77,14 +80,14 @@ public class MainClientCtrl {
         HBox box = (HBox) overview.lookup("#board");
 
         //rename board element ids to their specific ids
-        newList.setId("new_list_"+board_id);
-        container.setId("board_container_"+board_id);
-        box.setId("board_"+board_id);
+        newList.setId("new_list_"+board.id);
+        container.setId("board_container_"+board.id);
+        box.setId("board_"+board.id);
 
         //set action on click of new list
         newList.setOnAction(e->{
             try {
-                overviewCtrl.addList(board_id);
+                overviewCtrl.newList(board);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -92,16 +95,25 @@ public class MainClientCtrl {
     }
 
     /**
-     * Add new empty list
-     * @param board_id number of boards in application
+     * method which hides current board so that other can be shown
      */
-    public void addList(int board_id, int list_id) throws IOException {
+    public void hideCurrentBoard() {
+        AnchorPane page = (AnchorPane) overview.lookup("#main_page");
+        page.getChildren().remove(page.getChildren().size()-1);
+    }
+
+    /**
+     * Shows list
+     * @param board object of class Board where list is
+     * @param list  object of class CardList to be shown
+     */
+    public void showList(Board board, CardList list) throws IOException {
         primaryStage.setTitle("Main Page: Adding List");
-        HBox board = (HBox) overview.lookup("#board_"+board_id);
+        HBox board_element = (HBox) overview.lookup("#board_"+board.id);
 
         //load list template into board using loadFXML
         Parent root = loadFXML("List.fxml");
-        board.getChildren().addAll(root);
+        board_element.getChildren().addAll(root);
         // margin of lists when added to board
         HBox.setMargin(root, new Insets(10, 10, 10, 10));
         root.autosize();
@@ -110,13 +122,13 @@ public class MainClientCtrl {
         //rename list elements to be identified by their id (for now random int generated in MainPageCtrl)
         VBox box = (VBox) overview.lookup("#list");
         Button new_card = (Button) overview.lookup("#new_card");
-        box.setId("list_"+list_id);
-        new_card.setId("new_card_"+list_id);
+        box.setId("list_"+list.id);
+        new_card.setId("new_card_"+list.id);
 
         //set action on click of new card
         new_card.setOnAction(e->{
             try {
-                overviewCtrl.addCard(board_id, list_id);
+                overviewCtrl.newCard(board, list);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -124,19 +136,19 @@ public class MainClientCtrl {
     }
 
     /**
-     * method which creates a card to specified list
-     * @param board_id id of a board in a scene
-     * @param list_id id of a list in a scene
-     * @param card_id id of a card in a scene
+     * Shows card
+     * @param board object of class Board where card is
+     * @param list object of class CardList where card is
+     * @param card object of class Card to be added
      * @throws IOException
      */
-    public void addCard(int board_id, int list_id, int card_id) throws IOException {
+    public void showCard(Board board, CardList list, Card card) throws IOException {
         primaryStage.setTitle("Main Page: Adding Card");
-        VBox list = (VBox) overview.lookup("#list_"+list_id);
+        VBox list_element = (VBox) overview.lookup("#list_"+list.id);
 
         //load card template into list using loadFXML method
         Parent root = loadFXML("Card.fxml");
-        list.getChildren().addAll(root);
+        list_element.getChildren().addAll(root);
         VBox.setVgrow(root, Priority.ALWAYS); // resizing of child elements to fit VBox
 
         // rename card elements to be identified by their id

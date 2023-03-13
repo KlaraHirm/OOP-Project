@@ -1,6 +1,7 @@
 package client.utils;
 
 import commons.Board;
+import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -29,6 +30,15 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    //TODO - in server BoardController new card list is created there, however shouldn't new card list be created in client?
+    public CardList addList(Board board, CardList list) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/board/"+board.id+"/"+list.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(list, APPLICATION_JSON), CardList.class);
     }
 
 }

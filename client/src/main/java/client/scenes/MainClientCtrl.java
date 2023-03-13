@@ -5,6 +5,7 @@ import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,25 +28,13 @@ public class MainClientCtrl {
     private MainPageCtrl overviewCtrl;
     private Scene overview;  //main page
 
-    private BoardCtrl boardCtrl;
-    private Scene board;  //empty board template
 
-    private ListCtrl listCtrl;
-    private Scene list;  //empty board template
-
-    public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list) {
+    public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
-
-        this.boardCtrl = board.getKey();
-        this.board = new Scene(board.getValue());
-
-        this.listCtrl = list.getKey();
-        this.list = new Scene(list.getValue());
 
         showOverview();
         primaryStage.show();
@@ -95,11 +84,15 @@ public class MainClientCtrl {
     }
 
     /**
-     * method which hides current board so that other can be shown
+     * method which removes last element if it is a board
+     * (used so that new board can be shown without overlaying boards on top of each other)
      */
     public void hideCurrentBoard() {
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
-        page.getChildren().remove(page.getChildren().size()-1);
+        Node last_element = page.getChildren().get(page.getChildren().size()-1);
+        if(last_element.getId().contains("board_container_")){
+            page.getChildren().remove(last_element);
+        }
     }
 
     /**

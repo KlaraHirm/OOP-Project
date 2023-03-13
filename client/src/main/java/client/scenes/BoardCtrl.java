@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import javafx.fxml.Initializable;
 
 import java.io.IOException;
@@ -31,8 +32,9 @@ public class BoardCtrl implements Initializable {
 
     }
 
-    public void addBoard() throws IOException {
-        pageCtrl.addBoard();
-    }
+//    public void addBoard() throws IOException {
+//        server.addBoard(new Board("Untitled"));
+//        pageCtrl.addBoard((int)(Math.random()*(Integer.MAX_VALUE)));
+//    }
 
 }

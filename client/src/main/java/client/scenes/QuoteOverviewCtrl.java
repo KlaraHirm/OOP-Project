@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
-import client.utils.ServerUtils;
+import client.utils.ServerUtilsOld;
 import commons.Quote;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -32,7 +32,7 @@ import javafx.scene.control.TableView;
 
 public class QuoteOverviewCtrl implements Initializable {
 
-    private final ServerUtils server;
+    private final ServerUtilsOld server;
     private final MainCtrl mainCtrl;
 
     private ObservableList<Quote> data;
@@ -47,7 +47,7 @@ public class QuoteOverviewCtrl implements Initializable {
     private TableColumn<Quote, String> colQuote;
 
     @Inject
-    public QuoteOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public QuoteOverviewCtrl(ServerUtilsOld server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }

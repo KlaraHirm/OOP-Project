@@ -1,6 +1,6 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
+import client.utils.ServerUtilsOld;
 import com.google.inject.Inject;
 import javafx.fxml.Initializable;
 
@@ -9,12 +9,12 @@ import java.util.ResourceBundle;
 
 public class ListCtrl implements Initializable {
 
-    private final ServerUtils server;
+    private final ServerUtilsOld server;
     private final MainClientCtrl mainCtrl;
 
 
     @Inject
-    public ListCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
+    public ListCtrl(ServerUtilsOld server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }

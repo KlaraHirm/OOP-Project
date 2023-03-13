@@ -62,7 +62,7 @@ public class MainClientCtrl {
      * @param board_id number of boards in application
      * @throws IOException
      */
-    public void showAdd(int board_id) throws IOException {
+    public void showAdd(long board_id) throws IOException {
         primaryStage.setTitle("Main Page: Adding Board");
 
         //load board template into main page using FXMLLoader
@@ -151,6 +151,7 @@ public class MainClientCtrl {
     public Parent loadFXML(String resource) throws IOException {
         URL location = getClass().getResource(resource);
         FXMLLoader loader = new FXMLLoader(location);
+//        loader.setController(overviewCtrl);
         return loader.load();
     }
 

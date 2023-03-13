@@ -135,6 +135,9 @@ public class MainPageCtrl implements Initializable {
 
     //TODO - public void deleteCard(Card card)
 
+    public void editCard(Board board, CardList list, Card card) {
+        mainCtrl.showEditCard(card);
+    }
     /**
      * refreshes data variable
      */

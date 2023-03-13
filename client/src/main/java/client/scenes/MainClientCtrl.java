@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -28,13 +29,20 @@ public class MainClientCtrl {
     private MainPageCtrl overviewCtrl;
     private Scene overview;  //main page
 
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;  //edit card page
 
-    public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview) {
+
+    public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
+                           Pair<EditCardCtrl, Parent> editCard) {
 
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
         showOverview();
         primaryStage.show();
@@ -47,6 +55,7 @@ public class MainClientCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
+
     }
 
     /**
@@ -55,6 +64,12 @@ public class MainClientCtrl {
     public void showServer() {
         primaryStage.setTitle("Server Connection");
         primaryStage.setScene(overview);
+    }
+
+    public void showEditCard(Card card) {
+        primaryStage.setTitle("Edit Card");
+        editCardCtrl.setTitleField(card);
+        primaryStage.setScene(editCard);
     }
 
     /**
@@ -160,7 +175,15 @@ public class MainClientCtrl {
         VBox.setVgrow(root, Priority.ALWAYS); // resizing of child elements to fit VBox
 
         // rename card elements to be identified by their id
+        Button edit_card = (Button) overview.lookup("#edit_card");
+        Label card_title = (Label) overview.lookup("#title");
+
+        edit_card.setId("edit_card_"+card.id);
+        card_title.setId("title_"+card.id);
         //set action on click
+        edit_card.setOnAction(e->{
+            overviewCtrl.editCard(board, list, card);
+        });
     }
 
     /**

@@ -51,6 +51,7 @@ public class MainPageCtrl implements Initializable {
                         b.title.equals(title)).findFirst().orElse(null);
             }
         });
+        refresh();
     }
 
     /**
@@ -102,7 +103,7 @@ public class MainPageCtrl implements Initializable {
     public void newList(Board board) throws IOException {
         CardList list = new CardList("Untitled");
         list = server.addList(board, list);
-        board.cardLists.add(list);
+        list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         refresh();
         addList(board, list);
     }
@@ -137,6 +138,7 @@ public class MainPageCtrl implements Initializable {
      */
     public void newCard(Board board, CardList list) throws IOException {
         Card card = new Card("Untitled");
+        card.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         list.cards.add(card);
         addCard(board, list, card);
     }

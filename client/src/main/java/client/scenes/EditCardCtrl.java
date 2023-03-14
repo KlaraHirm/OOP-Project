@@ -26,6 +26,6 @@ public class EditCardCtrl {
     }
 
     public void submit(){
-        //TODO
+        mainCtrl.showOverview();
     }
 }

@@ -145,8 +145,10 @@ public class MainClientCtrl {
         //rename list elements to be identified by their id (for now random int generated in MainPageCtrl)
         VBox box = (VBox) overview.lookup("#list");
         Button new_card = (Button) overview.lookup("#new_card");
+        Button delete_list = (Button) overview.lookup("#delete_list");
         box.setId("list_"+list.id);
         new_card.setId("new_card_"+list.id);
+        delete_list.setId("delete_list_"+list.id);
 
         //set action on click of new card
         new_card.setOnAction(e->{
@@ -155,6 +157,9 @@ public class MainClientCtrl {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        });
+        delete_list.setOnAction(e->{
+            overviewCtrl.deleteList(board, list);
         });
     }
 

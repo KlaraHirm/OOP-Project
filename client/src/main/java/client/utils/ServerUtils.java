@@ -1,7 +1,6 @@
 package client.utils;
 
 import commons.Board;
-import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;

@@ -40,13 +40,24 @@ public class ServerUtils {
                 .delete();
     }
 
-    //TODO - Bad Request error
+    //TODO - getLists()
+
     public CardList addList(Board board, CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board/"+board.id+"/cardlist/") //
+                .target(SERVER).path("api/board/"+board.id+"/cardlist") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(list, APPLICATION_JSON), CardList.class);
+    }
+
+    public Response deleteList(Board board, CardList list) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list") //
+                .queryParam("list", list.id) //
+                .queryParam("board", board.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
     }
 
 }

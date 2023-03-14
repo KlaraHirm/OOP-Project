@@ -117,7 +117,7 @@ public class MainClientCtrl {
      * method which removes last element if it is a board
      * (used so that new board can be shown without overlaying boards on top of each other)
      */
-    public void hideCurrentBoard() {
+    public void hideBoard() {
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
         Node last_element = page.getChildren().get(page.getChildren().size()-1);
         if(last_element.getId().contains("board_container_")){
@@ -156,6 +156,17 @@ public class MainClientCtrl {
                 throw new RuntimeException(ex);
             }
         });
+    }
+
+    /**
+     * removes list element from ui
+     * @param board object of class Board where list is
+     * @param list object of class CardList which the list element represents
+     */
+    public void hideList(Board board, CardList list) {
+        HBox board_element = (HBox) overview.lookup("#board_"+board.id);
+        VBox list_element = (VBox)  overview.lookup("#list_"+list.id);
+        board_element.getChildren().remove(list_element);
     }
 
     /**

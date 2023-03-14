@@ -69,8 +69,8 @@ public class MainPageCtrl implements Initializable {
      */
     public void newBoard() throws IOException {
         Board board = new Board("Untitled");
-        server.addBoard(board);
-        mainCtrl.hideCurrentBoard();
+        board = server.addBoard(board);
+        mainCtrl.hideBoard();
         addBoard(board);
     }
 
@@ -80,7 +80,7 @@ public class MainPageCtrl implements Initializable {
      */
     public void deleteBoard(Board board) {
         server.deleteBoard(board);
-        mainCtrl.hideCurrentBoard();
+        mainCtrl.hideBoard();
         refresh();
     }
 
@@ -101,14 +101,22 @@ public class MainPageCtrl implements Initializable {
      */
     public void newList(Board board) throws IOException {
         CardList list = new CardList("Untitled");
-//        board.cardLists.add(list);
-//        server.addList(board, list); // TODO - Bad Request Error
+        list = server.addList(board, list);
+        board.cardLists.add(list);
         refresh();
-        list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now randomly generated id because id of new CardList is always 0
         addList(board, list);
     }
 
-    //TODO - public void deleteList(CardList list)
+    /**
+     * deletes list specified in parameters
+     * @param board object of class Board where list is
+     * @param list object of class CardList which is to be deleted
+     */
+    public void deleteList(Board board, CardList list) {
+        server.deleteList(board, list);
+        mainCtrl.hideList(board, list);
+        refresh();
+    }
 
     /**
      * method which shows existing card

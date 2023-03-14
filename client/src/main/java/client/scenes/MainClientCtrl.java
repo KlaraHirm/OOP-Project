@@ -194,8 +194,8 @@ public class MainClientCtrl {
         Button edit_card = (Button) overview.lookup("#edit_card");
         Label card_title = (Label) overview.lookup("#title");
 
-        edit_card.setId("edit_card_"+card.id);
-        card_title.setId("title_"+card.id);
+        edit_card.setId("edit_card_"+list.id+"_"+card.id); // to differentiate between cards in different lists
+        card_title.setId("title_"+list.id+"_"+card.id);
         //set action on click
         edit_card.setOnAction(e->{
             overviewCtrl.editCard(board, list, card);

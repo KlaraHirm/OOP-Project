@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="client.objects.TagObjectCtrl"
+      fx:id="tagHBox"
+      alignment="CENTER" prefHeight="11.0" prefWidth="70.0" spacing="10.0" style="-fx-border-color: black;">
+
+    <Label alignment="CENTER" text="Tag" />
+    <Button mnemonicParsing="false" text="X" onAction="#deleteTag" />
+
+</HBox>

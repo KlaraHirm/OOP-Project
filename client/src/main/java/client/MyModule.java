@@ -30,5 +30,6 @@ public class MyModule implements Module {
         binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditCtrl.class).in(Scopes.SINGLETON);
     }
 }

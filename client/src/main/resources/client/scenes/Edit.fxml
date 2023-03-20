@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCtrl">
+   <children>
+      <Pane prefHeight="411.0" prefWidth="602.0">
+         <children>
+            <TextField layoutX="14.0" layoutY="50.0" promptText="Title" style="-fx-border-color: black;" />
+            <TextArea layoutX="14.0" layoutY="83.0" prefHeight="89.0" prefWidth="573.0" promptText="information" style="-fx-border-color: black;" />
+            <Label alignment="CENTER" layoutX="219.0" layoutY="14.0" prefHeight="17.0" prefWidth="164.0" text="Edit Card" textAlignment="CENTER" />
+            <FlowPane fx:id="listPane" layoutX="14.0" layoutY="209.0" orientation="VERTICAL" prefHeight="113.0" prefWidth="573.0" style="-fx-border-color: black;">
+            </FlowPane>
+            <HBox alignment="CENTER" layoutX="14.0" layoutY="172.0" prefHeight="26.0" prefWidth="234.0" spacing="10.0">
+               <children>
+                  <Label text="Task" />
+                  <TextField fx:id="checkField" promptText="New Checkbox" style="-fx-border-color: black;">
+                     <HBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Button mnemonicParsing="false" fx:id="addTask" onAction="#addTask" prefHeight="6.0" prefWidth="4.0" text="+">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="14.0" layoutY="339.0" prefHeight="45.0" prefWidth="573.0" spacing="10.0">
+               <children>
+                  <HBox prefHeight="31.0" prefWidth="538.0" style="-fx-border-color: black;" fx:id="tagBox">
+                     <children>
+                     </children></HBox>
+                  <Button mnemonicParsing="false" text="+" onAction="#addTag"/>
+               </children>
+            </HBox>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

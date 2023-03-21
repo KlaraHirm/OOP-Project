@@ -1,10 +1,15 @@
 package client.scenes;
 
+import commons.Board;
+import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -24,36 +29,17 @@ public class MainClientCtrl {
     private MainPageCtrl overviewCtrl;
     private Scene overview;  //main page
 
-    private BoardCtrl boardCtrl;
-    private Scene board;  //empty board template
-
-    private ListCtrl listCtrl;
-    private Scene list;  //empty board template
-
-    private ServerConnectionCtrl serverCtrl;
-    //might need to be changed to refer to main page
-    private Scene server;
-
     private EditCardCtrl editCardCtrl;
-    private Scene editCard;
+    private Scene editCard;  //edit card page
+
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<BoardCtrl, Parent> board, Pair<ListCtrl, Parent> list,
-                           Pair<ServerConnectionCtrl, Parent> server, Pair<EditCardCtrl, Parent> editCard) {
+                           Pair<EditCardCtrl, Parent> editCard) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-
-
-        this.boardCtrl = board.getKey();
-        this.board = new Scene(board.getValue());
-
-        this.listCtrl = list.getKey();
-        this.list = new Scene(list.getValue());
-
-        this.serverCtrl = server.getKey();
-        this.server = new Scene(server.getValue());
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
@@ -69,6 +55,7 @@ public class MainClientCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
+
     }
 
     /**
@@ -79,56 +66,77 @@ public class MainClientCtrl {
         primaryStage.setScene(overview);
     }
 
+    public void showEditCard(Card card) {
+        primaryStage.setTitle("Edit Card");
+        editCardCtrl.setTitleField(card);
+        primaryStage.setScene(editCard);
+    }
+
     /**
-     * Add new empty board
-     * @param board_id number of boards in application
+     * Shows board
+     * @param board object of class Board to be shown
      * @throws IOException
      */
-    public void showAdd(int board_id) throws IOException {
+    public void showBoard(Board board) throws IOException {
         primaryStage.setTitle("Main Page: Adding Board");
 
         //load board template into main page using FXMLLoader
         AnchorPane page = (AnchorPane) overview.lookup("#main_page");
-        URL location = getClass().getResource("Board.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
-        loader.setController(overviewCtrl); // setting controller to MainPage before adding it
-        Parent root = loader.load();
+        Parent root = loadFXML("Board.fxml");
         page.getChildren().addAll(root);
 
         //select template board elements
         AnchorPane container = (AnchorPane) overview.lookup("#board_container");
         AnchorPane.setTopAnchor(container,130.0);
         Button newList = (Button) overview.lookup("#new_list");
+        Button delete_board = (Button) overview.lookup("#delete_board");
         HBox box = (HBox) overview.lookup("#board");
 
         //rename board element ids to their specific ids
-        newList.setId("new_list_"+board_id);
-        container.setId("board_container_"+board_id);
-        box.setId("board_"+board_id);
+        newList.setId("new_list_"+board.id);
+        delete_board.setId("delete_board_"+board.id);
+        container.setId("board_container_"+board.id);
+        box.setId("board_"+board.id);
 
         //set action on click of new list
         newList.setOnAction(e->{
             try {
-                overviewCtrl.addList(board_id);
+                overviewCtrl.newList(board);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
+
+        //set action on click of delete board
+        delete_board.setOnAction(e->{
+            overviewCtrl.deleteBoard(board);
+        });
     }
 
     /**
-     * Add new empty list
-     * @param board_id number of boards in application
+     * method which removes last element if it is a board
+     * (used so that new board can be shown without overlaying boards on top of each other)
      */
-    public void addList(int board_id, int list_id) throws IOException {
-        primaryStage.setTitle("Main Page: Adding List");
-        HBox board = (HBox) overview.lookup("#board_"+board_id);
+    public void hideBoard() {
+        AnchorPane page = (AnchorPane) overview.lookup("#main_page");
+        Node last_element = page.getChildren().get(page.getChildren().size()-1);
+        if(last_element.getId().contains("board_container_")){
+            page.getChildren().remove(last_element);
+        }
+    }
 
-        //load list template into board using FXMLLoader
-        URL location = getClass().getResource("List.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
-        Parent root = loader.load();
-        board.getChildren().addAll(root);
+    /**
+     * Shows list
+     * @param board object of class Board where list is
+     * @param list  object of class CardList to be shown
+     */
+    public void showList(Board board, CardList list) throws IOException {
+        primaryStage.setTitle("Main Page: Adding List");
+        HBox board_element = (HBox) overview.lookup("#board_"+board.id);
+
+        //load list template into board using loadFXML
+        Parent root = loadFXML("List.fxml");
+        board_element.getChildren().addAll(root);
         // margin of lists when added to board
         HBox.setMargin(root, new Insets(10, 10, 10, 10));
         root.autosize();
@@ -137,31 +145,73 @@ public class MainClientCtrl {
         //rename list elements to be identified by their id (for now random int generated in MainPageCtrl)
         VBox box = (VBox) overview.lookup("#list");
         Button new_card = (Button) overview.lookup("#new_card");
-        box.setId("list_"+list_id);
-        new_card.setId("new_card_"+list_id);
+        Button delete_list = (Button) overview.lookup("#delete_list");
+        box.setId("list_"+list.id);
+        new_card.setId("new_card_"+list.id);
+        delete_list.setId("delete_list_"+list.id);
 
         //set action on click of new card
         new_card.setOnAction(e->{
             try {
-                overviewCtrl.addCard(board_id, list_id);
+                overviewCtrl.newCard(board, list);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
+        delete_list.setOnAction(e->{
+            overviewCtrl.deleteList(board, list);
+        });
     }
 
-    public void addCard(int board_id, int list_id, int card_id) throws IOException {
-        primaryStage.setTitle("Main Page: Adding Card");
-        VBox list = (VBox) overview.lookup("#list_"+list_id);
+    /**
+     * removes list element from ui
+     * @param board object of class Board where list is
+     * @param list object of class CardList which the list element represents
+     */
+    public void hideList(Board board, CardList list) {
+        HBox board_element = (HBox) overview.lookup("#board_"+board.id);
+        VBox list_element = (VBox)  overview.lookup("#list_"+list.id);
+        board_element.getChildren().remove(list_element);
+    }
 
-        //load card template into list using FXMLLoader
-        URL location = getClass().getResource("Card.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
-        Parent root = loader.load();
-        list.getChildren().addAll(root);
+    /**
+     * Shows card
+     * @param board object of class Board where card is
+     * @param list object of class CardList where card is
+     * @param card object of class Card to be added
+     * @throws IOException
+     */
+    public void showCard(Board board, CardList list, Card card) throws IOException {
+        primaryStage.setTitle("Main Page: Adding Card");
+        VBox list_element = (VBox) overview.lookup("#list_"+list.id);
+
+        //load card template into list using loadFXML method
+        Parent root = loadFXML("Card.fxml");
+        list_element.getChildren().addAll(root);
         VBox.setVgrow(root, Priority.ALWAYS); // resizing of child elements to fit VBox
 
         // rename card elements to be identified by their id
+        Button edit_card = (Button) overview.lookup("#edit_card");
+        Label card_title = (Label) overview.lookup("#title");
+
+        edit_card.setId("edit_card_"+list.id+"_"+card.id); // to differentiate between cards in different lists
+        card_title.setId("title_"+list.id+"_"+card.id);
         //set action on click
+        edit_card.setOnAction(e->{
+            overviewCtrl.editCard(board, list, card);
+        });
     }
+
+    /**
+     * method which loads fxml resource using FXMLLoader and returns it as JavaFX Parent object
+     * @param resource resource where fxml file is
+     * @return JavaFX PArent object of fxml file
+     */
+    public Parent loadFXML(String resource) throws IOException {
+        URL location = getClass().getResource(resource);
+        FXMLLoader loader = new FXMLLoader(location);
+        return loader.load();
+    }
+
+
 }

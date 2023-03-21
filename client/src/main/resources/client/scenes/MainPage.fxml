@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main_page" accessibleRole="BUTTON" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: e9ecef;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="client.scenes.MainPageCtrl">
+<AnchorPane fx:id="main_page" accessibleRole="BUTTON" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainPageCtrl">
    <children>
       <AnchorPane prefHeight="70.0" prefWidth="600.0" style="-fx-background-color: f8f9fa;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -18,7 +18,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#addBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="26.0">
+      <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#newBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="26.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -26,7 +26,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ComboBox layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">
+      <ComboBox fx:id="boards_list" layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

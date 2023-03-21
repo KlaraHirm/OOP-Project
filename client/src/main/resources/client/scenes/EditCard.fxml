@@ -18,7 +18,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="23.0" layoutY="82.0" promptText="Title" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="520.0" />
+      <TextField fx:id="title_field" layoutX="23.0" layoutY="82.0" promptText="Title" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="520.0" />
       <HBox layoutX="23.0" layoutY="279.0" prefHeight="31.0" prefWidth="538.0" style="-fx-border-color: black; -fx-background-color: white;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="100.0">
          <children>
             <HBox alignment="CENTER" prefHeight="11.0" prefWidth="70.0" spacing="10.0" style="-fx-background-color: #CAE2F0;">
@@ -36,6 +36,10 @@
          </children>
       </HBox>
       <Button layoutX="626.0" layoutY="285.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="49.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button alignment="CENTER" layoutX="20.0" layoutY="348.0" mnemonicParsing="false" onAction="#submit" text="Submit" textFill="#2274a5">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>

@@ -26,9 +26,6 @@ public class MyModule implements Module {
     public void configure(Binder binder) {
         binder.bind(MainClientCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MainPageCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
     }
 }

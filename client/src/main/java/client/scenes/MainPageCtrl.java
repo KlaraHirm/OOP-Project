@@ -42,21 +42,37 @@ public class MainPageCtrl implements Initializable {
 
             @Override
             public String toString(Board board) {
+                if (board == null) {
+                    return null;
+                }
                 return board.title + " (" + board.id + ")";
             }
 
             @Override
-            public Board fromString(String title) {
+            public Board fromString(String text) {
+                if (text == null || text.isEmpty()) {
+                    return null;
+                }
+                String title = text.split(" ")[0];
+                String id_string = text.split(" ")[1];
+                long board_id = Long.parseLong(id_string.substring(1, id_string.length()-1));
                 return boards_list.getItems().stream().filter(b ->
-                        b.title.equals(title)).findFirst().orElse(null);
+                        b!=null && b.title.equals(title) && b.id == board_id).findFirst().orElse(null);
             }
         });
         refresh();
     }
 
     public void loadBoardContent() throws IOException {
+        mainCtrl.hideBoard();
         Board selected_board = boards_list.getValue();
-        mainCtrl.loadBoard(selected_board);
+        addBoard(selected_board);
+        for(CardList list:selected_board.cardLists){
+            addList(selected_board, list);
+            for(Card card:list.cards){
+                addCard(selected_board, list, card);
+            }
+        }
     }
 
     /**
@@ -76,6 +92,7 @@ public class MainPageCtrl implements Initializable {
     public void newBoard() throws IOException {
         Board board = new Board("Untitled");
         board = server.addBoard(board);
+//        boards_list.setValue(board);
         mainCtrl.hideBoard();
         addBoard(board);
     }
@@ -85,9 +102,13 @@ public class MainPageCtrl implements Initializable {
      * @param board board to be deleted
      */
     public void deleteBoard(Board board) {
+        boards_list.getSelectionModel().clearSelection();
+//        boards_list.setPromptText("Boards");
+        boards_list.getItems().remove(board);
         server.deleteBoard(board);
-        mainCtrl.hideBoard();
         refresh();
+        mainCtrl.hideBoard();
+
     }
 
     /**

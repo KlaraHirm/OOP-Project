@@ -72,16 +72,6 @@ public class MainClientCtrl {
         primaryStage.setScene(editCard);
     }
 
-    public void loadBoard(Board board) throws IOException {
-        showBoard(board);
-        for(CardList list:board.cardLists){
-            showList(board, list);
-            for(Card card:list.cards){
-                showCard(board, list, card);
-            }
-        }
-    }
-
     /**
      * Shows board
      * @param board object of class Board to be shown

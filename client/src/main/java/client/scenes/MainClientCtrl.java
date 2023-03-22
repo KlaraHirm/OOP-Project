@@ -46,6 +46,7 @@ public class MainClientCtrl {
 
         showOverview();
         primaryStage.show();
+        overviewCtrl.refresh();
 
     }
 
@@ -78,6 +79,9 @@ public class MainClientCtrl {
      * @throws IOException
      */
     public void showBoard(Board board) throws IOException {
+        if(board==null){
+            return;
+        }
         primaryStage.setTitle("Main Page: Adding Board");
 
         //load board template into main page using FXMLLoader

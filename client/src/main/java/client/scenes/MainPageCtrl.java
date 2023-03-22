@@ -9,12 +9,16 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
+
+import javax.swing.event.ChangeEvent;
+import javafx.beans.value.ChangeListener ;
 
 
 public class MainPageCtrl implements Initializable {
@@ -26,6 +30,8 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private ComboBox<Board> boards_list;
+
+    private ChangeListener<String> changeListener;
 
 
 
@@ -42,17 +48,11 @@ public class MainPageCtrl implements Initializable {
 
             @Override
             public String toString(Board board) {
-                if (board == null) {
-                    return null;
-                }
                 return board.title + " (" + board.id + ")";
             }
 
             @Override
             public Board fromString(String text) {
-                if (text == null || text.isEmpty()) {
-                    return null;
-                }
                 String title = text.split(" ")[0];
                 String id_string = text.split(" ")[1];
                 long board_id = Long.parseLong(id_string.substring(1, id_string.length()-1));
@@ -60,12 +60,25 @@ public class MainPageCtrl implements Initializable {
                         b!=null && b.title.equals(title) && b.id == board_id).findFirst().orElse(null);
             }
         });
-        refresh();
+
+        //adding event listener to boards_list which calls method loadBoardContent only when new value is selected
+        boards_list.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // This method will only run when a new value is selected
+            if(newValue == null){
+                return;
+            }
+            try {
+                loadBoardContent(newValue);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+//        refresh();
     }
 
-    public void loadBoardContent() throws IOException {
+    public void loadBoardContent(Board selected_board) throws IOException {
         mainCtrl.hideBoard();
-        Board selected_board = boards_list.getValue();
         addBoard(selected_board);
         for(CardList list:selected_board.cardLists){
             addList(selected_board, list);
@@ -92,9 +105,9 @@ public class MainPageCtrl implements Initializable {
     public void newBoard() throws IOException {
         Board board = new Board("Untitled");
         board = server.addBoard(board);
-//        boards_list.setValue(board);
         mainCtrl.hideBoard();
         addBoard(board);
+//        boards_list.setValue(board);
     }
 
     /**
@@ -103,7 +116,6 @@ public class MainPageCtrl implements Initializable {
      */
     public void deleteBoard(Board board) {
         boards_list.getSelectionModel().clearSelection();
-//        boards_list.setPromptText("Boards");
         boards_list.getItems().remove(board);
         server.deleteBoard(board);
         refresh();

@@ -16,6 +16,7 @@ public class CardList
     public String title;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("place")
     public List<Card> cards;
 
     @SuppressWarnings("unused")

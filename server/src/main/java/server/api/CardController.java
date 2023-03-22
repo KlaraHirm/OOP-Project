@@ -17,14 +17,10 @@ import java.util.Random;
 public class CardController {
 
     private final Random random;
-    private final BoardRepository repo;
-    private final CardListRepository listRepo;
     private final CardRepository cardRepo;
 
-    public CardController(Random random, BoardRepository repo, CardListRepository listRepo, CardRepository cardRepo) {
+    public CardController(Random random, CardRepository cardRepo) {
         this.random = random;
-        this.repo = repo;
-        this.listRepo = listRepo;
         this.cardRepo = cardRepo;
     }
 
@@ -35,9 +31,9 @@ public class CardController {
      * @return the card object
      * Returns 404 if the card does not exist
      */
-    @GetMapping("")
+    @GetMapping("/{id}")
     public ResponseEntity<Card> getCard(
-            @RequestParam("card") long cardId
+            @PathVariable("id") long cardId
     ) {
         if (!cardRepo.existsById(cardId)) return ResponseEntity.notFound().build();
         Card card = cardRepo.findById(cardId).get();
@@ -46,51 +42,20 @@ public class CardController {
     }
 
     /**
-     * Add a new card to a list
-     * @param listId the id of the list to add the card to
-     * @param boardId the id of the board in which the list is
-     * @param card the card object to add
-     * @return the whole board as updated
-     * Gives 404 if the list or board do not exist
-     * Gives 400 if the body is malformed
-     */
-    @PostMapping("")
-    public ResponseEntity<Board> addCard(
-            @RequestBody Card card,
-            @RequestParam("board") long boardId,
-            @RequestParam("list") long listId)
-    {
-        if (card == null) return ResponseEntity.badRequest().build();
-
-        if (!repo.existsById(boardId)) return ResponseEntity.notFound().build();
-        Board board = repo.findById(boardId).get();
-
-        Optional<CardList> cardList = board.cardLists.stream().filter(cl -> cl.id == listId).findFirst();
-        if (cardList.isEmpty()) return ResponseEntity.notFound().build();
-
-        cardList.get().cards.add(card);
-
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(saved);
-    }
-
-    /**
      * Update a certain card
-     * @param cardId the id of the card to edit
-     * @param newCard the card object to add
+     * @param newCard the card object to edit, with the corresponding id
      * @return the edited card
      * Gives 404 if the card does not exist
      * Gives 400 if the body is malformed
      */
     @PutMapping("")
     public ResponseEntity<Card>  editCard(
-            @RequestBody Card newCard,
-            @RequestParam("card") long cardId
+            @RequestBody Card newCard
     ) {
         if (newCard == null) return ResponseEntity.badRequest().build();
 
-        if (!cardRepo.existsById(cardId)) return ResponseEntity.notFound().build();
-        Card card = cardRepo.findById(cardId).get();
+        if (!cardRepo.existsById(newCard.id)) return ResponseEntity.notFound().build();
+        Card card = cardRepo.findById(newCard.id).get();
 
         card.title = newCard.title;
 
@@ -101,29 +66,18 @@ public class CardController {
     /**
      * Delete a card
      * @param cardId the id of the card to delete
-     * @param listId the id of the list in which the card is
-     * @param boardId the id of the board in which the list is
      * @return the whole board as updated
      * Returns 404 if the card, list or board do not exist
      */
-    @DeleteMapping("")
-    public ResponseEntity<Board> deleteCard(
-            @RequestParam("card") long cardId,
-            @RequestParam("board") long boardId,
-            @RequestParam("list") long listId
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Card> deleteCard(
+            @PathVariable("id") long cardId
     ) {
-        Board board = repo.findById(boardId).get();
-        if (!repo.existsById(boardId)) return ResponseEntity.notFound().build();
+        if (!cardRepo.existsById(cardId)) return ResponseEntity.notFound().build();
 
-        Optional<CardList> cardList = board.cardLists.stream().filter(cl -> cl.id == listId).findFirst();
-        if (cardList.isEmpty()) return ResponseEntity.notFound().build();
+        Card deleted = cardRepo.getById(cardId);
+        cardRepo.deleteById(cardId);
 
-        Optional<Card> card = cardList.get().cards.stream().filter(c -> c.id == cardId).findFirst();
-        if (card.isEmpty()) return ResponseEntity.notFound().build();
-
-        cardList.get().cards.remove(card.get());
-
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(deleted);
     }
 }

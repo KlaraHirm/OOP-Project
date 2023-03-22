@@ -42,7 +42,7 @@ public class MainPageCtrl implements Initializable {
 
             @Override
             public String toString(Board board) {
-                return board.title;
+                return board.title + " (" + board.id + ")";
             }
 
             @Override
@@ -52,6 +52,11 @@ public class MainPageCtrl implements Initializable {
             }
         });
         refresh();
+    }
+
+    public void loadBoardContent() throws IOException {
+        Board selected_board = boards_list.getValue();
+        mainCtrl.loadBoard(selected_board);
     }
 
     /**

@@ -72,7 +72,7 @@ public class MainClientCtrl {
         primaryStage.setScene(editCard);
     }
 
-    public void loadBorad(Board board) throws IOException {
+    public void loadBoard(Board board) throws IOException {
         showBoard(board);
         for(CardList list:board.cardLists){
             showList(board, list);

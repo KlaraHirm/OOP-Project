@@ -9,14 +9,17 @@
    <children>
       <Pane prefHeight="411.0" prefWidth="602.0">
          <children>
-            <TextField layoutX="14.0" layoutY="50.0" promptText="Title" style="-fx-border-color: black;" />
-            <TextArea layoutX="14.0" layoutY="83.0" prefHeight="89.0" prefWidth="573.0" promptText="information" style="-fx-border-color: black;" />
+            <HBox layoutX="14.0" layoutY="50.0" spacing="322.0">
+               <TextField promptText="Title" style="-fx-border-color: black;" fx:id="titleField"/>
+               <Button mnemonicParsing="false" prefHeight="6.0" prefWidth="100.0" text="Submit" onAction="#submitEdit"></Button>
+            </HBox>
+            <TextArea layoutX="14.0" layoutY="83.0" prefHeight="89.0" prefWidth="573.0" promptText="information" style="-fx-border-color: black;" fx:id="bodyField"/>
             <Label alignment="CENTER" layoutX="219.0" layoutY="14.0" prefHeight="17.0" prefWidth="164.0" text="Edit Card" textAlignment="CENTER" />
             <FlowPane fx:id="listPane" layoutX="14.0" layoutY="209.0" orientation="VERTICAL" prefHeight="113.0" prefWidth="573.0" style="-fx-border-color: black;">
             </FlowPane>
             <HBox alignment="CENTER" layoutX="14.0" layoutY="172.0" prefHeight="26.0" prefWidth="234.0" spacing="10.0">
                <children>
-                  <Label text="Task" />
+                  <Label text="Subtasks" minWidth="60"/>
                   <TextField fx:id="checkField" promptText="New Checkbox" style="-fx-border-color: black;">
                      <HBox.margin>
                         <Insets bottom="5.0" top="5.0" />

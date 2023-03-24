@@ -12,6 +12,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" style="-fx-background-color: transparent;" text="Untitled" textFill="#2274a5" />
+      <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" style="-fx-background-color: transparent;" text="Untitled" textAlignment="CENTER" textFill="#2274a5" wrapText="true" />
    </children>
 </VBox>

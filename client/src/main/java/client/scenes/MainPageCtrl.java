@@ -107,7 +107,7 @@ public class MainPageCtrl implements Initializable {
         board = server.addBoard(board);
         mainCtrl.hideBoard();
         addBoard(board);
-//        boards_list.setValue(board);
+        boards_list.setValue(board);
     }
 
     /**

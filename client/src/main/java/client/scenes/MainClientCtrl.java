@@ -91,16 +91,19 @@ public class MainClientCtrl {
 
         //select template board elements
         AnchorPane container = (AnchorPane) overview.lookup("#board_container");
-        AnchorPane.setTopAnchor(container,130.0);
+        Label board_title = (Label) overview.lookup("#board_title");
         Button newList = (Button) overview.lookup("#new_list");
         Button delete_board = (Button) overview.lookup("#delete_board");
         HBox box = (HBox) overview.lookup("#board");
 
         //rename board element ids to their specific ids
+        container.setId("board_container_"+board.id);
+        board_title.setId("board_title_"+board.id);
         newList.setId("new_list_"+board.id);
         delete_board.setId("delete_board_"+board.id);
-        container.setId("board_container_"+board.id);
         box.setId("board_"+board.id);
+
+        board_title.setText(board.title + " (" + board.id + ")");
 
         //set action on click of new list
         newList.setOnAction(e->{

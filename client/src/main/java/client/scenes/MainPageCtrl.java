@@ -181,7 +181,11 @@ public class MainPageCtrl implements Initializable {
         addCard(board, list, card);
     }
 
-    //TODO - public void deleteCard(Card card)
+    public void deleteCard(Board board, CardList list, Card card) {
+        //TODO - server.deleteCard
+        mainCtrl.hideCard(board, list, card);
+        refresh();
+    }
 
     /**
      * method which loads a scene to edit card

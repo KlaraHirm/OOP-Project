@@ -195,15 +195,29 @@ public class MainClientCtrl {
         VBox.setVgrow(root, Priority.ALWAYS); // resizing of child elements to fit VBox
 
         // rename card elements to be identified by their id
+        VBox card_element = (VBox)  overview.lookup("#card");
         Button edit_card = (Button) overview.lookup("#edit_card");
+        Button delete_card = (Button) overview.lookup("#delete_card");
         Label card_title = (Label) overview.lookup("#title");
 
+        card_element.setId("card_"+list.id+"_"+card.id);
         edit_card.setId("edit_card_"+list.id+"_"+card.id); // to differentiate between cards in different lists
+        delete_card.setId("delete_card_"+list.id+"_"+card.id);
         card_title.setId("title_"+list.id+"_"+card.id);
         //set action on click
         edit_card.setOnAction(e->{
             overviewCtrl.showEditCard(board, list, card);
         });
+        delete_card.setOnAction(e->{
+            overviewCtrl.deleteCard(board, list, card);
+        });
+    }
+
+    public void hideCard(Board board, CardList list, Card card) {
+        primaryStage.setTitle("Main Page: Deleting Card");
+        VBox list_element = (VBox) overview.lookup("#list_"+list.id);
+        VBox card_element = (VBox) overview.lookup("#card_"+list.id+"_"+card.id);
+        list_element.getChildren().remove(card_element);
     }
 
     /**

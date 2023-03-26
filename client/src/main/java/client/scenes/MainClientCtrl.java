@@ -161,8 +161,8 @@ public class MainClientCtrl {
         new_card.setId("new_card_"+list.id);
         delete_list.setId("delete_list_"+list.id);
 
-        //rename to actual list title with id in brackets
-        list_title.setText(list.title + " (" + list.id + ")");
+        //rename to actual list title
+        list_title.setText(list.title);
 
         //set action on click of new card
         new_card.setOnAction(e->{
@@ -214,6 +214,9 @@ public class MainClientCtrl {
         edit_card.setId("edit_card_"+list.id+"_"+card.id); // to differentiate between cards in different lists
         delete_card.setId("delete_card_"+list.id+"_"+card.id);
         card_title.setId("title_"+list.id+"_"+card.id);
+
+        //rename to actual card title
+        card_title.setText(card.title);
         //set action on click
         edit_card.setOnAction(e->{
             overviewCtrl.showEditCard(board, list, card);

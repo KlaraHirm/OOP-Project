@@ -103,6 +103,7 @@ public class MainClientCtrl {
         delete_board.setId("delete_board_"+board.id);
         box.setId("board_"+board.id);
 
+        //rename to actual board title with id in brackets
         board_title.setText(board.title + " (" + board.id + ")");
 
         //set action on click of new list
@@ -151,11 +152,17 @@ public class MainClientCtrl {
 
         //rename list elements to be identified by their id (for now random int generated in MainPageCtrl)
         VBox box = (VBox) overview.lookup("#list");
+        Label list_title = (Label) overview.lookup("#list_title");
         Button new_card = (Button) overview.lookup("#new_card");
         Button delete_list = (Button) overview.lookup("#delete_list");
+
         box.setId("list_"+list.id);
+        list_title.setId("list_title_"+list.id);
         new_card.setId("new_card_"+list.id);
         delete_list.setId("delete_list_"+list.id);
+
+        //rename to actual list title with id in brackets
+        list_title.setText(list.title + " (" + list.id + ")");
 
         //set action on click of new card
         new_card.setOnAction(e->{

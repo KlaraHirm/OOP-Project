@@ -202,7 +202,7 @@ public class MainClientCtrl {
         card_title.setId("title_"+list.id+"_"+card.id);
         //set action on click
         edit_card.setOnAction(e->{
-            overviewCtrl.editCard(board, list, card);
+            overviewCtrl.showEditCard(board, list, card);
         });
     }
 

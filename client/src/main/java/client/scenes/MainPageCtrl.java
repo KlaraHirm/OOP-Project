@@ -9,16 +9,12 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
-
-import javax.swing.event.ChangeEvent;
-import javafx.beans.value.ChangeListener ;
 
 
 public class MainPageCtrl implements Initializable {
@@ -76,6 +72,11 @@ public class MainPageCtrl implements Initializable {
 //        refresh();
     }
 
+    /**
+     * method which load board along with its content
+     * @param selected_board object of class Board to be loaded
+     * @throws IOException
+     */
     public void loadBoardContent(Board selected_board) throws IOException {
         mainCtrl.hideBoard();
         addBoard(selected_board);
@@ -182,7 +183,13 @@ public class MainPageCtrl implements Initializable {
 
     //TODO - public void deleteCard(Card card)
 
-    public void editCard(Board board, CardList list, Card card) {
+    /**
+     * method which loads a scene to edit card
+     * @param board object of class Board - grandparent of card
+     * @param list object of class CardList - parent of card
+     * @param card object of class Card which is to be edited
+     */
+    public void showEditCard(Board board, CardList list, Card card) {
         mainCtrl.showEditCard(card);
     }
     /**

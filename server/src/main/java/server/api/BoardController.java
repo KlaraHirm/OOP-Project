@@ -15,14 +15,13 @@
  */
 package server.api;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.BoardRepository;
-import server.database.CardListRepository;
 
 import commons.*;
 
@@ -31,30 +30,42 @@ import commons.*;
 public class BoardController
 {
 
-    private final Random random;
     private final BoardRepository repo;
 
-    private final CardListRepository cardListRepo;
-
-    public BoardController(Random random, BoardRepository repo, CardListRepository cardListRepo) {
-        this.random = random;
+    /**
+     * Constructor for the BoardController
+     */
+    public BoardController(BoardRepository repo) {
         this.repo = repo;
-        this.cardListRepo = cardListRepo;
     }
 
+    /**
+     * Retrieve all boards in the database
+     * @return a json array containing all boards
+     */
     @GetMapping(path = { "", "/" })
     public List<Board> getAll() {
         return repo.findAll();
     }
 
+    /**
+     * Retrieve particular Board using ID
+     * @param id id of board
+     * @return Json representation of board object
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoard(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
+    /**
+     * Write Board to server
+     * @param board board object to create/ write
+     * @return json representation of successfully written board
+     */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Board> addBoard(@RequestBody Board board)
     {
@@ -64,40 +75,66 @@ public class BoardController
         }
 
         Board saved = repo.save(board);
+        if(saved.cardLists == null) saved.cardLists = new ArrayList<>();
         return ResponseEntity.ok(saved);
     }
 
-    @PostMapping(path = { "/{id}", "/{id}/" })
-    public ResponseEntity<Board> addBoardWithID(@RequestBody Board board, @PathVariable("id") long id)
-    {
-        if (board.title == null || id < 0 || !repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
+    /**
+     * Update a board
+     * @param changedBoard the board object to edit, with the corresponding id
+     * @return the edited board
+     * Gives 404 if the board does not exist
+     * Gives 400 if the body is malformed
+     */
+    @PutMapping(path = { "", "/" })
+    public ResponseEntity<Board> editBoard(@RequestBody Board changedBoard) {
+        if (changedBoard == null) return ResponseEntity.badRequest().build();
 
-        board.id = id;
-        Board saved = repo.save(board);
+        if (!repo.existsById(changedBoard.id)) return ResponseEntity.notFound().build();
+        Board board = repo.findById(changedBoard.id).get();
+
+        changedBoard.cardLists = board.cardLists;
+
+        Board saved = repo.save(changedBoard);
         return ResponseEntity.ok(saved);
     }
 
+    /**
+     * Deletes a board with particular ID
+     * @param id id of board to delete
+     * @return Response indicating success fo deletion
+     */
     @DeleteMapping(path = { "/{id}", "/{id}/" })
-    public ResponseEntity<Integer> deleteBoardWithID(@PathVariable("id") long id)
+    public ResponseEntity<Board> deleteBoardWithID(@PathVariable("id") long id)
     {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+        Board board = repo.findById(id).get();
         repo.deleteById(id);
-        return ResponseEntity.ok(1);
+        return ResponseEntity.ok(board);
     }
 
-    @PostMapping(path = { "/{id}/cardlist", "/{id}/cardlist/" })
-    public ResponseEntity<CardList> postCardlist(@RequestBody CardList cardList, @PathVariable("id") long id)
+    /**
+     * Create a cardlist on board with id
+     * @param cardList cardlist object to write/ create
+     * @param id id of board to which cardlist should be attached
+     * @return json representation of written cardlist
+     */
+    @PostMapping(path = { "/{id}", "/{id}/" })
+    public ResponseEntity<CardList> addCardList(@RequestBody CardList cardList, @PathVariable("id") long id)
     {
-        if (cardList.title == null || id < 0 || !repo.existsById(id)) {
+        if (cardList == null || cardList.title == null) {
             return ResponseEntity.badRequest().build();
+        }
+        if(id < 0 || !repo.existsById(id))
+        {
+            return ResponseEntity.notFound().build();
         }
 
         Board board = repo.findById(id).get();
         board.cardLists.add(cardList);
+        if(cardList.cards == null) cardList.cards = new ArrayList<>();
 
         Board saved = repo.save(board);
         return ResponseEntity.ok(cardList);

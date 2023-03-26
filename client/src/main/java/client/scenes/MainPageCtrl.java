@@ -31,7 +31,6 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private ComboBox<Board> boards_list;
 
-    private ChangeListener<String> changeListener;
 
 
 

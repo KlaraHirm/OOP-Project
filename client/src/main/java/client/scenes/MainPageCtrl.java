@@ -18,6 +18,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 
@@ -135,12 +137,12 @@ public class MainPageCtrl implements Initializable {
      * deletes board currently shown from server and client
      * @param board board to be deleted
      */
-    public void deleteBoard(Board board) {
+    public void deleteBoard(Board board, AnchorPane board_container) {
         boards_list.getSelectionModel().clearSelection();
         boards_list.getItems().remove(board);
         server.deleteBoard(board);
         refresh();
-        hideBoard(main_page.lookup("#board_container"));
+        hideBoard(board_container);
     }
 
     /**
@@ -150,7 +152,16 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void addList(Board board, CardList list) throws IOException {
-        mainCtrl.showList(board, list);
+        refresh();
+        URL location = getClass().getResource("List.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent p =  loader.load();
+        ListCtrl listCtrl = loader.getController();
+        listCtrl.setPageCtrl(this);
+        listCtrl.setList_object(list);
+        listCtrl.setBoard_object(board);
+        listCtrl.setTitle();
+        ((HBox) main_page.lookup("#board")).getChildren().addAll(p);
     }
 
     /**
@@ -166,14 +177,19 @@ public class MainPageCtrl implements Initializable {
         addList(board, list);
     }
 
+    public void hideList(Node n, HBox board){
+        board.getChildren().remove(n);
+    }
+
+
     /**
      * deletes list specified in parameters
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be deleted
      */
-    public void deleteList(Board board, CardList list) {
+    public void deleteList(Board board, CardList list, VBox list_container) {
         server.deleteList(board, list);
-        mainCtrl.hideList(board, list);
+        hideList(list_container, ((HBox)list_container.getParent()));
         refresh();
     }
 

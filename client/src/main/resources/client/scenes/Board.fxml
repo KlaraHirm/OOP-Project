@@ -14,7 +14,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="new_list" layoutX="25.0" layoutY="335.0" mnemonicParsing="false" text="Add New List" textFill="#2274a5" wrapText="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
+      <Button fx:id="new_list" layoutX="25.0" layoutY="335.0" mnemonicParsing="false" onAction="#addNewList" text="Add New List" textFill="#2274a5" wrapText="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

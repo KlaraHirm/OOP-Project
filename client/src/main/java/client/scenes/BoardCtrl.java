@@ -43,7 +43,7 @@ public class BoardCtrl {
     }
 
     public void deleteBoard() {
-        pageCtrl.deleteBoard(board_object);
+        pageCtrl.deleteBoard(board_object, board_container);
     }
 
     public void addNewList() throws IOException {

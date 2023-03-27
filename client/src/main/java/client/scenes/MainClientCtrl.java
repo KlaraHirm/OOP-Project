@@ -179,16 +179,16 @@ public class MainClientCtrl {
         list_title.setText(list.title);
 
         //set action on click of new card
-        new_card.setOnAction(e->{
-            try {
-                overviewCtrl.newCard(board, list);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        delete_list.setOnAction(e->{
-            overviewCtrl.deleteList(board, list);
-        });
+//        new_card.setOnAction(e->{
+//            try {
+//                overviewCtrl.newCard(board, list);
+//            } catch (IOException ex) {
+//                throw new RuntimeException(ex);
+//            }
+//        });
+//        delete_list.setOnAction(e->{
+//            overviewCtrl.deleteList(board, list);
+//        });
     }
 
     /**

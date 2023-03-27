@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
@@ -165,6 +166,7 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setBoard_object(board);
         listCtrl.setTitle();
         board_element.getChildren().addAll(p);
+        HBox.setMargin(p, new Insets(10, 10, 10, 10));
         return p;
     }
 
@@ -221,6 +223,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setBoard_object(board);
         cardCtrl.setTitle();
         list_element.getChildren().addAll(p);
+        VBox.setMargin(p, new Insets(5, 5, 5, 5));
     }
 
     /**

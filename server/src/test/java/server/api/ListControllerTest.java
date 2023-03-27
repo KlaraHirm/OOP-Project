@@ -127,7 +127,6 @@ class ListControllerTest {
     public void testDeleteListNonExistent1()
     {
         when(repoList.existsById(1L)).thenReturn(false);
-        when(repoBoard.existsById(1L)).thenReturn(true);
         assertEquals(ResponseEntity.notFound().build(), controller.deleteList(1L, 1L));
     }
 

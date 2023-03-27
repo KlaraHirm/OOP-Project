@@ -66,11 +66,6 @@ public class MainClientCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-
-//        Button page = (Button) test.lookup("#button");
-//        Button pagee = (Button) test.lookup("#butt");
-//        draggableCtrl.makeDraggable(page);
-//        draggableCtrl.makeDraggable(pagee);
     }
 
     /**

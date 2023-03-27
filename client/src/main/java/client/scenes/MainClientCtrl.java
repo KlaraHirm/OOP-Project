@@ -32,9 +32,14 @@ public class MainClientCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;  //edit card page
 
+    private DraggableCtrl draggableCtrl;
+
+    private TestCtrl testCtrl;
+    private Scene test;
+
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<EditCardCtrl, Parent> editCard) {
+                           Pair<EditCardCtrl, Parent> editCard, DraggableCtrl draggableCtrl, Pair<TestCtrl, Parent> test) {
 
         this.primaryStage = primaryStage;
 
@@ -43,6 +48,11 @@ public class MainClientCtrl {
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
+
+        this.draggableCtrl = draggableCtrl;
+
+        this.testCtrl = test.getKey();
+        this.test = new Scene(test.getValue());
 
         showOverview();
         primaryStage.show();
@@ -57,6 +67,10 @@ public class MainClientCtrl {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
 
+//        Button page = (Button) test.lookup("#button");
+//        Button pagee = (Button) test.lookup("#butt");
+//        draggableCtrl.makeDraggable(page);
+//        draggableCtrl.makeDraggable(pagee);
     }
 
     /**
@@ -197,6 +211,7 @@ public class MainClientCtrl {
      */
     public void showCard(Board board, CardList list, Card card) throws IOException {
         primaryStage.setTitle("Main Page: Adding Card");
+        HBox board_element = (HBox) overview.lookup("#board_"+board.id);
         VBox list_element = (VBox) overview.lookup("#list_"+list.id);
 
         //load card template into list using loadFXML method
@@ -224,6 +239,8 @@ public class MainClientCtrl {
         delete_card.setOnAction(e->{
             overviewCtrl.deleteCard(board, list, card);
         });
+
+        draggableCtrl.makeDraggable(card_element, list_element, board_element);
     }
 
     public void hideCard(Board board, CardList list, Card card) {

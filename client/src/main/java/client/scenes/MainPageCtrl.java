@@ -88,11 +88,11 @@ public class MainPageCtrl implements Initializable {
      */
     public void loadBoardContent(Board selected_board) throws IOException {
         hideBoard(main_page.lookup("#board_container"));
-        showBoard(selected_board);
+        AnchorPane board_container = (AnchorPane) showBoard(selected_board);
         for(CardList list:selected_board.cardLists){
-            addList(selected_board, list);
+            VBox list_container = (VBox) showList(selected_board, list, (HBox) board_container.lookup("#board"));
             for(Card card:list.cards){
-                addCard(selected_board, list, card);
+                addCard(selected_board, list, card, list_container);
             }
         }
     }
@@ -102,7 +102,7 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board
      * @throws IOException
      */
-    public void showBoard(Board board) throws IOException {
+    public Parent showBoard(Board board) throws IOException {
         refresh();
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
@@ -112,6 +112,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setBoard_object(board);
         boardCtrl.setTitle();
         main_page.getChildren().addAll(p);
+        return p;
     }
 
     /**
@@ -151,7 +152,7 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList which is to be shown
      * @throws IOException
      */
-    public void addList(Board board, CardList list) throws IOException {
+    public Parent showList(Board board, CardList list, HBox board_element) throws IOException {
         refresh();
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
@@ -161,7 +162,8 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setList_object(list);
         listCtrl.setBoard_object(board);
         listCtrl.setTitle();
-        ((HBox) main_page.lookup("#board")).getChildren().addAll(p);
+        board_element.getChildren().addAll(p);
+        return p;
     }
 
     /**
@@ -169,12 +171,12 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where list is added
      * @throws IOException
      */
-    public void newList(Board board) throws IOException {
+    public void newList(Board board, HBox board_element) throws IOException {
         CardList list = new CardList("Untitled");
         list = server.addList(board, list);
         list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         refresh();
-        addList(board, list);
+        showList(board, list, board_element);
     }
 
     public void hideList(Node n, HBox board){
@@ -200,8 +202,18 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be shown
      * @throws IOException
      */
-    public void addCard(Board board, CardList list, Card card) throws IOException {
-        mainCtrl.showCard(board, list, card);
+    public void addCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
+        refresh();
+        URL location = getClass().getResource("Card.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent p =  loader.load();
+        CardCtrl cardCtrl = loader.getController();
+        cardCtrl.setPageCtrl(this);
+        cardCtrl.setCard_object(card);
+        cardCtrl.setList_object(list);
+        cardCtrl.setBoard_object(board);
+        cardCtrl.setTitle();
+        list_element.getChildren().addAll(p);
     }
 
     /**
@@ -210,16 +222,20 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList where card is
      * @throws IOException
      */
-    public void newCard(Board board, CardList list) throws IOException {
+    public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
         card.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         list.cards.add(card);
-        addCard(board, list, card);
+        addCard(board, list, card, list_element);
     }
 
-    public void deleteCard(Board board, CardList list, Card card) {
+    public void hideCard(Node n, VBox list_container) {
+        list_container.getChildren().remove(n);
+    }
+
+    public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
         //TODO - server.deleteCard
-        mainCtrl.hideCard(board, list, card);
+        hideCard(card_element, (VBox) card_element.getParent());
         refresh();
     }
 

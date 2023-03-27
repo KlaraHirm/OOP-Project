@@ -47,7 +47,7 @@ public class BoardCtrl {
     }
 
     public void addNewList() throws IOException {
-        pageCtrl.newList(board_object);
+        pageCtrl.newList(board_object, board);
     }
 
 

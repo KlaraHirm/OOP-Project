@@ -5,6 +5,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class ListCtrl {
     }
 
     public void newCard() throws IOException {
-        pageCtrl.newCard(board_object, list_object);
+        pageCtrl.newCard(board_object, list_object, list);
     }
 
     public void deleteList() {

@@ -14,6 +14,9 @@ public class Card
 
     public String title;
 
+    /**
+     * Order of the card in the cardList
+     */
     public int place;
 
     @SuppressWarnings("unused")

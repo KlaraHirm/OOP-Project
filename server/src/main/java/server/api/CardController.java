@@ -75,7 +75,7 @@ public class CardController {
     ) {
         if (!cardRepo.existsById(cardId)) return ResponseEntity.notFound().build();
 
-        Card deleted = cardRepo.getById(cardId);
+        Card deleted = cardRepo.findById(cardId).get();
         cardRepo.deleteById(cardId);
 
         return ResponseEntity.ok(deleted);

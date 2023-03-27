@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="list" alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="240.0" prefWidth="700.0" style="-fx-border-color: #2274A5; -fx-background-color: #eff6fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="list" alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="240.0" prefWidth="700.0" style="-fx-border-color: #2274A5; -fx-background-color: #eff6fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ListCtrl">
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
          <children>
-            <Button fx:id="new_card" mnemonicParsing="false" style="-fx-background-color: #D7DDE1; -fx-border-color: #2274A5;" text="New Card" textFill="#2274a5" wrapText="true">
+            <Button fx:id="new_card" mnemonicParsing="false" onAction="#newCard" style="-fx-background-color: #D7DDE1; -fx-border-color: #2274A5;" text="New Card" textFill="#2274a5" wrapText="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -25,7 +25,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="delete_list" mnemonicParsing="false" style="-fx-background-color: #D7DDE1; -fx-border-color: a32222;" text="Delete List" textFill="#a32222" wrapText="true">
+            <Button fx:id="delete_list" mnemonicParsing="false" onAction="#deleteList" style="-fx-background-color: #D7DDE1; -fx-border-color: a32222;" text="Delete List" textFill="#a32222" wrapText="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

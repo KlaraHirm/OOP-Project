@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
       <HBox alignment="CENTER" style="-fx-background-color: transparent;">
          <children>
-            <Button fx:id="delete_card" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: a32222; -fx-border-radius: 50%;" text="x" textAlignment="CENTER" textFill="#a32222" HBox.hgrow="ALWAYS">
+            <Button fx:id="delete_card" alignment="CENTER" mnemonicParsing="false" onAction="#deleteCard" style="-fx-background-color: transparent; -fx-border-color: a32222; -fx-border-radius: 50%;" text="x" textAlignment="CENTER" textFill="#a32222" HBox.hgrow="ALWAYS">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -19,7 +19,7 @@
                   <Insets right="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="edit_card" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 30%;" text="⋮" textAlignment="CENTER" textFill="#2274a5" HBox.hgrow="ALWAYS">
+            <Button fx:id="edit_card" alignment="CENTER" mnemonicParsing="false" onAction="#showEdit" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 30%;" text="⋮" textAlignment="CENTER" textFill="#2274a5" HBox.hgrow="ALWAYS">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

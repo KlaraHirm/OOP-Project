@@ -12,8 +12,12 @@ import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
 
 
@@ -26,6 +30,9 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private ComboBox<Board> boards_list;
+
+    @FXML
+    private AnchorPane main_page;
 
 
 
@@ -78,8 +85,8 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void loadBoardContent(Board selected_board) throws IOException {
-        mainCtrl.hideBoard();
-        addBoard(selected_board);
+        hideBoard(main_page.lookup("#board_container"));
+        showBoard(selected_board);
         for(CardList list:selected_board.cardLists){
             addList(selected_board, list);
             for(Card card:list.cards){
@@ -93,9 +100,16 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board
      * @throws IOException
      */
-    public void addBoard(Board board) throws IOException {
+    public void showBoard(Board board) throws IOException {
         refresh();
-        mainCtrl.showBoard(board);
+        URL location = getClass().getResource("Board.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent p =  loader.load();
+        BoardCtrl boardCtrl = loader.getController();
+        boardCtrl.setPageCtrl(this);
+        boardCtrl.setBoard_object(board);
+        boardCtrl.setTitle();
+        main_page.getChildren().addAll(p);
     }
 
     /**
@@ -105,9 +119,16 @@ public class MainPageCtrl implements Initializable {
     public void newBoard() throws IOException {
         Board board = new Board("Untitled");
         board = server.addBoard(board);
-        mainCtrl.hideBoard();
-        addBoard(board);
+        hideBoard(main_page.lookup("#board_container"));
+        showBoard(board);
         boards_list.setValue(board);
+    }
+
+    public void hideBoard(Node n) {
+        if(n==null){
+            return;
+        }
+        main_page.getChildren().remove(n);
     }
 
     /**
@@ -119,8 +140,7 @@ public class MainPageCtrl implements Initializable {
         boards_list.getItems().remove(board);
         server.deleteBoard(board);
         refresh();
-        mainCtrl.hideBoard();
-
+        hideBoard(main_page.lookup("#board_container"));
     }
 
     /**

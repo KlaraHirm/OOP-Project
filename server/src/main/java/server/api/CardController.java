@@ -55,11 +55,8 @@ public class CardController {
         if (newCard == null) return ResponseEntity.badRequest().build();
 
         if (!cardRepo.existsById(newCard.id)) return ResponseEntity.notFound().build();
-        Card card = cardRepo.findById(newCard.id).get();
 
-        card.title = newCard.title;
-
-        Card saved = cardRepo.save(card);
+        Card saved = cardRepo.save(newCard);
         return ResponseEntity.ok(saved);
     }
 

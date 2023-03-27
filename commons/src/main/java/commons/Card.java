@@ -19,6 +19,11 @@ public class Card
      */
     public int place;
 
+    /**
+     * Description of the card
+     */
+    public String description;
+
     @SuppressWarnings("unused")
     private Card() {
         // for object mappers

@@ -1,53 +1,43 @@
 package client.scenes;
 
+import client.objects.TaskObjectCtrl;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 
 public class TagPopupCtrl {
 
     public static void display()
     {
-        Stage popupwindow=new Stage();
+        try {
+            Stage popupwindow=new Stage();
 
-        popupwindow.initModality(Modality.APPLICATION_MODAL);
-        popupwindow.setTitle("This is a pop up window");
+            popupwindow.initModality(Modality.APPLICATION_MODAL);
+            popupwindow.setTitle("This is a pop up window");
+            //gets fxml of ListObject.fxml
+            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                    Path.of("client", "scenes", "TagPopup.fxml").toString()));
+            //loads it into parent object
+            Parent n = (Parent)fxml.load();
+            Scene scene1= new Scene(n, 300, 250);
 
+            popupwindow.setScene(scene1);
 
-        Label label1 = new Label("Tag:");
+            popupwindow.showAndWait();
 
-        TextField field = new TextField();
-        field.setMaxWidth(150);
-
-        Button submit= new Button("Submit");
-        Button cancel= new Button("Cancel");
-
-        submit.setOnAction(e -> setTag(popupwindow));
-
-
-
-        VBox layout= new VBox(10);
-
-
-        layout.getChildren().addAll(label1, field, submit, cancel);
-
-        layout.setAlignment(Pos.CENTER);
-
-        Scene scene1= new Scene(layout, 300, 250);
-
-        popupwindow.setScene(scene1);
-
-        popupwindow.showAndWait();
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void setTag(Stage popupwindow){
 
-        popupwindow.close();
-    }
 
 }
 

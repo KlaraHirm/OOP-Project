@@ -42,14 +42,24 @@ public class ListCtrl {
         this.pageCtrl = pageCtrl;
     }
 
+    /**
+     * set title which is shown in ui of list to its title with id in brackets
+     */
     public void setTitle() {
         list_title.setText(list_object.title + " (" + list_object.id + ")");
     }
 
+    /**
+     * used as onAction to create new card
+     * @throws IOException
+     */
     public void newCard() throws IOException {
         pageCtrl.newCard(board_object, list_object, list);
     }
 
+    /**
+     * used as onAction to delete current list
+     */
     public void deleteList() {
         pageCtrl.deleteList(board_object, list_object, list);
     }

@@ -46,14 +46,23 @@ public class CardCtrl {
         this.pageCtrl = pageCtrl;
     }
 
+    /**
+     * set title which is shown in ui of card to its title with id in brackets
+     */
     public void setTitle() {
         title.setText(card_object.title + " (" + card_object.id + ")");
     }
 
+    /**
+     * used as onAction to delete card
+     */
     public void deleteCard() {
         pageCtrl.deleteCard(board_object, list_object, card_object, card);
     }
 
+    /**
+     * used as onAction to go to edit scene
+     */
     public void showEdit() {
         pageCtrl.showEditCard(board_object, list_object, card_object);
     }

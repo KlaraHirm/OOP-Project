@@ -37,8 +37,6 @@ public class MainPageCtrl implements Initializable {
     private AnchorPane main_page;
 
 
-
-
     @Inject
     public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
@@ -82,7 +80,7 @@ public class MainPageCtrl implements Initializable {
     }
 
     /**
-     * method which load board along with its content
+     * method which loads board along with its content
      * @param selected_board object of class Board to be loaded
      * @throws IOException
      */
@@ -127,6 +125,10 @@ public class MainPageCtrl implements Initializable {
         boards_list.setValue(board);
     }
 
+    /**
+     * method which hides board from ui
+     * @param n object of class Node to be hidden (board)
+     */
     public void hideBoard(Node n) {
         if(n==null){
             return;
@@ -179,6 +181,11 @@ public class MainPageCtrl implements Initializable {
         showList(board, list, board_element);
     }
 
+    /**
+     * method which hides list from ui
+     * @param n object of class Node to be hidden (list)
+     * @param board object of class HBox which represents board where list is
+     */
     public void hideList(Node n, HBox board){
         board.getChildren().remove(n);
     }
@@ -229,6 +236,11 @@ public class MainPageCtrl implements Initializable {
         addCard(board, list, card, list_element);
     }
 
+    /**
+     * method which hides card from ui
+     * @param n object of class Node to be hidden (card)
+     * @param list_container object of class VBox which represents list where card is
+     */
     public void hideCard(Node n, VBox list_container) {
         list_container.getChildren().remove(n);
     }

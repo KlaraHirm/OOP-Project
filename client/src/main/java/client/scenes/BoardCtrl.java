@@ -38,14 +38,24 @@ public class BoardCtrl {
         this.board_object = board_object;
     }
 
+    /**
+     * set title which is shown in ui of board to its title with id in brackets
+     */
     public void setTitle() {
         board_title.setText(board_object.title + " (" + board_object.id + ")");
     }
 
+    /**
+     * used as onAction to delete board
+     */
     public void deleteBoard() {
         pageCtrl.deleteBoard(board_object, board_container);
     }
 
+    /**
+     * used as onAction to add new list
+     * @throws IOException
+     */
     public void addNewList() throws IOException {
         pageCtrl.newList(board_object, board);
     }

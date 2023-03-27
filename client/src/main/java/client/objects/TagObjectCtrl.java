@@ -2,6 +2,7 @@ package client.objects;
 
 import client.scenes.EditCardCtrl;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 
 public class TagObjectCtrl {

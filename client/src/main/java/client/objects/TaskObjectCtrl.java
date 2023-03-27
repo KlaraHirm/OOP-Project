@@ -1,6 +1,7 @@
 package client.objects;
 
 import client.scenes.EditCardCtrl;
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;

@@ -32,14 +32,9 @@ public class MainClientCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;  //edit card page
 
-    private DraggableCtrl draggableCtrl;
-
-    private TestCtrl testCtrl;
-    private Scene test;
-
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<EditCardCtrl, Parent> editCard, DraggableCtrl draggableCtrl, Pair<TestCtrl, Parent> test) {
+                           Pair<EditCardCtrl, Parent> editCard) {
 
         this.primaryStage = primaryStage;
 
@@ -48,11 +43,6 @@ public class MainClientCtrl {
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
-
-        this.draggableCtrl = draggableCtrl;
-
-        this.testCtrl = test.getKey();
-        this.test = new Scene(test.getValue());
 
         showOverview();
         primaryStage.show();

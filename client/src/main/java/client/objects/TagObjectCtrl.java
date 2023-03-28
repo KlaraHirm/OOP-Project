@@ -3,6 +3,7 @@ package client.objects;
 import client.scenes.EditCardCtrl;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 public class TagObjectCtrl {
@@ -10,7 +11,14 @@ public class TagObjectCtrl {
     @FXML
     private HBox tagHBox;
 
+    @FXML
+    private static Label tagLabel;
+
     private EditCardCtrl editCtrl;
+
+    public static void setTagLabel(String name){
+        tagLabel.setText(name);
+    }
 
     //sets instance of editctrl
     public void setEditCtrl(EditCardCtrl e) {

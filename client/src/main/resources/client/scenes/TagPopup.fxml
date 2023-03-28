@@ -15,7 +15,7 @@
             <HBox spacing="10" alignment="CENTER">
                 <children>
                     <Label  text="Tag" />
-                    <TextField promptText="New Tag" maxWidth="150"/>
+                    <TextField promptText="New Tag" maxWidth="150" fx:id="tagField"/>
                 </children>
             </HBox>
             <ScrollPane minHeight="150" pannable="true" maxHeight="150" maxWidth="150">

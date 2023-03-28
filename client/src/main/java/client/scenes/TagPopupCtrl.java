@@ -1,6 +1,8 @@
 package client.scenes;
 
+import client.objects.TagObjectCtrl;
 import client.objects.TaskObjectCtrl;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.*;
@@ -19,6 +21,9 @@ public class TagPopupCtrl {
     public static void setEditCtrl(EditCardCtrl e) {
         editCtrl = e;
     }
+
+    @FXML
+    private TextField tagField;
 
     public static void display()
     {
@@ -46,6 +51,8 @@ public class TagPopupCtrl {
 
     public void submitTag(){
         windowTag.close();
+        String name = tagField.getText();
+        TagObjectCtrl.setTagLabel(name);
         editCtrl.tagSubmit();
     }
     public void cancelTag(){

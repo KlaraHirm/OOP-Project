@@ -54,7 +54,7 @@ public class MainClientCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
-        primaryStage.setScene(editCard);
+        primaryStage.setScene(overview);
 
     }
 

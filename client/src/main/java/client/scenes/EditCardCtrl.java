@@ -59,6 +59,8 @@ public class EditCardCtrl {
 
     static boolean tagAdd;
 
+    String tagName;
+
 
 
     //not done working on
@@ -111,6 +113,9 @@ public class EditCardCtrl {
         tagAdd=true;
     }
 
+    public void setTagLabel(String name){
+        tagName=name;
+    }
     @FXML
     private void addTag() {
         tagAdd=true;
@@ -123,6 +128,7 @@ public class EditCardCtrl {
                 Parent n = (Parent)fxml.load();
                 TagObjectCtrl controller = fxml.getController();
                 controller.setEditCtrl(this);
+                controller.setTagLabel(tagName);
                 tagBox.getChildren().add(n);
             } catch (IOException e) {
                 e.printStackTrace();

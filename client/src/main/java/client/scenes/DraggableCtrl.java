@@ -6,8 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 
 public class DraggableCtrl {
 
@@ -72,7 +70,6 @@ public class DraggableCtrl {
                         mouseAnchorY = mouseEvent.getSceneY();
 
                         node_card.setManaged(true); // layout of card is managed by new list (VBox)
-
                         break;
                     }
                 }

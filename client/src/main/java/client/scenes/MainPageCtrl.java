@@ -46,16 +46,36 @@ public class MainPageCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initialize method which is called after constructor, setts properties of ComboBox boards_list
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // convertor for board_list (dropdown menu field with board names)
         boards_list.setConverter(new StringConverter<Board>() {
 
+            /**
+             * toString method which converts elements in boards_list to String - this is shown in UI in ComboBox
+             * @param board the object of type {@code T} to convert
+             * @return String representation of objects in boards_list
+             */
             @Override
             public String toString(Board board) {
                 return board.title + " (" + board.id + ")";
             }
 
+            /**
+             * fromString method which converts String representation back to object in boards_list
+             * @param text the {@code String} to convert
+             * @return actual object of String representation
+             */
             @Override
             public Board fromString(String text) {
                 String title = text.split(" ")[0];
@@ -218,7 +238,6 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void showCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
-        refresh();
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -255,6 +274,14 @@ public class MainPageCtrl implements Initializable {
         list_container.getChildren().remove(n);
     }
 
+
+    /**
+     * method which deletes card from server and ui
+     * @param board object of class Board where card is - grandparent
+     * @param list object of class CardList where card is - parent
+     * @param card object of class Card which represents the card to be deleted
+     * @param card_element JavaFX element of the card
+     */
     public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
         //TODO - server.deleteCard
         hideCard(card_element, (VBox) card_element.getParent());

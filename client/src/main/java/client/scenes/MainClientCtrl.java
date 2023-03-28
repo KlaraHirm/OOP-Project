@@ -6,8 +6,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Main Controller for Application

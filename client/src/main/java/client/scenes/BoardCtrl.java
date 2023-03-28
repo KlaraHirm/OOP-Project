@@ -30,10 +30,18 @@ public class BoardCtrl {
 
     private Board board_object;
 
+    /**
+     * Setter for MainPageCtrl pageCtrl
+     * @param pageCtrl object of class MainPageCtrl
+     */
     public void setPageCtrl(MainPageCtrl pageCtrl) {
         this.pageCtrl = pageCtrl;
     }
 
+    /**
+     * Setter for Board board_object
+     * @param board_object object of class Board which this controller represents
+     */
     public void setBoard_object(Board board_object) {
         this.board_object = board_object;
     }

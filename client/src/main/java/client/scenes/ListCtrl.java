@@ -29,14 +29,26 @@ public class ListCtrl {
 
     private MainPageCtrl pageCtrl;
 
+    /**
+     * setter for board_object
+     * @param board_object object of class Board where list is
+     */
     public void setBoard_object(Board board_object) {
         this.board_object = board_object;
     }
 
+    /**
+     * setter for list_object
+     * @param list_object object of class CardList representing a list
+     */
     public void setList_object(CardList list_object) {
         this.list_object = list_object;
     }
 
+    /**
+     * setter for MainPageCtrl pageCtrl
+     * @param pageCtrl object of class MainPageCtrl
+     */
     public void setPageCtrl(MainPageCtrl pageCtrl) {
         this.pageCtrl = pageCtrl;
     }

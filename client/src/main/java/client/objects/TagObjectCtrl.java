@@ -16,16 +16,23 @@ public class TagObjectCtrl {
 
     private EditCardCtrl editCtrl;
 
+    /**
+     * Sets tagLabel to name
+     * **/
     public static void setTagLabel(String name){
         tagLabel.setText(name);
     }
 
-    //sets instance of editctrl
+    /**
+     * Sets instance of editCardCtrl
+     * **/
     public void setEditCtrl(EditCardCtrl e) {
         this.editCtrl = e;
     }
 
-    //sends delete to editctrl with whats getting deleted
+    /**
+     * sends delete to editctrl with whats getting deleted
+     * **/
     public void deleteTag() {
         editCtrl.deleteTag(tagHBox);
     }

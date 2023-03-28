@@ -27,15 +27,12 @@ public class EditCardCtrl {
     @FXML
     private TextField titleField;
 
-    //gets the listPane
     @FXML
     private FlowPane listPane;
 
-    //gets text field for checkbox
     @FXML
     private TextField checkField;
 
-    //gets tag HBox
     @FXML
     private HBox tagBox;
     @FXML
@@ -63,12 +60,13 @@ public class EditCardCtrl {
 
 
 
-    //not done working on
+    /**
+     * sets data already in card to show in the UI
+     * not finished, getting worked on by kars de jong
+     * **/
     Card aCard;
     //CardController cardCtrl;
     long cardId;
-
-    //not done working on
     /*
     public void setEdit(CardController cardCtrl, long cardId){
         aCard = cardCtrl.getCard(cardId);
@@ -81,46 +79,57 @@ public class EditCardCtrl {
     }
     */
 
-
-    //adds task with checkbox and x button to listpane
+    /**
+     * adds a subtask to the listPane
+     * uses fxml loader to load TaskObject.fxml
+     * **/
     @FXML
     private void addTask() {
         try {
-            //gets fxml of ListObject.fxml
             FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
                     Path.of("client", "objects", "TaskObject.fxml").toString()));
-            //loads it into parent object
             Parent n = (Parent)fxml.load();
-            //sets name using setName in listObjectCtrl
             TaskObjectCtrl controller = fxml.getController();
             controller.setName(checkField.getText());
-            //makes listobjectctrl capable of using editctrl
             controller.setEditCtrl(this);
-            //clears textfield
             checkField.setText("");
-            //adds fxml to listpane
             listPane.getChildren().add(n);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * allows user to cancel adding a tag
+     * **/
     public void tagCancel(){
         tagAdd=false;
     }
 
+    /**
+     * allows user to submit a tag
+     * **/
     public void tagSubmit(){
         tagAdd=true;
     }
 
+    /**
+     * sets name
+     * **/
     public void setTagLabel(String name){
         tagName=name;
     }
+
+    /**
+     * adds a tag using fxml loader
+     * loads TagObject.fxml
+     * calls display on TagPopup
+     * **/
     @FXML
     private void addTag() {
         tagAdd=true;
-        TagPopupCtrl.display();
         TagPopupCtrl.setEditCtrl(this);
+        TagPopupCtrl.display();
         if(tagAdd){
             try {
                 FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
@@ -136,16 +145,25 @@ public class EditCardCtrl {
         }
     }
 
+    /**
+     * deletes object from listpane
+     * **/
     public void deleteTask(Node n) {
-        //removes object from listpane
         listPane.getChildren().remove(n);
     }
+
+    /**
+     * deletes object from tagBox
+     * **/
     public void deleteTag(Node n) {
         //removes object from tagBox
         tagBox.getChildren().remove(n);
     }
 
-    //not done working on
+    /**
+     * saves what was edited
+     * not done being worked on, being worked on by kars de jong
+     * **/
     public void submitEdit(){
         Card edited = new Card(titleField.getText());
         //edited.setBody(bodyField.getText());

@@ -18,13 +18,20 @@ public class TagPopupCtrl {
 
     static Stage windowTag;
     private static EditCardCtrl editCtrl;
+    @FXML
+    private TextField tagField;
+
+    /**
+     * Sets EditCardCtrl instance
+     * **/
     public static void setEditCtrl(EditCardCtrl e) {
         editCtrl = e;
     }
 
-    @FXML
-    private TextField tagField;
-
+    /**
+     * displays popup window to add a tag
+     * uses fxml loader to load TagPopup.fxml
+     * **/
     public static void display()
     {
         try {
@@ -49,12 +56,18 @@ public class TagPopupCtrl {
         }
     }
 
+    /**
+     * Submits a tag to be added to EditCard
+     * **/
     public void submitTag(){
         windowTag.close();
         String name = tagField.getText();
         TagObjectCtrl.setTagLabel(name);
         editCtrl.tagSubmit();
     }
+    /**
+     * cancels adding a tag
+     * **/
     public void cancelTag(){
         windowTag.close();
         editCtrl.tagCancel();

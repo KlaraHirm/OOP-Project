@@ -16,17 +16,24 @@ public class TaskObjectCtrl {
     private HBox listHBox;
     private EditCardCtrl editCtrl;
 
-    //sets name using .setText
+    /**
+     * sets name using .setText
+     * **/
     public void setName(String name) {
         this.name.setText(name);
     }
 
-    //sets editCtrl instance
+    /**
+     * Sets instance of editCardCtrl
+     * **/
     public void setEditCtrl(EditCardCtrl e) {
         this.editCtrl = e;
     }
 
-    //deleteTask is onAction method
+    /**
+     * deleteTask is onAction method for a button
+     * calls deleteTask in editCtrl
+     * **/
     public void deleteTask() {
         //sends to editCtrl
         editCtrl.deleteTask(listHBox);

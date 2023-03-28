@@ -62,6 +62,17 @@ public class Card
     }
 
     /**
+     * Create a new Card instance. Set default values for all other properties
+     * @param title Title of the card
+     */
+    public Card(String title){
+        this.title = title;
+        this.place = 0;
+        this.description = "";
+        this.done = false;
+    }
+
+    /**
      * Checks if this Card instance is equivalent to another Card instance.
      * @param o object to compare this card to
      * @return true if the objects are equivalent, false otherwise

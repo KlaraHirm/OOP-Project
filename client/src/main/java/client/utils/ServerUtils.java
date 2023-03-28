@@ -64,7 +64,7 @@ public class ServerUtils {
      */
     public CardList addList(Board board, CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board/"+board.id+"/cardlist") //
+                .target(SERVER).path("api/board/"+board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(list, APPLICATION_JSON), CardList.class);

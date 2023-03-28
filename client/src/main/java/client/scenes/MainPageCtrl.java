@@ -37,6 +37,8 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private AnchorPane main_page;
 
+    private DraggableCtrl draggableCtrl;
+
 
     @Inject
     public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
@@ -80,6 +82,10 @@ public class MainPageCtrl implements Initializable {
 //        refresh();
     }
 
+    public void setDraggableCtrl(DraggableCtrl draggableCtrl) {
+        this.draggableCtrl = draggableCtrl;
+    }
+
     /**
      * method which loads board along with its content
      * @param selected_board object of class Board to be loaded
@@ -91,7 +97,7 @@ public class MainPageCtrl implements Initializable {
         for(CardList list:selected_board.cardLists){
             VBox list_container = (VBox) showList(selected_board, list, (HBox) board_container.lookup("#board"));
             for(Card card:list.cards){
-                addCard(selected_board, list, card, list_container);
+                showCard(selected_board, list, card, list_container);
             }
         }
     }
@@ -211,7 +217,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be shown
      * @throws IOException
      */
-    public void addCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
+    public void showCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
         refresh();
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
@@ -224,6 +230,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setTitle();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
+        draggableCtrl.makeDraggable((VBox) p, list_element, (HBox) list_element.getParent());
     }
 
     /**
@@ -236,7 +243,7 @@ public class MainPageCtrl implements Initializable {
         Card card = new Card("Untitled");
         card.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         list.cards.add(card);
-        addCard(board, list, card, list_element);
+        showCard(board, list, card, list_element);
     }
 
     /**

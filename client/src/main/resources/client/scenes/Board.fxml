@@ -7,20 +7,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="board_container" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="400.0" prefWidth="750.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="board_container" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="400.0" prefWidth="750.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
    <children>
-      <Label alignment="CENTER" layoutY="22.0" prefHeight="18.0" prefWidth="600.0" text="Untitled" textAlignment="CENTER" textFill="#2274a5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+      <Label fx:id="board_title" alignment="CENTER" layoutY="20.0" prefHeight="18.0" prefWidth="700.0" text="Untitled" textAlignment="CENTER" textFill="#2274a5" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="new_list" layoutX="25.0" layoutY="335.0" mnemonicParsing="false" text="Add New List" textFill="#2274a5" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
+      <Button fx:id="new_list" layoutX="25.0" layoutY="335.0" mnemonicParsing="false" onAction="#addNewList" text="Add New List" textFill="#2274a5" wrapText="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="25.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
       <HBox fx:id="board" alignment="CENTER" layoutX="5.0" layoutY="67.0" prefHeight="240.0" prefWidth="700.0" style="-fx-background-color: #CAE2F0;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
-      <Button fx:id="delete_board" layoutX="646.0" layoutY="359.0" mnemonicParsing="false" text="Delete Board" textFill="#a32222" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="25.0">
+      <Button fx:id="delete_board" layoutX="637.0" layoutY="359.0" mnemonicParsing="false" onAction="#deleteBoard" text="Delete Board" textFill="#a32222" wrapText="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="25.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

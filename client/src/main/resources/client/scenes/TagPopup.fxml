@@ -8,13 +8,38 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.TagPopupCtrl"
-            prefHeight="300.0" prefWidth="250.0">
-    <VBox spacing="10" alignment="CENTER">
-        <Label  text="Tag" />
-        <TextField maxWidth="150"/>
-        <Button text="Submit"/>
-        <Button text="Cancel"/>
+            fx:controller="client.scenes.TagPopupCtrl">
+
+    <VBox spacing="10" alignment="CENTER" minHeight="250" minWidth="200">
+        <children>
+            <HBox spacing="10" alignment="CENTER">
+                <children>
+                    <Label  text="Tag" />
+                    <TextField promptText="New Tag" maxWidth="150"/>
+                </children>
+            </HBox>
+            <ScrollPane minHeight="150" pannable="true" maxHeight="150" maxWidth="150">
+                <content>
+                    <VBox spacing="10" alignment="CENTER_LEFT">
+                        <CheckBox mnemonicParsing="false" text="Urgent"/>
+                        <CheckBox mnemonicParsing="false" text="tag 1"/>
+                        <CheckBox mnemonicParsing="false" text="tag 2"/>
+                        <CheckBox mnemonicParsing="false" text="tag 3"/>
+                        <CheckBox mnemonicParsing="false" text="tag 4"/>
+                        <CheckBox mnemonicParsing="false" text="tag 5"/>
+                        <CheckBox mnemonicParsing="false" text="tag 6"/>
+                        <CheckBox mnemonicParsing="false" text="tag 7"/>
+                        <CheckBox mnemonicParsing="false" text="tag 8"/>
+                    </VBox>
+                </content>
+            </ScrollPane>
+            <HBox spacing="10" alignment="CENTER">
+                <children>
+                    <Button text="Submit" onAction="#submitTag"/>
+                    <Button text="Cancel" onAction="#cancelTag"/>
+                </children>
+            </HBox>
+        </children>
     </VBox>
 
 </AnchorPane>

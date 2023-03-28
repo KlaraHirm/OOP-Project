@@ -57,6 +57,8 @@ public class EditCardCtrl {
     @FXML
     private Button addTask;
 
+    static boolean tagAdd;
+
 
 
     //not done working on
@@ -101,18 +103,30 @@ public class EditCardCtrl {
         }
     }
 
+    public void tagCancel(){
+        tagAdd=false;
+    }
+
+    public void tagSubmit(){
+        tagAdd=true;
+    }
+
     @FXML
     private void addTag() {
+        tagAdd=true;
         TagPopupCtrl.display();
-        try {
-            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-                    Path.of("client", "objects", "TagObject.fxml").toString()));
-            Parent n = (Parent)fxml.load();
-            TagObjectCtrl controller = fxml.getController();
-            controller.setEditCtrl(this);
-            tagBox.getChildren().add(n);
-        } catch (IOException e) {
-            e.printStackTrace();
+        TagPopupCtrl.setEditCtrl(this);
+        if(tagAdd){
+            try {
+                FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                        Path.of("client", "objects", "TagObject.fxml").toString()));
+                Parent n = (Parent)fxml.load();
+                TagObjectCtrl controller = fxml.getController();
+                controller.setEditCtrl(this);
+                tagBox.getChildren().add(n);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

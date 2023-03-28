@@ -25,6 +25,21 @@ public class Card
     public String title;
 
     /**
+     * Order of the card in the cardList
+     */
+    public int place;
+
+    /**
+     * Description of the card
+     */
+    public String description;
+
+    /**
+     * Wether the card is checked/done
+     */
+    public boolean done;
+
+    /**
      * Empty constructor for object mappers
      */
     @SuppressWarnings("unused")
@@ -35,9 +50,26 @@ public class Card
     /**
      * Create a new Card instance.
      * @param title Title of the card
+     * @param place Place of the card (to determine order in the list)
+     * @param description Description of the card
+     * @param done If the card is checked/done
+     */
+    public Card(String title, int place, String description, boolean done){
+        this.title = title;
+        this.place = place;
+        this.description = description;
+        this.done = done;
+    }
+
+    /**
+     * Create a new Card instance. Set default values for all other properties
+     * @param title Title of the card
      */
     public Card(String title){
         this.title = title;
+        this.place = 0;
+        this.description = "";
+        this.done = false;
     }
 
     /**
@@ -54,7 +86,12 @@ public class Card
 
         Card card = (Card) o;
 
-        return new EqualsBuilder().append(id, card.id).append(title, card.title).isEquals();
+        return new EqualsBuilder()
+                .append(id, card.id)
+                .append(title, card.title)
+                .append(description, card.description)
+                .append(done, card.done)
+                .isEquals();
     }
 
     /**
@@ -64,7 +101,12 @@ public class Card
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder(17, 37).append(id).append(title).toHashCode();
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(title)
+                .append(description)
+                .append(done)
+                .toHashCode();
     }
 
     /**
@@ -77,6 +119,9 @@ public class Card
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("title", title)
+                .append("place", place)
+                .append("description", description)
+                .append("done", done)
                 .toString();
     }
 }

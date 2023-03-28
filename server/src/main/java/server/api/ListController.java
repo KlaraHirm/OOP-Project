@@ -106,7 +106,7 @@ public class ListController {
      * @return the saved target list
      * Returns 404 if IDs and position do not exist
      */
-    @PutMapping(path = {"/{id}"})
+    @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
                                             @RequestParam("cardId") long idCard) {
         if ((idOld < 0 || !repoList.existsById(idOld)) &&

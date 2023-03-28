@@ -9,8 +9,6 @@ import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/list")
 public class ListController {
@@ -105,25 +103,29 @@ public class ListController {
      * @param idOld - the original list
      * @param idNew - the target list
      * @param idCard - the Card to be displaced
-     * @param position - the new position in the target list
      * @return the saved target list
      * Returns 404 if IDs and position do not exist
      */
     @PutMapping(path = {"/{id}"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
-                                            @RequestParam("cardId") long idCard, @RequestParam("position") long position) {
+                                            @RequestParam("cardId") long idCard) {
         if ((idOld < 0 || !repoList.existsById(idOld)) &&
                 (idNew < 0 || !repoList.existsById(idNew))) {
             return  ResponseEntity.notFound().build();
         }
         if (idCard < 0 || !repoCard.existsById(idCard)) return ResponseEntity.notFound().build();
-        if (position < 0) return ResponseEntity.notFound().build();
         CardList oldList = repoList.findById(idOld).get();
         CardList newList = repoList.findById(idNew).get();
         Card card = repoCard.findById(idCard).get();
+        int position = 0;
         if (!oldList.cards.contains(card)) return ResponseEntity.notFound().build();
+        for (int i = 0; i < oldList.cards.size(); i++) {
+            if (oldList.cards.get(i).equals(card)) {
+                position++;
+            }
+        }
         oldList.cards.remove(card);
-        newList.cards.add((int) position, card);
+        newList.cards.add(position, card);
         repoList.save(oldList);
         repoList.save(newList);
         return ResponseEntity.ok(newList);

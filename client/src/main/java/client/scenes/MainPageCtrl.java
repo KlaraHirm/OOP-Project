@@ -198,7 +198,6 @@ public class MainPageCtrl implements Initializable {
     public void newList(Board board, HBox board_element) throws IOException {
         CardList list = new CardList("Untitled");
         list = server.addList(board, list);
-        list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         refresh();
         showList(board, list, board_element);
     }

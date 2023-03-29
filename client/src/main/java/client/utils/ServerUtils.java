@@ -1,6 +1,7 @@
 package client.utils;
 
 import commons.Board;
+import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -86,6 +87,18 @@ public class ServerUtils {
                 .delete();
     }
 
-    //TODO - addCard, deleteCard, getCards
+    /**
+     * add newly created card to db
+     * @param list object of class CardList where the card is
+     * @param card newly create object of class Card which is to be added to the db
+     * @return updated card (with updated id)
+     */
+    public Card addCard(CardList list, Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list/"+list.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
 
 }

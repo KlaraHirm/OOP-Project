@@ -253,7 +253,7 @@ public class MainPageCtrl implements Initializable {
      */
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
-        card.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
+        card = server.addCard(list, card);
         list.cards.add(card);
         addCard(board, list, card, list_element);
     }

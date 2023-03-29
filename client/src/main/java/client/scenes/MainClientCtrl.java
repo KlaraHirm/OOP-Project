@@ -19,11 +19,9 @@ public class MainClientCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;  //edit card page
 
-    private DraggableCtrl draggableCtrl;
-
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<EditCardCtrl, Parent> editCard, DraggableCtrl draggableCtrl) {
+                           Pair<EditCardCtrl, Parent> editCard) {
 
         this.primaryStage = primaryStage;
 
@@ -32,8 +30,6 @@ public class MainClientCtrl {
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
-
-        this.draggableCtrl = draggableCtrl;
 
         showOverview();
         primaryStage.show();
@@ -46,7 +42,6 @@ public class MainClientCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
-        overviewCtrl.setDraggableCtrl(draggableCtrl);
         primaryStage.setScene(overview);
     }
 

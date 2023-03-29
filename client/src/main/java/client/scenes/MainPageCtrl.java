@@ -37,8 +37,6 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private AnchorPane main_page;
 
-    private DraggableCtrl draggableCtrl;
-
 
     @Inject
     public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
@@ -100,10 +98,6 @@ public class MainPageCtrl implements Initializable {
         });
 
 //        refresh();
-    }
-
-    public void setDraggableCtrl(DraggableCtrl draggableCtrl) {
-        this.draggableCtrl = draggableCtrl;
     }
 
     /**
@@ -249,7 +243,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setTitle();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
-        draggableCtrl.makeDraggable((VBox) p, list_element, (HBox) list_element.getParent());
+        cardCtrl.makeDraggable((VBox) p, list_element, (HBox) list_element.getParent(), main_page);
     }
 
     /**

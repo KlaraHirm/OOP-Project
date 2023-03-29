@@ -41,7 +41,6 @@ public class Main extends Application {
         var overview = FXML.load(MainPageCtrl.class, "client", "scenes", "MainPage.fxml");
         var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
         var mainCtrl = INJECTOR.getInstance(MainClientCtrl.class);
-        var draggable = INJECTOR.getInstance(DraggableCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, editCard, draggable);
+        mainCtrl.initialize(primaryStage, overview, editCard);
     }
 }

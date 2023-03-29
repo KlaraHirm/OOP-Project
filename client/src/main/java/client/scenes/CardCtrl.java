@@ -107,50 +107,52 @@ public class CardCtrl {
             AnchorPane.setLeftAnchor(node_card, null);
             AnchorPane.setRightAnchor(node_card, null);
 
-            for (int i = 0; i < node_board.getChildren().size(); i++) {
-                if (node_board.getChildren().get(i) instanceof VBox) {
-                    if (node_card.getBoundsInParent().intersects(node_board.getChildren().get(i).getBoundsInParent())) {
-                        node_card.setLayoutX(node_board.getLayoutX() - node_board.getChildren().get(i).getLayoutX());
-                        node_card.setLayoutY(node_board.getLayoutY() - node_board.getChildren().get(i).getLayoutY());
-                        break;
-                    }
-                }
-            }
+//            for (int i = 0; i < node_board.getChildren().size(); i++) {
+//                if (node_board.getChildren().get(i) instanceof VBox) {
+//                    if (node_card.getBoundsInParent().intersects(node_board.getChildren().get(i).getBoundsInParent())) {
+//                        node_card.setLayoutX(node_board.getLayoutX() - node_board.getChildren().get(i).getLayoutX());
+//                        node_card.setLayoutY(node_board.getLayoutY() - node_board.getChildren().get(i).getLayoutY());
+//                        break;
+//                    }
+//                }
+//            }
 
-            mouseAnchorX = mouseEvent.getX() - node_card.getLayoutX();
-            mouseAnchorY = mouseEvent.getY() - node_card.getLayoutY();
+            mouseAnchorX = mouseEvent.getSceneX() - node_card.getTranslateX();
+            mouseAnchorY = mouseEvent.getSceneY() - node_card.getTranslateY();
         });
 
         node_card.setOnMouseDragged(mouseEvent -> {
 
             //  Calculate the button's new position
-            double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
-            double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
-            double newX = node_card.getLayoutX() + deltaX;
-            double newY = node_card.getLayoutY() + deltaY;
+//            double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
+//            double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
+//            double newX = node_card.getLayoutX() + deltaX;
+//            double newY = node_card.getLayoutY() + deltaY;
+            node_card.setTranslateX(mouseEvent.getSceneX() - mouseAnchorX);
+            node_card.setTranslateY(mouseEvent.getSceneY() - mouseAnchorY);
 
             // Update the button's position
-            node_card.setLayoutX(newX);
-            node_card.setLayoutY(newY);
+//            node_card.setLayoutX(newX);
+//            node_card.setLayoutY(newY);
+//
+//            mouseAnchorX = mouseEvent.getSceneX();
+//            mouseAnchorY = mouseEvent.getSceneY();
 
-            mouseAnchorX = mouseEvent.getSceneX();
-            mouseAnchorY = mouseEvent.getSceneY();
-
-            for (Node n : node_board.getChildren()) {
-                if (n instanceof VBox) {
-                    while (node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-                    }
-                }
-            }
-            for (Node n : node_board.getChildren()) {
-                if (n instanceof VBox) {
-                    if (!node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
-                        break;
-                    }
-                }
-            }
+//            for (Node n : node_board.getChildren()) {
+//                if (n instanceof VBox) {
+//                    while (node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+//                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+//                    }
+//                }
+//            }
+//            for (Node n : node_board.getChildren()) {
+//                if (n instanceof VBox) {
+//                    if (!node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+//                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
+//                        break;
+//                    }
+//                }
+//            }
         });
 
         node_card.setOnMouseReleased(mouseEvent -> {
@@ -163,9 +165,12 @@ public class CardCtrl {
                         // Remove the button from its current node_list and add it to the new node_list
                         node_board.getChildren().remove(node_card);
                         ((VBox) n).getChildren().add(node_card);
+//                        node_card.toFront();
+//                        mouseAnchorX = mouseEvent.getSceneX() - node_card.getTranslateX();
+//                        mouseAnchorY = mouseEvent.getSceneY() - node_card.getTranslateY();
 
-                        mouseAnchorX = mouseEvent.getSceneX();
-                        mouseAnchorY = mouseEvent.getSceneY();
+//                        node_card.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
+//                        node_card.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
 
                         node_card.setManaged(true); // layout of card is managed by new list (VBox)
                         break;

@@ -32,7 +32,7 @@ public class ListController {
      * @return - list object
      * Returns 404 if the list does not exist
      */
-    @GetMapping(path = {""})
+    @GetMapping("")
     public ResponseEntity<CardList> getList(@RequestParam("list") long listId) {
         if (!repoList.existsById(listId)) return ResponseEntity.notFound().build();
         CardList list = repoList.findById(listId).get();
@@ -47,7 +47,7 @@ public class ListController {
      * Gives 404 if the board does not exist
      * Gives 400 if the body is malformed
      */
-    @PostMapping(path = {""})
+    @PostMapping("")
     public ResponseEntity<Board> addList(@RequestBody CardList list, @RequestParam("board") long boardId) {
         if (list == null) return ResponseEntity.badRequest().build();
         if (!repoBoard.existsById(boardId)) return ResponseEntity.notFound().build();
@@ -65,7 +65,7 @@ public class ListController {
      * Gives 404 if the list does not exist
      * Gives 400 if the title is malformed
      */
-    @PutMapping(path = {""})
+    @PutMapping("")
     public ResponseEntity<CardList> editList(@RequestParam("title") String listTitle,
                                              @RequestParam("list") long listId) {
         if (listTitle == null) return ResponseEntity.badRequest().build();
@@ -83,7 +83,7 @@ public class ListController {
      * @return the whole board as updated
      * Returns 404 if the list or board do not exist
      */
-    @DeleteMapping(path = {""})
+    @DeleteMapping("")
     public ResponseEntity<Board> deleteList(@RequestParam("list") long listId,
                                             @RequestParam("board") long boardId) {
         if (!repoList.existsById(listId)) return ResponseEntity.notFound().build();

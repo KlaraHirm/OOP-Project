@@ -79,9 +79,8 @@ public class ServerUtils {
      */
     public Response deleteList(Board board, CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list") //
-                .queryParam("list", list.id) //
-                .queryParam("board", board.id) //
+                .target(SERVER).path("api/list/"+list.id) //
+                .queryParam("boardId", board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();

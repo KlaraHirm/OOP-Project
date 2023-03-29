@@ -10,11 +10,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -60,10 +63,6 @@ public class EditCardCtrl {
     @FXML
     private Button addTask;
 
-    static boolean tagAdd;
-
-    String tagName;
-
 
 
     /**
@@ -86,27 +85,6 @@ public class EditCardCtrl {
         }
     }
 
-    /**
-     * allows user to cancel adding a tag
-     * **/
-    public void tagCancel(){
-        tagAdd=false;
-    }
-
-    /**
-     * allows user to submit a tag
-     * **/
-    public void tagSubmit(){
-        tagAdd=true;
-    }
-
-    /**
-     * @param name
-     * sets name
-     * **/
-    public void setTagLabel(String name){
-        tagName=name;
-    }
 
     /**
      * adds a tag using fxml loader
@@ -115,21 +93,26 @@ public class EditCardCtrl {
      * **/
     @FXML
     private void addTag() {
-        tagAdd=true;
-        TagPopupCtrl.setEditCtrl(this);
-        TagPopupCtrl.display();
-        if(tagAdd){
-            try {
-                FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-                        Path.of("client", "objects", "TagObject.fxml").toString()));
-                Parent n = (Parent)fxml.load();
-                TagObjectCtrl controller = fxml.getController();
-                controller.setEditCtrl(this);
-                controller.setTagLabel(tagName);
-                tagBox.getChildren().add(n);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            Stage popupwindow = new Stage();
+            popupwindow.initModality(Modality.APPLICATION_MODAL);
+            popupwindow.setTitle("Add Tag(s)");
+
+            //gets fxml of ListObject.fxml
+            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                    Path.of("client", "scenes", "TagPopup.fxml").toString()));
+
+            Scene popUpScene = new Scene((Parent)fxml.load(), 200, 250);
+            popupwindow.setScene(popUpScene);
+
+            //loads it into parent object
+            TagPopupCtrl popupCtrl = fxml.getController();
+            popupCtrl.setEditCtrl(this);
+
+            popupwindow.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -139,6 +122,20 @@ public class EditCardCtrl {
      * **/
     public void deleteTask(Node n) {
         listPane.getChildren().remove(n);
+    }
+
+    public void createNewTag(String name) {
+        try {
+            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                    Path.of("client", "objects", "TagObject.fxml").toString()));
+            Parent n = (Parent)fxml.load();
+            TagObjectCtrl controller = fxml.getController();
+            controller.setEditCtrl(this);
+            controller.setTagLabel(name);
+            tagBox.getChildren().add(n);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

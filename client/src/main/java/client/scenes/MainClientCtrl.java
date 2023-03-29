@@ -42,7 +42,7 @@ public class MainClientCtrl {
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
-        primaryStage.setScene(overview);
+        primaryStage.setScene(editCard);
     }
 
     /**

@@ -8,7 +8,8 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.TagPopupCtrl">
+            fx:controller="client.scenes.TagPopupCtrl"
+            fx:id="root">
 
     <VBox spacing="10" alignment="CENTER" minHeight="250" minWidth="200">
         <children>

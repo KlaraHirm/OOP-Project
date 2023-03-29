@@ -17,6 +17,7 @@ public class TagObjectCtrl {
     private EditCardCtrl editCtrl;
 
     /**
+     * @param name
      * Sets tagLabel to name
      * **/
     public static void setTagLabel(String name){
@@ -24,6 +25,7 @@ public class TagObjectCtrl {
     }
 
     /**
+     * @param e
      * Sets instance of editCardCtrl
      * **/
     public void setEditCtrl(EditCardCtrl e) {

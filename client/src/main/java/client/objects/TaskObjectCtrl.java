@@ -17,6 +17,7 @@ public class TaskObjectCtrl {
     private EditCardCtrl editCtrl;
 
     /**
+     * @param name
      * sets name using .setText
      * **/
     public void setName(String name) {
@@ -24,6 +25,7 @@ public class TaskObjectCtrl {
     }
 
     /**
+     * @param e
      * Sets instance of editCardCtrl
      * **/
     public void setEditCtrl(EditCardCtrl e) {

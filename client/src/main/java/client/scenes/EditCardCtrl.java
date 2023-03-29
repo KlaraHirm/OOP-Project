@@ -38,6 +38,12 @@ public class EditCardCtrl {
     @FXML
     private TextArea bodyField;
 
+    /**
+     * \
+     * @param server
+     * @param mainCtrl
+     * Sets EditCardCtrl
+     */
     @Inject
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
@@ -59,25 +65,6 @@ public class EditCardCtrl {
     String tagName;
 
 
-
-    /**
-     * sets data already in card to show in the UI
-     * not finished, getting worked on by kars de jong
-     * **/
-    Card aCard;
-    //CardController cardCtrl;
-    long cardId;
-    /*
-    public void setEdit(CardController cardCtrl, long cardId){
-        aCard = cardCtrl.getCard(cardId);
-        this.cardCtrl = cardCtrl;
-        this.cardId = cardId;
-        titleField.setText(aCard.title);
-        //bodyField.setText(aCard.body);
-        //get and set subtasks
-        //get and set tags
-    }
-    */
 
     /**
      * adds a subtask to the listPane
@@ -114,6 +101,7 @@ public class EditCardCtrl {
     }
 
     /**
+     * @param name
      * sets name
      * **/
     public void setTagLabel(String name){
@@ -146,6 +134,7 @@ public class EditCardCtrl {
     }
 
     /**
+     * @param n
      * deletes object from listpane
      * **/
     public void deleteTask(Node n) {

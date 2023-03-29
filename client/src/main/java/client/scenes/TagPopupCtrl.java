@@ -22,6 +22,7 @@ public class TagPopupCtrl {
     private TextField tagField;
 
     /**
+     * @param e
      * Sets EditCardCtrl instance
      * **/
     public static void setEditCtrl(EditCardCtrl e) {

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
 import commons.*;
+import server.database.CardListRepository;
 
 @RestController
 @RequestMapping("/api/board")
@@ -32,11 +33,14 @@ public class BoardController
 
     private final BoardRepository repo;
 
+    private final CardListRepository repoList;
+
     /**
      * Constructor for the BoardController
      */
-    public BoardController(BoardRepository repo) {
+    public BoardController(BoardRepository repo, CardListRepository repoList) {
         this.repo = repo;
+        this.repoList = repoList;
     }
 
     /**
@@ -135,7 +139,8 @@ public class BoardController
         board.cardLists.add(cardList);
         if(cardList.cards == null) cardList.cards = new ArrayList<>();
 
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(cardList);
+        CardList saved = repoList.save(cardList);
+        repo.save(board);
+        return ResponseEntity.ok(saved);
     }
 }

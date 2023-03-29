@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
 import commons.*;
+import server.database.CardListRepository;
 
 @RestController
 @RequestMapping("/api/board")
@@ -32,18 +33,21 @@ public class BoardController
 
     private final BoardRepository repo;
 
+    private final CardListRepository repoList;
+
     /**
      * Constructor for the BoardController
      */
-    public BoardController(BoardRepository repo) {
+    public BoardController(BoardRepository repo, CardListRepository repoList) {
         this.repo = repo;
+        this.repoList = repoList;
     }
 
     /**
      * Retrieve all boards in the database
      * @return a json array containing all boards
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping("")
     public List<Board> getAll() {
         return repo.findAll();
     }
@@ -66,7 +70,7 @@ public class BoardController
      * @param board board object to create/ write
      * @return json representation of successfully written board
      */
-    @PostMapping(path = { "", "/" })
+    @PostMapping("")
     public ResponseEntity<Board> addBoard(@RequestBody Board board)
     {
         if (board.title == null)
@@ -86,7 +90,7 @@ public class BoardController
      * Gives 404 if the board does not exist
      * Gives 400 if the body is malformed
      */
-    @PutMapping(path = { "", "/" })
+    @PutMapping("")
     public ResponseEntity<Board> editBoard(@RequestBody Board changedBoard) {
         if (changedBoard == null) return ResponseEntity.badRequest().build();
 
@@ -104,7 +108,7 @@ public class BoardController
      * @param id id of board to delete
      * @return Response indicating success fo deletion
      */
-    @DeleteMapping(path = { "/{id}", "/{id}/" })
+    @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteBoardWithID(@PathVariable("id") long id)
     {
         if (id < 0 || !repo.existsById(id)) {
@@ -121,14 +125,13 @@ public class BoardController
      * @param id id of board to which cardlist should be attached
      * @return json representation of written cardlist
      */
-    @PostMapping(path = { "/{id}", "/{id}/" })
+    @PostMapping("/{id}")
     public ResponseEntity<CardList> addCardList(@RequestBody CardList cardList, @PathVariable("id") long id)
     {
         if (cardList == null || cardList.title == null) {
             return ResponseEntity.badRequest().build();
         }
-        if(id < 0 || !repo.existsById(id))
-        {
+        if(id < 0 || !repo.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
 
@@ -136,7 +139,8 @@ public class BoardController
         board.cardLists.add(cardList);
         if(cardList.cards == null) cardList.cards = new ArrayList<>();
 
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(cardList);
+        CardList saved = repoList.save(cardList);
+        repo.save(board);
+        return ResponseEntity.ok(saved);
     }
 }

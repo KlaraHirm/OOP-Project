@@ -27,6 +27,7 @@ public class CardList
      * List of Cards in the cardList
      */
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("place")
     public List<Card> cards;
 
     /**

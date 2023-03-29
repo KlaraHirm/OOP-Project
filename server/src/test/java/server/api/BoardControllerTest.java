@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import server.database.BoardRepository;
+import server.database.CardListRepository;
 
 import java.util.*;
 
@@ -23,12 +24,15 @@ class BoardControllerTest
     @Mock
     private BoardRepository repo;
 
+    @Mock
+    private CardListRepository repoList;
+
     private BoardController sut;
 
     @BeforeEach
     public void setup()
     {
-        sut = new BoardController(repo);
+        sut = new BoardController(repo, repoList);
     }
 
     /**
@@ -218,6 +222,7 @@ class BoardControllerTest
         when(repo.existsById(1L)).thenReturn(true);
         when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.save(board)).thenReturn(board);
+        when(repoList.save(cardList)).thenReturn(cardList);
         assertEquals(cardList, sut.addCardList(cardList, 1L).getBody());
         verify(repo, times(1)).save(board);
         assertEquals(1, board.cardLists.size());
@@ -238,6 +243,7 @@ class BoardControllerTest
         when(repo.existsById(1L)).thenReturn(true);
         when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.save(board)).thenReturn(board);
+        when(repoList.save(cardList)).thenReturn(cardList);
         assertEquals(cardList, sut.addCardList(cardList, 1L).getBody());
         assertNotNull(cardList.cards);
         verify(repo, times(1)).save(board);

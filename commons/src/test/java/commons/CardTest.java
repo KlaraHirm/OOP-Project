@@ -13,7 +13,7 @@ class CardTest
     @BeforeEach
     public void setUp()
     {
-        card = new Card("Test Card");
+        card = new Card("Test Card", 1, "Description", true);
         card.id = 7L;
     }
 
@@ -32,7 +32,7 @@ class CardTest
     @Test
     public void testEqualsHashcode()
     {
-        Card card2 = new Card("Test Card");
+        Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 7L;
         assertEquals(card, card2);
         assertEquals(card.hashCode(), card2.hashCode());
@@ -44,7 +44,7 @@ class CardTest
     @Test
     public void testNotEqualsID()
     {
-        Card card2 = new Card("Test Card");
+        Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 8L;
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
@@ -56,10 +56,47 @@ class CardTest
     @Test
     public void testNotEqualsTitle()
     {
-        Card card2 = new Card("Test Card 2");
+        Card card2 = new Card("Test Card 2", 1, "Description", true);
         card2.id = 7L;
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
+    }
+
+    /**
+     * Test that the Card Equals method returns false and the hashcodes differ when different descriptions
+     */
+    @Test
+    public void testNotEqualsDescription()
+    {
+        Card card2 = new Card("Test Card", 1, "Description 2", true);
+        card2.id = 7L;
+        assertNotEquals(card, card2);
+        assertNotEquals(card.hashCode(), card2.hashCode());
+    }
+
+    /**
+     * Test that the Card Equals method returns false and the hashcodes differ when different done values
+     */
+    @Test
+    public void testNotEqualsDone()
+    {
+        Card card2 = new Card("Test Card", 1, "Description", false);
+        card2.id = 7L;
+        assertNotEquals(card, card2);
+        assertNotEquals(card.hashCode(), card2.hashCode());
+    }
+
+
+    /**
+     * Test that the Card Equals method returns true and the hashcodes are equal even though the place is the same
+     */
+    @Test
+    public void testEqualsDifferentPlace()
+    {
+        Card card2 = new Card("Test Card", 3, "Description", true);
+        card2.id = 7L;
+        assertEquals(card, card2);
+        assertEquals(card.hashCode(), card2.hashCode());
     }
 
     /**

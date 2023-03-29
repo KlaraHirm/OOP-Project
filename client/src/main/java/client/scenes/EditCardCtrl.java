@@ -149,17 +149,4 @@ public class EditCardCtrl {
         tagBox.getChildren().remove(n);
     }
 
-    /**
-     * saves what was edited
-     * not done being worked on, being worked on by kars de jong
-     * **/
-    public void submitEdit(){
-        Card edited = new Card(titleField.getText());
-        //edited.setBody(bodyField.getText());
-        //add subTasks to subTask list
-        //edited. set subtaks
-        //add tags to tag list
-        //edited. set tags
-        //cardCtrl.editCard(edited, cardId);
-    }
 }

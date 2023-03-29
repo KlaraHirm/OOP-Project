@@ -12,8 +12,15 @@ import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 
@@ -27,6 +34,8 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private ComboBox<Board> boards_list;
 
+    @FXML
+    private AnchorPane main_page;
 
 
     @Inject
@@ -35,23 +44,76 @@ public class MainPageCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initialize method which is called after constructor, setts properties of ComboBox boards_list
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // convertor for board_list (dropdown menu field with board names)
         boards_list.setConverter(new StringConverter<Board>() {
 
+            /**
+             * toString method which converts elements in boards_list to String - this is shown in UI in ComboBox
+             * @param board the object of type {@code T} to convert
+             * @return String representation of objects in boards_list
+             */
             @Override
             public String toString(Board board) {
-                return board.title;
+                return board.title + " (" + board.id + ")";
             }
 
+            /**
+             * fromString method which converts String representation back to object in boards_list
+             * @param text the {@code String} to convert
+             * @return actual object of String representation
+             */
             @Override
-            public Board fromString(String title) {
+            public Board fromString(String text) {
+                String title = text.split(" ")[0];
+                String id_string = text.split(" ")[1];
+                long board_id = Long.parseLong(id_string.substring(1, id_string.length()-1));
                 return boards_list.getItems().stream().filter(b ->
-                        b.title.equals(title)).findFirst().orElse(null);
+                        b!=null && b.title.equals(title) && b.id == board_id).findFirst().orElse(null);
             }
         });
-        refresh();
+
+        //adding event listener to boards_list which calls method loadBoardContent only when new value is selected
+        boards_list.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // This method will only run when a new value is selected
+            if(newValue == null){
+                return;
+            }
+            try {
+                loadBoardContent(newValue);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+//        refresh();
+    }
+
+    /**
+     * method which loads board along with its content
+     * @param selected_board object of class Board to be loaded
+     * @throws IOException
+     */
+    public void loadBoardContent(Board selected_board) throws IOException {
+        hideBoard(main_page.lookup("#board_container"));
+        AnchorPane board_container = (AnchorPane) showBoard(selected_board);
+        for(CardList list:selected_board.cardLists){
+            VBox list_container = (VBox) showList(selected_board, list, (HBox) board_container.lookup("#board"));
+            for(Card card:list.cards){
+                addCard(selected_board, list, card, list_container);
+            }
+        }
     }
 
     /**
@@ -59,9 +121,17 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board
      * @throws IOException
      */
-    public void addBoard(Board board) throws IOException {
+    public Parent showBoard(Board board) throws IOException {
         refresh();
-        mainCtrl.showBoard(board);
+        URL location = getClass().getResource("Board.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent p =  loader.load();
+        BoardCtrl boardCtrl = loader.getController();
+        boardCtrl.setPageCtrl(this);
+        boardCtrl.setBoard_object(board);
+        boardCtrl.setTitle();
+        main_page.getChildren().addAll(p);
+        return p;
     }
 
     /**
@@ -71,18 +141,32 @@ public class MainPageCtrl implements Initializable {
     public void newBoard() throws IOException {
         Board board = new Board("Untitled");
         board = server.addBoard(board);
-        mainCtrl.hideBoard();
-        addBoard(board);
+        hideBoard(main_page.lookup("#board_container"));
+        showBoard(board);
+        boards_list.setValue(board);
+    }
+
+    /**
+     * method which hides board from ui
+     * @param n object of class Node to be hidden (board)
+     */
+    public void hideBoard(Node n) {
+        if(n==null){
+            return;
+        }
+        main_page.getChildren().remove(n);
     }
 
     /**
      * deletes board currently shown from server and client
      * @param board board to be deleted
      */
-    public void deleteBoard(Board board) {
+    public void deleteBoard(Board board, AnchorPane board_container) {
+        boards_list.getSelectionModel().clearSelection();
+        boards_list.getItems().remove(board);
         server.deleteBoard(board);
-        mainCtrl.hideBoard();
         refresh();
+        hideBoard(board_container);
     }
 
     /**
@@ -91,8 +175,19 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList which is to be shown
      * @throws IOException
      */
-    public void addList(Board board, CardList list) throws IOException {
-        mainCtrl.showList(board, list);
+    public Parent showList(Board board, CardList list, HBox board_element) throws IOException {
+        refresh();
+        URL location = getClass().getResource("List.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent p =  loader.load();
+        ListCtrl listCtrl = loader.getController();
+        listCtrl.setPageCtrl(this);
+        listCtrl.setList_object(list);
+        listCtrl.setBoard_object(board);
+        listCtrl.setTitle();
+        board_element.getChildren().addAll(p);
+        HBox.setMargin(p, new Insets(10, 10, 10, 10));
+        return p;
     }
 
     /**
@@ -100,22 +195,31 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where list is added
      * @throws IOException
      */
-    public void newList(Board board) throws IOException {
+    public void newList(Board board, HBox board_element) throws IOException {
         CardList list = new CardList("Untitled");
         list = server.addList(board, list);
-        list.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
         refresh();
-        addList(board, list);
+        showList(board, list, board_element);
     }
+
+    /**
+     * method which hides list from ui
+     * @param n object of class Node to be hidden (list)
+     * @param board object of class HBox which represents board where list is
+     */
+    public void hideList(Node n, HBox board){
+        board.getChildren().remove(n);
+    }
+
 
     /**
      * deletes list specified in parameters
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be deleted
      */
-    public void deleteList(Board board, CardList list) {
+    public void deleteList(Board board, CardList list, VBox list_container) {
         server.deleteList(board, list);
-        mainCtrl.hideList(board, list);
+        hideList(list_container, ((HBox)list_container.getParent()));
         refresh();
     }
 
@@ -126,8 +230,19 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be shown
      * @throws IOException
      */
-    public void addCard(Board board, CardList list, Card card) throws IOException {
-        mainCtrl.showCard(board, list, card);
+    public void addCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
+        refresh();
+        URL location = getClass().getResource("Card.fxml");
+        FXMLLoader loader = new FXMLLoader(location);
+        Parent p =  loader.load();
+        CardCtrl cardCtrl = loader.getController();
+        cardCtrl.setPageCtrl(this);
+        cardCtrl.setCard_object(card);
+        cardCtrl.setList_object(list);
+        cardCtrl.setBoard_object(board);
+        cardCtrl.setTitle();
+        list_element.getChildren().addAll(p);
+        VBox.setMargin(p, new Insets(5, 5, 5, 5));
     }
 
     /**
@@ -136,16 +251,42 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList where card is
      * @throws IOException
      */
-    public void newCard(Board board, CardList list) throws IOException {
+    public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
-        card.id = (long)(Math.random()*(Integer.MAX_VALUE)); //TODO - for now because controllers do not return updated object
+        card = server.addCard(list, card);
         list.cards.add(card);
-        addCard(board, list, card);
+        addCard(board, list, card, list_element);
     }
 
-    //TODO - public void deleteCard(Card card)
+    /**
+     * method which hides card from ui
+     * @param n object of class Node to be hidden (card)
+     * @param list_container object of class VBox which represents list where card is
+     */
+    public void hideCard(Node n, VBox list_container) {
+        list_container.getChildren().remove(n);
+    }
 
-    public void editCard(Board board, CardList list, Card card) {
+    /**
+     * method which deletes card from server and ui
+     * @param board object of class Board where card is - grandparent
+     * @param list object of class CardList where card is - parent
+     * @param card object of class Card which represents the card to be deleted
+     * @param card_element JavaFX element of the card
+     */
+    public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
+        //TODO - server.deleteCard
+        hideCard(card_element, (VBox) card_element.getParent());
+        refresh();
+    }
+
+    /**
+     * method which loads a scene to edit card
+     * @param board object of class Board - grandparent of card
+     * @param list object of class CardList - parent of card
+     * @param card object of class Card which is to be edited
+     */
+    public void showEditCard(Board board, CardList list, Card card) {
         mainCtrl.showEditCard(card);
     }
     /**

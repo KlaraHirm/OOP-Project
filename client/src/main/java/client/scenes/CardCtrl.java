@@ -109,7 +109,8 @@ public class CardCtrl {
     public void makeDraggable() {
 
         card.setOnMousePressed(mouseEvent -> {
-            // changing node_list to board so that z-index is lowest
+            double x = card.getLayoutX();
+            double y = card.getLayoutY();
 
             list_element.getChildren().remove(card);
             board_element.getChildren().add(card);
@@ -122,8 +123,8 @@ public class CardCtrl {
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
 
-            card.setLayoutX(list_element.getLayoutX()+mouseEvent.getX());
-            card.setLayoutY(list_element.getLayoutY()+mouseEvent.getY());
+            card.setLayoutX(list_element.getLayoutX()+x);
+            card.setLayoutY(list_element.getLayoutY()+y);
 
         });
 
@@ -177,5 +178,6 @@ public class CardCtrl {
         });
 
     }
+
 
 }

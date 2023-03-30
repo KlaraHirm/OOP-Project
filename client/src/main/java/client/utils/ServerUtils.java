@@ -100,4 +100,12 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public Card editCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/card") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
 }

@@ -287,7 +287,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be edited
      */
     public void showEditCard(Board board, CardList list, Card card) {
-        mainCtrl.showEditCard(card);
+        mainCtrl.showEditCard(card, board);
     }
     /**
      * refreshes data variable

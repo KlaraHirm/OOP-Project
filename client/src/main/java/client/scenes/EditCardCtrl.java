@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.objects.TagObjectCtrl;
-import client.objects.TaskObjectCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;

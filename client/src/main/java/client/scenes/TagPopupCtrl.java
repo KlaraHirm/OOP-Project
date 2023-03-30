@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.objects.TagObjectCtrl;
-import client.objects.TaskObjectCtrl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +24,15 @@ public class TagPopupCtrl {
     private TextField tagField;
     @FXML
     private AnchorPane root;
+    @FXML
+    private CheckBox urgentTag;
+    @FXML
+    private CheckBox tag1;
+    @FXML
+    private CheckBox tag2;
+    @FXML
+    private CheckBox tag3;
+
 
 
     /**
@@ -43,7 +51,21 @@ public class TagPopupCtrl {
     public void submitTag(){
         popupWindow.close();
         String name = tagField.getText();
-        editCtrl.createNewTag(name);
+        if(!name.equals("")){
+            editCtrl.createNewTag(name);
+        }
+        if(urgentTag.isSelected()){
+            editCtrl.createNewTag("Urgent");
+        }
+        if(tag1.isSelected()){
+            editCtrl.createNewTag("Tag 1");
+        }
+        if(tag2.isSelected()){
+            editCtrl.createNewTag("Tag 2");
+        }
+        if(tag3.isSelected()){
+            editCtrl.createNewTag("Tag 3");
+        }
     }
     /**
      * cancels adding a tag

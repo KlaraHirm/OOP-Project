@@ -32,14 +32,26 @@ public class CardCtrl {
 
     private Board board_object;
 
+    private HBox board_element;
+
     private CardList list_object;
 
     private Card card_object;
+
+    private VBox list_element;
 
     private MainPageCtrl pageCtrl;
 
     private double mouseAnchorX;
     private double mouseAnchorY;
+
+    public void setBoard_element(HBox board_element) {
+        this.board_element = board_element;
+    }
+
+    public void setList_element(VBox list_element) {
+        this.list_element = list_element;
+    }
 
     /**
      * setter for board_object
@@ -94,90 +106,76 @@ public class CardCtrl {
         pageCtrl.showEditCard(board_object, list_object, card_object);
     }
 
-    public void makeDraggable(VBox node_card, VBox node_list, HBox node_board, AnchorPane mainpage) {
+    public void makeDraggable() {
 
-        node_card.setOnMousePressed(mouseEvent -> {
+        card.setOnMousePressed(mouseEvent -> {
             // changing node_list to board so that z-index is lowest
-            node_card.setManaged(false);
-            node_list.getChildren().remove(node_card);
-            node_board.getChildren().add(node_card);
 
-            AnchorPane.setBottomAnchor(node_card, null);
-            AnchorPane.setTopAnchor(node_card, null);
-            AnchorPane.setLeftAnchor(node_card, null);
-            AnchorPane.setRightAnchor(node_card, null);
+            list_element.getChildren().remove(card);
+            board_element.getChildren().add(card);
+            card.setManaged(false);
 
-//            for (int i = 0; i < node_board.getChildren().size(); i++) {
-//                if (node_board.getChildren().get(i) instanceof VBox) {
-//                    if (node_card.getBoundsInParent().intersects(node_board.getChildren().get(i).getBoundsInParent())) {
-//                        node_card.setLayoutX(node_board.getLayoutX() - node_board.getChildren().get(i).getLayoutX());
-//                        node_card.setLayoutY(node_board.getLayoutY() - node_board.getChildren().get(i).getLayoutY());
-//                        break;
-//                    }
-//                }
-//            }
+            AnchorPane.setBottomAnchor(card, null);
+            AnchorPane.setTopAnchor(card, null);
+            AnchorPane.setLeftAnchor(card, null);
+            AnchorPane.setRightAnchor(card, null);
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
 
-            mouseAnchorX = mouseEvent.getSceneX() - node_card.getTranslateX();
-            mouseAnchorY = mouseEvent.getSceneY() - node_card.getTranslateY();
+            card.setLayoutX(list_element.getLayoutX()+mouseEvent.getX());
+            card.setLayoutY(list_element.getLayoutY()+mouseEvent.getY());
+
         });
 
-        node_card.setOnMouseDragged(mouseEvent -> {
+        card.setOnMouseDragged(mouseEvent -> {
 
             //  Calculate the button's new position
-//            double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
-//            double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
-//            double newX = node_card.getLayoutX() + deltaX;
-//            double newY = node_card.getLayoutY() + deltaY;
-            node_card.setTranslateX(mouseEvent.getSceneX() - mouseAnchorX);
-            node_card.setTranslateY(mouseEvent.getSceneY() - mouseAnchorY);
+            double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
+            double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
+            double newX = card.getLayoutX() + deltaX;
+            double newY = card.getLayoutY() + deltaY;
 
             // Update the button's position
-//            node_card.setLayoutX(newX);
-//            node_card.setLayoutY(newY);
-//
-//            mouseAnchorX = mouseEvent.getSceneX();
-//            mouseAnchorY = mouseEvent.getSceneY();
+            card.setLayoutX(newX);
+            card.setLayoutY(newY);
 
-//            for (Node n : node_board.getChildren()) {
-//                if (n instanceof VBox) {
-//                    while (node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-//                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-//                    }
-//                }
-//            }
-//            for (Node n : node_board.getChildren()) {
-//                if (n instanceof VBox) {
-//                    if (!node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-//                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
-//                        break;
-//                    }
-//                }
-//            }
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+
+            for (Node n : board_element.getChildren()) {
+                if (n instanceof VBox) {
+                    if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        ( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        break;
+                    }
+                }
+            }
         });
 
-        node_card.setOnMouseReleased(mouseEvent -> {
+        card.setOnMouseReleased(mouseEvent -> {
+
             // Check if the button is within the bounds of another VBox
-            for (Node n : node_board.getChildren()) {
+            for (Node n : board_element.getChildren()) {
                 if (n instanceof VBox) {
-                    if (node_card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-                        Bounds bounds = node_card.localToScene(node_card.getBoundsInLocal());
-                        //( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        Bounds bounds = card.localToScene(card.getBoundsInLocal());
+                        ( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
                         // Remove the button from its current node_list and add it to the new node_list
-                        node_board.getChildren().remove(node_card);
-                        ((VBox) n).getChildren().add(node_card);
-//                        node_card.toFront();
-//                        mouseAnchorX = mouseEvent.getSceneX() - node_card.getTranslateX();
-//                        mouseAnchorY = mouseEvent.getSceneY() - node_card.getTranslateY();
+                        board_element.getChildren().remove(card);
+                        ((VBox) n).getChildren().add(card);
 
-//                        node_card.setLayoutX(mouseEvent.getSceneX() - mouseAnchorX);
-//                        node_card.setLayoutY(mouseEvent.getSceneY() - mouseAnchorY);
+                        mouseAnchorX = mouseEvent.getSceneX();
+                        mouseAnchorY = mouseEvent.getSceneY();
 
-                        node_card.setManaged(true); // layout of card is managed by new list (VBox)
+                        card.setManaged(true); // layout of card is managed by new list (VBox)
+                        setList_element((VBox) n);
                         break;
                     }
                 }
             }
 
         });
+
     }
+
 }

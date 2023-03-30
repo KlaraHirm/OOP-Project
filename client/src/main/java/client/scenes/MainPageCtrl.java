@@ -243,7 +243,9 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setTitle();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
-        cardCtrl.makeDraggable((VBox) p, list_element, (HBox) list_element.getParent(), main_page);
+        cardCtrl.setBoard_element((HBox) list_element.getParent());
+        cardCtrl.setList_element(list_element);
+        cardCtrl.makeDraggable();
     }
 
     /**

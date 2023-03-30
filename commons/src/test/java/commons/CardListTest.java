@@ -15,7 +15,7 @@ class CardListTest
     @BeforeEach
     public void setUp()
     {
-        cardList = new CardList("Test CardList");
+        cardList = new CardList("Test CardList", 1);
         cardList.cards = new ArrayList<>();
         cardList.id = 7L;
     }
@@ -36,7 +36,7 @@ class CardListTest
     @Test
     public void testEqualsHashcode()
     {
-        CardList cardList2 = new CardList("Test CardList");
+        CardList cardList2 = new CardList("Test CardList", 1);
         cardList2.cards = new ArrayList<>();
         cardList2.id = 7L;
         assertEquals(cardList, cardList2);
@@ -49,7 +49,7 @@ class CardListTest
     @Test
     public void testNotEqualsID()
     {
-        CardList cardList2 = new CardList("Test CardList");
+        CardList cardList2 = new CardList("Test CardList", 1);
         cardList2.cards = new ArrayList<>();
         cardList2.id = 8L;
         assertNotEquals(cardList, cardList2);
@@ -62,7 +62,7 @@ class CardListTest
     @Test
     public void testNotEqualsTitle()
     {
-        CardList cardList2 = new CardList("Test CardList 2");
+        CardList cardList2 = new CardList("Test CardList 2", 1);
         cardList2.cards = new ArrayList<>();
         cardList2.id = 7L;
         assertNotEquals(cardList, cardList2);
@@ -75,12 +75,25 @@ class CardListTest
     @Test
     public void testNotEqualsCards()
     {
-        CardList cardList2 = new CardList("Test CardList");
+        CardList cardList2 = new CardList("Test CardList", 1);
         cardList2.cards = new ArrayList<>();
         cardList2.cards.add(new Card("Test Card"));
         cardList2.id = 7L;
         assertNotEquals(cardList, cardList2);
         assertNotEquals(cardList.hashCode(), cardList2.hashCode());
+    }
+
+    /**
+     * Test that the CardList Equals method still returns true and the hashcodes are the same when different places
+     */
+    @Test
+    public void testEqualsPlace()
+    {
+        CardList cardList2 = new CardList("Test CardList", 2);
+        cardList2.cards = new ArrayList<>();
+        cardList2.id = 7L;
+        assertEquals(cardList, cardList2);
+        assertEquals(cardList.hashCode(), cardList2.hashCode());
     }
 
     /**
@@ -92,6 +105,7 @@ class CardListTest
            String actual = cardList.toString();
            assertTrue(actual.contains("id=7"));
            assertTrue(actual.contains("title=Test CardList"));
+           assertTrue(actual.contains("place=1"));
            assertTrue(actual.contains("cards=[]"));
    }
 }

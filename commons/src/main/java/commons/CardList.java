@@ -19,6 +19,11 @@ public class CardList
     public long id;
 
     /**
+     * Place within board, used to ensure list order is maintained within the database
+     */
+    public int place;
+
+    /**
      * Title of the cardList
      */
     public String title;
@@ -45,6 +50,18 @@ public class CardList
     public CardList(String title)
     {
         this.title = title;
+        this.cards = new ArrayList<Card>();
+    }
+
+    /**
+     * Create a new CardList instance.
+     * @param title Title of the cardList
+     * @param place Place of the cardList within it's board
+     */
+    public CardList(String title, int place)
+    {
+        this.title = title;
+        this.place = place;
         this.cards = new ArrayList<Card>();
     }
 
@@ -85,6 +102,7 @@ public class CardList
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("title", title)
+                .append("place", place)
                 .append("cards", cards)
                 .toString();
     }

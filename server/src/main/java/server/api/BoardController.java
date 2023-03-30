@@ -32,15 +32,14 @@ public class BoardController
 {
 
     private final BoardRepository repo;
-
-    private final CardListRepository repoList;
+    private final CardListRepository listRepo;
 
     /**
      * Constructor for the BoardController
      */
-    public BoardController(BoardRepository repo, CardListRepository repoList) {
+    public BoardController(BoardRepository repo, CardListRepository listRepo) {
         this.repo = repo;
-        this.repoList = repoList;
+        this.listRepo = listRepo;
     }
 
     /**
@@ -78,8 +77,18 @@ public class BoardController
             return ResponseEntity.badRequest().build();
         }
 
+
+        if(board.cardLists == null) board.cardLists = new ArrayList<>();
+
+        else {
+            //set place value of lists
+            for (int i = 0; i < board.cardLists.size(); i++) {
+                CardList list = board.cardLists.get(i);
+                list.place = i;
+                listRepo.save(list);
+            }
+        }
         Board saved = repo.save(board);
-        if(saved.cardLists == null) saved.cardLists = new ArrayList<>();
         return ResponseEntity.ok(saved);
     }
 
@@ -138,9 +147,46 @@ public class BoardController
         Board board = repo.findById(id).get();
         board.cardLists.add(cardList);
         if(cardList.cards == null) cardList.cards = new ArrayList<>();
+        cardList.place = board.cardLists.indexOf(cardList);
 
-        CardList saved = repoList.save(cardList);
+        CardList saved = listRepo.save(cardList);
         repo.save(board);
         return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Reorder a cardlist on a board
+     * @param boardId id of the board
+     * @param listId id of the cardlist
+     * @param index new index of the cardlist
+     * @return the updated board
+     */
+    @PutMapping(path = { "/{id}/reorder" })
+    public ResponseEntity<Board> reorderCardLists(@PathVariable("id") long boardId, @RequestParam long listId, @RequestParam int index)
+    {
+        if(boardId <= 0 || listId <= 0 ||  !repo.existsById(boardId) || !listRepo.existsById(listId))
+            return ResponseEntity.notFound().build();
+        if(index < 0) return ResponseEntity.badRequest().build();
+
+
+        Board board = repo.findById(boardId).get();
+        CardList list = listRepo.findById(listId).get();
+
+        if(!board.cardLists.contains(list)) return ResponseEntity.badRequest().build();
+
+
+        board.cardLists.remove(list);
+
+        if(index >= board.cardLists.size()) board.cardLists.add(list);
+        else board.cardLists.add(index, list);
+
+        //Set place to index for all lists
+        for(int i = 0; i < board.cardLists.size(); i ++)
+        {
+            board.cardLists.get(i).place = i;
+        }
+
+        repo.save(board);
+        return ResponseEntity.ok(board);
     }
 }

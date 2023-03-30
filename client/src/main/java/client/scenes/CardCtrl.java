@@ -151,6 +151,16 @@ public class CardCtrl {
                     }
                 }
             }
+
+            for (Node n : board_element.getChildren()) {
+                if (n instanceof VBox) {
+                    if (!card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
+                        break;
+                    }
+                }
+            }
+
         });
 
         card.setOnMouseReleased(mouseEvent -> {

@@ -275,7 +275,7 @@ public class MainPageCtrl implements Initializable {
      * @param card_element JavaFX element of the card
      */
     public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
-        //TODO - server.deleteCard
+//        server.deleteCard(card);
         hideCard(card_element, (VBox) card_element.getParent());
         refresh();
     }

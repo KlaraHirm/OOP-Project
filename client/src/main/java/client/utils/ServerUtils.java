@@ -108,4 +108,12 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public Response deleteCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/card/"+card.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
 }

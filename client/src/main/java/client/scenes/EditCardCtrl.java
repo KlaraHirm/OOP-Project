@@ -60,30 +60,8 @@ public class EditCardCtrl {
     public void submit(){
         mainCtrl.showOverview();
     }
-    @FXML
-    private Button addTask;
 
 
-
-    /**
-     * adds a subtask to the listPane
-     * uses fxml loader to load TaskObject.fxml
-     * **/
-    @FXML
-    private void addTask() {
-        try {
-            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-                    Path.of("client", "objects", "TaskObject.fxml").toString()));
-            Parent n = (Parent)fxml.load();
-            TaskObjectCtrl controller = fxml.getController();
-            controller.setName(checkField.getText());
-            controller.setEditCtrl(this);
-            checkField.setText("");
-            listPane.getChildren().add(n);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     /**

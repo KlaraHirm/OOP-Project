@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.layout.FlowPane?>
-<AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
+<AnchorPane prefHeight="350.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
     <children>
         <TextArea fx:id="bodyField" layoutX="23.0" layoutY="148.0" prefHeight="89.0" prefWidth="573.0" promptText="Description" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="100.0" />
         <Label alignment="CENTER" layoutX="5.0" layoutY="27.0" prefHeight="17.0" prefWidth="700.0" text="Edit Card" textAlignment="CENTER" textFill="#2274a5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -20,34 +20,18 @@
             </font>
         </Label>
         <TextField fx:id="titleField" layoutX="23.0" layoutY="82.0" promptText="Title" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="520.0" />
-        <FlowPane fx:id="listPane" layoutX="23.0" layoutY="280.0" orientation="VERTICAL" prefHeight="113.0" prefWidth="573.0" style="-fx-border-color: black;">
-        </FlowPane>
-        <HBox alignment="CENTER_LEFT" layoutX="23.0" layoutY="240.0" prefHeight="26.0" prefWidth="573.0" spacing="10.0">
-            <children>
-                <Label text="Subtasks" minWidth="60"/>
-                <TextField fx:id="checkField" promptText="New Checkbox" style="-fx-border-color: black;">
-                    <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                    </HBox.margin>
-                </TextField>
-                <Button mnemonicParsing="false" fx:id="addTask" prefHeight="6.0" prefWidth="4.0" onAction="#addTask" text="+">
-                    <font>
-                        <Font size="10.0" />
-                    </font>
-                </Button>
-            </children>
-        </HBox>
 
-        <HBox fx:id="tagBox" layoutX="23.0" layoutY="400.0" prefHeight="31.0" prefWidth="538.0" style="-fx-border-color: black; -fx-background-color: white;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="100.0">
+
+        <HBox fx:id="tagBox" layoutX="23.0" layoutY="250.0" prefHeight="31.0" prefWidth="538.0" style="-fx-border-color: black; -fx-background-color: white;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="100.0">
             <children>
 
             </children>
         </HBox>
-        <Button onAction="#addTag" layoutX="626.0" layoutY="400.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="49.0">
+        <Button onAction="#addTag" layoutX="626.0" layoutY="250.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="49.0">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor></Button>
-        <Button alignment="CENTER" layoutX="20.0" layoutY="450.0" mnemonicParsing="false" onAction="#submit" text="Submit" textFill="#2274a5">
+        <Button alignment="CENTER" layoutX="20.0" layoutY="300.0" mnemonicParsing="false" onAction="#submit" text="Submit" textFill="#2274a5">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor></Button>

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
+<VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: #eff6fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
       <HBox alignment="CENTER" style="-fx-background-color: transparent;">
          <children>

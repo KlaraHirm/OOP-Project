@@ -23,6 +23,7 @@ public class Board
      * List of CardLists on the board
      */
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("place")
     public List<CardList> cardLists;
 
     /**

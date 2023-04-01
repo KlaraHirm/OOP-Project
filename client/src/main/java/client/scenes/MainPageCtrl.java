@@ -187,6 +187,7 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setTitle();
         board_element.getChildren().addAll(p);
         HBox.setMargin(p, new Insets(10, 10, 10, 10));
+        listCtrl.setListId();
         return p;
     }
 
@@ -315,8 +316,23 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
-    public void reorderCard(Card card, CardList original, CardList target, Board board) {
+    /**
+     * calls server to reorder card, used during drag and drop
+     * @param card object of class Card representing the card being dragged
+     * @param original object of class CardList representing the origin of drag
+     * @param target object of class CardList representing the target of drag
+     */
+    public void reorderCard(Card card, CardList original, CardList target) {
         server.editCardPosition(card, original, target);
+    }
+
+    /**
+     * method used to get list based on id
+     * @param listId id of list
+     * @return object of class CardList which had the same id as passed in listId
+     */
+    public CardList getList(long listId) {
+        return server.getList(listId);
     }
 
 }

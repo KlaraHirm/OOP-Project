@@ -74,4 +74,11 @@ public class ListCtrl {
     public void deleteList() {
         pageCtrl.deleteList(board_object, list_object, list);
     }
+
+    /**
+     * sets id of element representing list to contain its object id
+     */
+    public void setListId() {
+        list.setId("list_"+list_object.id);
+    }
 }

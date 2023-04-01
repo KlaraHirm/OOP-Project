@@ -102,28 +102,29 @@ public class ListController {
      * Reorder CardLists when drag and drop
      * @param idOld - the original list
      * @param idNew - the target list
-     * @param idCard - the Card to be displaced
+     * @param card_reorder - the Card to be displaced
      * @return the saved target list
      * Returns 404 if IDs and position do not exist
      */
     @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
-                                            @RequestParam("cardId") long idCard) {
+                                            @RequestParam("cardId") long cardId, @RequestBody Card card_reorder) {
         if ((idOld < 0 || !repoList.existsById(idOld)) &&
                 (idNew < 0 || !repoList.existsById(idNew))) {
             return  ResponseEntity.notFound().build();
         }
-        if (idCard < 0 || !repoCard.existsById(idCard)) return ResponseEntity.notFound().build();
+        if (cardId < 0 || !repoCard.existsById(cardId)) return ResponseEntity.notFound().build();
         CardList oldList = repoList.findById(idOld).get();
         CardList newList = repoList.findById(idNew).get();
-        Card card = repoCard.findById(idCard).get();
         int position = 0;
+        Card card = repoCard.findById(cardId).get();
         if (!oldList.cards.contains(card)) return ResponseEntity.notFound().build();
-        for (int i = 0; i < oldList.cards.size(); i++) {
-            if (oldList.cards.get(i).equals(card)) {
-                position++;
-            }
-        }
+        // TODO - had to comment out this part because it was causing internal server error
+//        for (int i = 0; i < oldList.cards.size(); i++) {
+//            if (oldList.cards.get(i).equals(card)) {
+//                position++;
+//            }
+//        }
         oldList.cards.remove(card);
         newList.cards.add(position, card);
         repoList.save(oldList);

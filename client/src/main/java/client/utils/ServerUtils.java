@@ -55,7 +55,18 @@ public class ServerUtils {
                 .delete();
     }
 
-    //TODO - getLists()
+    /**
+     * getter for list
+     * @param listId id of list which we want to get
+     * @return object of class CardList which has the same id as passed in listId
+     */
+    public CardList getList(long listId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list/"+listId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<CardList>() {});
+    }
 
     /**
      * add newly created list to db
@@ -126,6 +137,13 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * edits position of card, used during drag and drop
+     * @param card card being dragged
+     * @param original list origin of drag
+     * @param target list target of drag
+     * @return updated target
+     */
     public CardList editCardPosition(Card card, CardList original, CardList target) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/list/reorder") //
@@ -134,7 +152,7 @@ public class ServerUtils {
                 .queryParam("cardId", card.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(null, CardList.class);
+                .put(Entity.entity(card, APPLICATION_JSON), CardList.class);
     }
 
 }

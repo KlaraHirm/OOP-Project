@@ -78,6 +78,10 @@ public class CardCtrl {
         this.list_object = list_object;
     }
 
+    /**
+     * setter for original_lis_element which is used in drag and drop to represent the origin of drag
+     * @param original_list_element object of class CardList
+     */
     public void setOriginal_list_element(CardList original_list_element) {
         this.original_list_element = original_list_element;
     }
@@ -128,6 +132,9 @@ public class CardCtrl {
         pageCtrl.toggleCardState(board_object, list_object, card_object, card);
     }
 
+    /**
+     * method which makes card draggable
+     */
     public void makeDraggable() {
 
         card.setOnMousePressed(mouseEvent -> {
@@ -203,7 +210,9 @@ public class CardCtrl {
 
                         card.setManaged(true); // layout of card is managed by new list (VBox)
                         setList_element((VBox) n);
-                        pageCtrl.reorderCard(card_object, original_list_element, list_object, board_object);
+                        long newListId = Long.parseLong(n.getId().split("_")[1]); //retrieves object id from element id
+                        setList_object(pageCtrl.getList(newListId));
+                        pageCtrl.reorderCard(card_object, original_list_element, list_object);
                         break;
                     }
                 }

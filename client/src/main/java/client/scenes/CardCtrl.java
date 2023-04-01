@@ -4,10 +4,18 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+
+import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CardCtrl {
 
@@ -31,11 +39,26 @@ public class CardCtrl {
 
     private Board board_object;
 
+    private HBox board_element;
+
     private CardList list_object;
 
     private Card card_object;
 
+    private VBox list_element;
+
     private MainPageCtrl pageCtrl;
+
+    private double mouseAnchorX;
+    private double mouseAnchorY;
+
+    public void setBoard_element(HBox board_element) {
+        this.board_element = board_element;
+    }
+
+    public void setList_element(VBox list_element) {
+        this.list_element = list_element;
+    }
 
     /**
      * setter for board_object
@@ -98,4 +121,88 @@ public class CardCtrl {
     public void toggleCardState() {
         pageCtrl.toggleCardState(board_object, list_object, card_object, card);
     }
+
+    public void makeDraggable() {
+
+        card.setOnMousePressed(mouseEvent -> {
+            double x = card.getLayoutX();
+            double y = card.getLayoutY();
+
+            list_element.getChildren().remove(card);
+            board_element.getChildren().add(card);
+            card.setManaged(false);
+
+            AnchorPane.setBottomAnchor(card, null);
+            AnchorPane.setTopAnchor(card, null);
+            AnchorPane.setLeftAnchor(card, null);
+            AnchorPane.setRightAnchor(card, null);
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+
+            card.setLayoutX(list_element.getLayoutX()+x);
+            card.setLayoutY(list_element.getLayoutY()+y);
+
+        });
+
+        card.setOnMouseDragged(mouseEvent -> {
+
+            //  Calculate the button's new position
+            double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
+            double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
+            double newX = card.getLayoutX() + deltaX;
+            double newY = card.getLayoutY() + deltaY;
+
+            // Update the button's position
+            card.setLayoutX(newX);
+            card.setLayoutY(newY);
+
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+
+            for (Node n : board_element.getChildren()) {
+                if (n instanceof VBox) {
+                    if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        ( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        break;
+                    }
+                }
+            }
+
+            for (Node n : board_element.getChildren()) {
+                if (n instanceof VBox) {
+                    if (!card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
+                        break;
+                    }
+                }
+            }
+
+        });
+
+        card.setOnMouseReleased(mouseEvent -> {
+
+            // Check if the button is within the bounds of another VBox
+            for (Node n : board_element.getChildren()) {
+                if (n instanceof VBox) {
+                    if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        Bounds bounds = card.localToScene(card.getBoundsInLocal());
+                        ( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        // Remove the button from its current node_list and add it to the new node_list
+                        board_element.getChildren().remove(card);
+                        ((VBox) n).getChildren().add(card);
+
+                        mouseAnchorX = mouseEvent.getSceneX();
+                        mouseAnchorY = mouseEvent.getSceneY();
+
+                        card.setManaged(true); // layout of card is managed by new list (VBox)
+                        setList_element((VBox) n);
+                        break;
+                    }
+                }
+            }
+
+        });
+
+    }
+
 }

@@ -111,7 +111,7 @@ public class MainPageCtrl implements Initializable {
         for(CardList list:selected_board.cardLists){
             VBox list_container = (VBox) showList(selected_board, list, (HBox) board_container.lookup("#board"));
             for(Card card:list.cards){
-                addCard(selected_board, list, card, list_container);
+                showCard(selected_board, list, card, list_container);
             }
         }
     }
@@ -230,8 +230,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be shown
      * @throws IOException
      */
-    public void addCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
-        refresh();
+    public void showCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -243,6 +242,9 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setTitle();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
+        cardCtrl.setBoard_element((HBox) list_element.getParent());
+        cardCtrl.setList_element(list_element);
+        cardCtrl.makeDraggable();
     }
 
     /**
@@ -255,7 +257,7 @@ public class MainPageCtrl implements Initializable {
         Card card = new Card("Untitled");
         card = server.addCard(list, card);
         list.cards.add(card);
-        addCard(board, list, card, list_element);
+        showCard(board, list, card, list_element);
     }
 
     /**
@@ -266,6 +268,7 @@ public class MainPageCtrl implements Initializable {
     public void hideCard(Node n, VBox list_container) {
         list_container.getChildren().remove(n);
     }
+
 
     /**
      * method which deletes card from server and ui

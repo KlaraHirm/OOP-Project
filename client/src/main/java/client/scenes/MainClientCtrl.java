@@ -2,6 +2,7 @@ package client.scenes;
 
 import commons.Board;
 import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

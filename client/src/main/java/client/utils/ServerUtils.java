@@ -126,4 +126,15 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public CardList editCardPosition(Card card, CardList original, CardList target) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list/reorder") //
+                .queryParam("original", original.id) //
+                .queryParam("target", target.id) //
+                .queryParam("cardId", card.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(null, CardList.class);
+    }
+
 }

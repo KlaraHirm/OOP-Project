@@ -5,9 +5,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<<<<<<< HEAD
-<VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: transparent;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
-=======
 <VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: #eff6fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
 >>>>>>> 33-drag_and_drop
    <children>

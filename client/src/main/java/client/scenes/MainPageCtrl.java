@@ -315,4 +315,8 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
+    public void reorderCard(Card card, CardList original, CardList target, Board board) {
+        server.editCardPosition(card, original, target);
+    }
+
 }

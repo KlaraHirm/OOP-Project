@@ -37,15 +37,17 @@ public class CardCtrl {
     @FXML
     private CheckBox done;
 
+    private Card card_object;
+
     private Board board_object;
 
     private HBox board_element;
 
     private CardList list_object;
 
-    private Card card_object;
-
     private VBox list_element;
+
+    private CardList original_list_element;
 
     private MainPageCtrl pageCtrl;
 
@@ -74,6 +76,10 @@ public class CardCtrl {
      */
     public void setList_object(CardList list_object) {
         this.list_object = list_object;
+    }
+
+    public void setOriginal_list_element(CardList original_list_element) {
+        this.original_list_element = original_list_element;
     }
 
     /**
@@ -125,6 +131,7 @@ public class CardCtrl {
     public void makeDraggable() {
 
         card.setOnMousePressed(mouseEvent -> {
+            setOriginal_list_element(list_object);
             double x = card.getLayoutX();
             double y = card.getLayoutY();
 
@@ -196,6 +203,7 @@ public class CardCtrl {
 
                         card.setManaged(true); // layout of card is managed by new list (VBox)
                         setList_element((VBox) n);
+                        pageCtrl.reorderCard(card_object, original_list_element, list_object, board_object);
                         break;
                     }
                 }

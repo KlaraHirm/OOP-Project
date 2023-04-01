@@ -100,20 +100,30 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * delete specified card
+     * @param card card object to delete
+     * @return deleted card (for undo)
+     */
+    public Card deleteCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/card/"+card.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete(Card.class);
+    }
+
+    /**
+     * edit specified card
+     * @param card card object to edit
+     * @return edited card
+     */
     public Card editCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/card") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    public Response deleteCard(Card card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/card/"+card.id) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .delete();
     }
 
 }

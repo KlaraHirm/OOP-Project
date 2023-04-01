@@ -275,7 +275,7 @@ public class MainPageCtrl implements Initializable {
      * @param card_element JavaFX element of the card
      */
     public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
-//        server.deleteCard(card);
+        server.deleteCard(card);
         hideCard(card_element, (VBox) card_element.getParent());
         refresh();
     }
@@ -289,6 +289,7 @@ public class MainPageCtrl implements Initializable {
     public void showEditCard(Board board, CardList list, Card card) {
         mainCtrl.showEditCard(card, board);
     }
+
     /**
      * refreshes data variable
      */
@@ -298,5 +299,17 @@ public class MainPageCtrl implements Initializable {
         boards_list.setItems(data);
     }
 
+    /**
+     * method which marks a card as done (checkbox checked) or not done (unchecked)
+     * @param board object of class Board where card is - grandparent
+     * @param list object of class CardList where card is - parent
+     * @param card object of class Card which represents the card to be marked as done
+     * @param card_element JavaFX element of the card
+     */
+    public void toggleCardState(Board board, CardList list, Card card, VBox card_element) {
+        card.done = !card.done;
+        server.editCard(card);
+        refresh();
+    }
 
 }

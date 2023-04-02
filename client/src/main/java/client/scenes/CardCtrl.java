@@ -6,6 +6,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import javax.xml.bind.annotation.XmlType;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,27 +166,36 @@ public class CardCtrl {
         });
 
         card.setOnMouseReleased(mouseEvent -> {
-
-            // Check if the button is within the bounds of another VBox
             for (Node n : board_element.getChildren()) {
                 if (n instanceof VBox) {
                     if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-                        Bounds bounds = card.localToScene(card.getBoundsInLocal());
-                        ( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-                        // Remove the button from its current node_list and add it to the new node_list
-                        board_element.getChildren().remove(card);
-                        ((VBox) n).getChildren().add(card);
-
+                        setList_element((VBox) n);
+                        for (int indexCard = 0; indexCard < list_element.getChildren().size(); indexCard++) {
+                                Node test = list_element.getChildren().get(indexCard);
+                                Point p = MouseInfo.getPointerInfo().getLocation();
+                                Point2D point = new Point2D(mouseAnchorX, mouseAnchorY);
+                            if (indexCard == 0 && (test.contains(test.screenToLocal(point)) || test.contains(point))) {
+                                board_element.getChildren().remove(card);
+                                list_element.getChildren().add(1, card);
+                                break;
+                            }
+                            if (list_element.getChildren().get(indexCard) instanceof VBox) {
+                                if (test.contains(test.screenToLocal(point)) || test.contains(point)) {
+                                    board_element.getChildren().remove(card);
+                                    list_element.getChildren().add(indexCard, card);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!list_element.getChildren().contains(card)) {
+                            list_element.getChildren().add(card);
+                        }
                         mouseAnchorX = mouseEvent.getSceneX();
                         mouseAnchorY = mouseEvent.getSceneY();
-
-                        card.setManaged(true); // layout of card is managed by new list (VBox)
-                        setList_element((VBox) n);
-                        break;
+                        card.setManaged(true);
+                        }
                     }
                 }
-            }
-
         });
 
     }

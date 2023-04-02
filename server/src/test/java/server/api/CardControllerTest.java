@@ -66,7 +66,7 @@ public class CardControllerTest {
         a.id = 1L;
 
         when(cardRepo.existsById(1L)).thenReturn(true);
-        when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
         when(cardRepo.save(a)).thenReturn(a);
 
         assertEquals(a, sut.editCard(e));

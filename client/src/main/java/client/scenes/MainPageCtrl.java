@@ -122,7 +122,6 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public Parent showBoard(Board board) throws IOException {
-        refresh();
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -144,6 +143,7 @@ public class MainPageCtrl implements Initializable {
         hideBoard(main_page.lookup("#board_container"));
         showBoard(board);
         boards_list.setValue(board);
+        refresh();
     }
 
     /**

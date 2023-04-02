@@ -18,8 +18,10 @@ public class CardServiceImpl implements CardService {
 
 
     /**
-     * @param cardId
-     * @return
+     * Get info about a card
+     * @param cardId the id of the card
+     * @return the card object
+     * Returns null if the card does not exist
      */
     @Override
     public Card getCard(long cardId) {
@@ -29,8 +31,11 @@ public class CardServiceImpl implements CardService {
     }
 
     /**
-     * @param card
-     * @return
+     * Update a certain card
+     * @param card the card object to edit, with the corresponding id
+     * @return the edited card
+     * Gives null if the card does not exist
+     * Gives null if the body is malformed
      */
     @Override
     public Card editCard(Card card) {
@@ -42,8 +47,10 @@ public class CardServiceImpl implements CardService {
     }
 
     /**
-     * @param cardId
-     * @return
+     * Delete a card
+     * @param cardId the id of the card to delete
+     * @return the whole board as updated
+     * Returns nukk if the card, list or board do not exist
      */
     @Override
     public Card deleteCard(long cardId) {

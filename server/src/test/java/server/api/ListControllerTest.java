@@ -9,9 +9,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import server.api.repository.TestBoardRepository;
+import server.api.repository.TestCardListRepository;
+import server.api.repository.TestCardRepository;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.services.BoardServiceImpl;
+import server.services.CardListServiceImpl;
+
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,16 +26,20 @@ import static org.mockito.Mockito.*;
 class ListControllerTest {
 
     @Mock
-    private BoardRepository repoBoard;
+    private TestBoardRepository repo;
+
     @Mock
-    private CardListRepository repoList;
+    private TestCardListRepository listRepo;
+
     @Mock
-    private CardRepository repoCard;
-    private ListController controller;
+    private TestCardRepository cardRepo;
+
+    private CardListServiceImpl sut;
 
     @BeforeEach
-    void setUp() {
-        controller = new ListController(repoBoard, repoList, repoCard);
+    public void setup()
+    {
+        sut = new CardListServiceImpl(repo, listRepo, cardRepo);
     }
 
     /**
@@ -38,9 +48,9 @@ class ListControllerTest {
     @Test
     public void testGetList() {
         CardList list = new CardList("test");
-        when(repoList.existsById(1L)).thenReturn(true);
-        when(repoList.findById(1L)).thenReturn(Optional.of(list));
-        assertEquals(list, controller.getList(1L).getBody());
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(list));
+        assertEquals(list, sut.getList(1L));
     }
 
     /**
@@ -50,8 +60,8 @@ class ListControllerTest {
     @Test
     public void testGetList404()
     {
-        assertEquals(ResponseEntity.notFound().build(), controller.getList(-1L));
-        assertEquals(ResponseEntity.notFound().build(), controller.getList(1L));
+        assertNull(sut.getList(-1L));
+        assertNull(sut.getList(1L));
     }
 
     /**
@@ -66,12 +76,12 @@ class ListControllerTest {
         card.id = 2L;
         cardList.cards = new ArrayList<>();
 
-        when(repoList.existsById(1L)).thenReturn(true);
-        when(repoList.findById(1L)).thenReturn(Optional.of(cardList));
-        when(repoList.save(cardList)).thenReturn(cardList);
-        assertEquals(card, controller.addCard(card, 1L).getBody());
-        verify(repoList, times(1)).save(cardList);
-        verify(repoCard, times(1)).save(card);
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(cardList));
+        when(listRepo.save(cardList)).thenReturn(cardList);
+        assertEquals(card, sut.addCard(card, 1L));
+        verify(listRepo, times(1)).save(cardList);
+        verify(cardRepo, times(1)).save(card);
         assertEquals(1, cardList.cards.size());
     }
 
@@ -83,9 +93,9 @@ class ListControllerTest {
     public void testAddCardInvalidListID()
     {
         Card card = new Card("test");
-        assertEquals(ResponseEntity.notFound().build(), controller.addCard(card, -1L));
-        when(repoList.existsById(1L)).thenReturn(false);
-        assertEquals(ResponseEntity.notFound().build(), controller.addCard(card, 1L));
+        assertNull(sut.addCard(card, -1L));
+        when(listRepo.existsById(1L)).thenReturn(false);
+        assertNull(sut.addCard(card, 1L));
     }
 
     /**
@@ -94,8 +104,8 @@ class ListControllerTest {
     @Test
     public void testAddCardNull()
     {
-        assertEquals(ResponseEntity.badRequest().build(), controller.addCard(null, 1L));
-        assertEquals(ResponseEntity.badRequest().build(), controller.addCard(new Card(null), 1L));
+        assertNull(sut.addCard(null, 1L));
+        assertNull(sut.addCard(new Card(null), 1L));
     }
 
     /**
@@ -110,13 +120,13 @@ class ListControllerTest {
         board.id = 1L;
         board.cardLists.add(cardList);
         cardList.id = 1L;
-        when(repoList.existsById(1L)).thenReturn(true);
-        when(repoBoard.existsById(1L)).thenReturn(true);
-        when(repoList.findById(1L)).thenReturn(Optional.of(cardList));
-        when(repoBoard.findById(1L)).thenReturn(Optional.of(board));
-        assertEquals(ResponseEntity.ok(cardList), controller.deleteList(1L, 1L));
-        verify(repoList, times(1)).deleteById(1L);
-        verify(repoBoard, times(1)).save(board);
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(repo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(cardList));
+        when(repo.findById(1L)).thenReturn(Optional.of(board));
+        assertEquals(cardList, sut.deleteList(1L, 1L));
+        verify(listRepo, times(1)).deleteById(1L);
+        verify(repo, times(1)).save(board);
     }
 
     /**
@@ -126,8 +136,8 @@ class ListControllerTest {
     @Test
     public void testDeleteListNonExistent1()
     {
-        when(repoList.existsById(1L)).thenReturn(false);
-        assertEquals(ResponseEntity.notFound().build(), controller.deleteList(1L, 1L));
+        when(listRepo.existsById(1L)).thenReturn(false);
+        assertNull(sut.deleteList(1L, 1L));
     }
 
     /**
@@ -137,9 +147,9 @@ class ListControllerTest {
     @Test
     public void testDeleteListNonExistent2()
     {
-        when(repoList.existsById(2L)).thenReturn(true);
-        when(repoBoard.existsById(2L)).thenReturn(false);
-        assertEquals(ResponseEntity.notFound().build(), controller.deleteList(2L, 2L));
+        when(listRepo.existsById(2L)).thenReturn(true);
+        when(repo.existsById(2L)).thenReturn(false);
+        assertNull(sut.deleteList(2L, 2L));
     }
 
     /**
@@ -149,8 +159,8 @@ class ListControllerTest {
     @Test
     public void testDeleteListInvalidID()
     {
-        assertEquals(ResponseEntity.notFound().build(), controller.deleteList(1L,-1L));
-        assertEquals(ResponseEntity.notFound().build(), controller.deleteList(-1L,1L));
+        assertNull(sut.deleteList(1L, -1L));
+        assertNull(sut.deleteList(-1L, 1L));
     }
 
     /**
@@ -173,12 +183,12 @@ class ListControllerTest {
         afterList.id = 1L;
         afterList.cards = cardsIn;
 
-        when(repoList.existsById(1L)).thenReturn(true);
-        when(repoList.findById(1L)).thenReturn(Optional.of(beforeList));
-        when(repoList.save(afterList)).thenReturn(afterList);
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(beforeList));
+        when(listRepo.save(afterList)).thenReturn(afterList);
 
-        assertEquals(afterList, controller.editList(changeList).getBody());
-        verify(repoList, times(1)).save(afterList);
+        assertEquals(afterList, sut.editList(changeList));
+        verify(listRepo, times(1)).save(afterList);
     }
 
     /**
@@ -190,8 +200,8 @@ class ListControllerTest {
     {
         CardList cardList = new CardList("test");
         cardList.id = 1L;
-        when(repoList.existsById(1L)).thenReturn(false);
-        assertEquals(ResponseEntity.notFound().build(), controller.editList(cardList));
+        when(listRepo.existsById(1L)).thenReturn(false);
+        assertNull(sut.editList(cardList));
     }
 
     /**
@@ -201,8 +211,8 @@ class ListControllerTest {
     @Test
     public void testEditListNull()
     {
-        assertEquals(ResponseEntity.badRequest().build(), controller.editList(null));
-        assertEquals(ResponseEntity.badRequest().build(), controller.editList(new CardList(null)));
+        assertNull(sut.editList(null));
+        assertNull(sut.editList(new CardList(null)));
     }
 
 }

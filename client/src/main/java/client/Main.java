@@ -40,7 +40,8 @@ public class Main extends Application {
 
         var overview = FXML.load(MainPageCtrl.class, "client", "scenes", "MainPage.fxml");
         var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
+        var serverConnection = FXML.load(ServerConnectionCtrl.class, "client", "scenes", "ServerConnection.fxml");
         var mainCtrl = INJECTOR.getInstance(MainClientCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, editCard);
+        mainCtrl.initialize(primaryStage, overview, editCard, serverConnection);
     }
 }

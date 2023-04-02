@@ -19,9 +19,12 @@ public class MainClientCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;  //edit card page
 
+    private ServerConnectionCtrl serverCtrl;
+    private Scene serverCon; //server connection page
+
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<EditCardCtrl, Parent> editCard) {
+                           Pair<EditCardCtrl, Parent> editCard, Pair<ServerConnectionCtrl, Parent> serverConnection) {
 
         this.primaryStage = primaryStage;
 
@@ -31,9 +34,14 @@ public class MainClientCtrl {
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
 
+        this.serverCtrl = serverConnection.getKey();
+        this.serverCon = new Scene(serverConnection.getValue());
+
         showOverview();
         primaryStage.show();
         overviewCtrl.refresh();
+
+
 
     }
 
@@ -50,7 +58,11 @@ public class MainClientCtrl {
      */
     public void showServer() {
         primaryStage.setTitle("Server Connection");
-        primaryStage.setScene(overview);
+        primaryStage.setScene(serverCon);
+    }
+
+    public void refreshOverview() {
+        overviewCtrl.refresh();
     }
 
     public void showEditCard(Card card) {

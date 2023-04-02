@@ -17,11 +17,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
+
+import javax.swing.*;
 
 
 public class MainPageCtrl implements Initializable {
@@ -36,6 +39,8 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private AnchorPane main_page;
+    @FXML
+    private Button connect_button;
 
 
     @Inject
@@ -294,6 +299,7 @@ public class MainPageCtrl implements Initializable {
      * refreshes data variable
      */
     public void refresh() {
+        connect_button.setText(server.isConnected() ? "Change server" : "Connect");
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);
         boards_list.setItems(data);
@@ -310,6 +316,11 @@ public class MainPageCtrl implements Initializable {
         card.done = !card.done;
         server.editCard(card);
         refresh();
+    }
+
+    public void changeServerConnection(){
+        mainCtrl.showServer();
+        connect_button.setText(server.isConnected() ? "Change server" : "Connect");
     }
 
 }

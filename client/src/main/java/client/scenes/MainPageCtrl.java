@@ -240,7 +240,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setCard_object(card);
         cardCtrl.setList_object(list);
         cardCtrl.setBoard_object(board);
-        cardCtrl.setTitle();
+        cardCtrl.setFields();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
     }
@@ -287,7 +287,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be edited
      */
     public void showEditCard(Board board, CardList list, Card card) {
-        mainCtrl.showEditCard(card);
+        mainCtrl.showEditCard(card, board);
     }
 
     /**

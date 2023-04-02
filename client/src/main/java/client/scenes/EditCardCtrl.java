@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -65,7 +64,7 @@ public class EditCardCtrl {
         this.board = board;
     }
 
-    public void setTitleField(Card card) {
+    public void setFields(Card card) {
         titleField.setText(card.title);
         bodyField.setText(card.description);
     }

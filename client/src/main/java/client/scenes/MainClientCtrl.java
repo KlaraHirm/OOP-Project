@@ -62,7 +62,7 @@ public class MainClientCtrl {
 
     public void showEditCard(Card card, Board board) {
         primaryStage.setTitle("Edit Card");
-        editCardCtrl.setTitleField(card);
+        editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);

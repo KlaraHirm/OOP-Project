@@ -4,7 +4,6 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -13,10 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-import javax.xml.bind.annotation.XmlType;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CardCtrl {
 
@@ -57,6 +53,7 @@ public class CardCtrl {
 
     /**
      * setter for board_object
+     *
      * @param board_object object of class Board where list is
      */
     public void setBoard_object(Board board_object) {
@@ -65,6 +62,7 @@ public class CardCtrl {
 
     /**
      * setter for list_object
+     *
      * @param list_object object of class CardList where card is
      */
     public void setList_object(CardList list_object) {
@@ -73,7 +71,8 @@ public class CardCtrl {
 
     /**
      * setter for card_object
-     * @param card_object   object of class Card representing this card
+     *
+     * @param card_object object of class Card representing this card
      */
     public void setCard_object(Card card_object) {
         this.card_object = card_object;
@@ -81,6 +80,7 @@ public class CardCtrl {
 
     /**
      * setter for MainPageCtrl pageCtrl
+     *
      * @param pageCtrl object of class MainPageCtrl
      */
     public void setPageCtrl(MainPageCtrl pageCtrl) {
@@ -108,6 +108,7 @@ public class CardCtrl {
         pageCtrl.showEditCard(board_object, list_object, card_object);
     }
 
+
     public void makeDraggable() {
 
         card.setOnMousePressed(mouseEvent -> {
@@ -125,8 +126,8 @@ public class CardCtrl {
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
 
-            card.setLayoutX(list_element.getLayoutX()+x);
-            card.setLayoutY(list_element.getLayoutY()+y);
+            card.setLayoutX(list_element.getLayoutX() + x);
+            card.setLayoutY(list_element.getLayoutY() + y);
 
         });
 
@@ -148,17 +149,9 @@ public class CardCtrl {
             for (Node n : board_element.getChildren()) {
                 if (n instanceof VBox) {
                     if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
-                        ( (VBox) n ).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-                        break;
-                    }
-                }
-            }
-
-            for (Node n : board_element.getChildren()) {
-                if (n instanceof VBox) {
-                    if (!card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        ((VBox) n).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
                         ((VBox) n).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
-                        break;
                     }
                 }
             }
@@ -169,11 +162,20 @@ public class CardCtrl {
             for (Node n : board_element.getChildren()) {
                 if (n instanceof VBox) {
                     if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
+                        ((VBox) n).setBackground(new Background
+                                (new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
+                }
+            }
+            int size = list_element.getChildren().size();
+            for (Node n : board_element.getChildren()) {
+                if (n instanceof VBox) {
+                    if (card.getBoundsInParent().intersects(n.getBoundsInParent())) {
                         setList_element((VBox) n);
-                        for (int indexCard = 0; indexCard < list_element.getChildren().size(); indexCard++) {
-                                Node test = list_element.getChildren().get(indexCard);
-                                Point p = MouseInfo.getPointerInfo().getLocation();
-                                Point2D point = new Point2D(mouseAnchorX, mouseAnchorY);
+                        for (int indexCard = 0; indexCard < size; indexCard++) {
+                            Node test = list_element.getChildren().get(indexCard);
+                            Point p = MouseInfo.getPointerInfo().getLocation();
+                            Point2D point = new Point2D(mouseAnchorX, mouseAnchorY);
                             if (indexCard == 0 && (test.contains(test.screenToLocal(point)) || test.contains(point))) {
                                 board_element.getChildren().remove(card);
                                 list_element.getChildren().add(1, card);
@@ -193,12 +195,9 @@ public class CardCtrl {
                         mouseAnchorX = mouseEvent.getSceneX();
                         mouseAnchorY = mouseEvent.getSceneY();
                         card.setManaged(true);
-                        }
                     }
                 }
+            }
         });
-
     }
-
-
 }

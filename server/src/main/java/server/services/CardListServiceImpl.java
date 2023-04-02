@@ -29,8 +29,10 @@ public class CardListServiceImpl implements CardListService {
     }
 
     /**
-     * @param listId
-     * @return
+     * Get a particular CardList using ID
+     * @param listId - the ID of the list
+     * @return - representation of the CardList
+     * Returns null if the CardList does not exist
      */
     @Override
     public CardList getList(long listId) {
@@ -39,9 +41,12 @@ public class CardListServiceImpl implements CardListService {
     }
 
     /**
-     * @param card
-     * @param listId
-     * @return
+     * Add a Card on a CardList with ID
+     * @param card - Card object
+     * @param listId - ID of the CardList to which Card should be attached
+     * @return the saved card
+     * Gives null if the CardList does not exist
+     * Gives null if the body is malformed
      */
     @Override
     public Card addCard(Card card, long listId) {
@@ -55,8 +60,11 @@ public class CardListServiceImpl implements CardListService {
     }
 
     /**
-     * @param list
-     * @return
+     * Update a CardList
+     * @param list - the CardList object to edit, with the corresponding ID
+     * @return the edited CardList
+     * Gives null if the CardList does not exist
+     * Gives null if the body is malformed
      */
     @Override
     public CardList editList(CardList list) {
@@ -69,9 +77,11 @@ public class CardListServiceImpl implements CardListService {
     }
 
     /**
-     * @param boardId
-     * @param listId
-     * @return
+     * Delete a CardList with ID
+     * @param listId - the id of the CardList to delete
+     * @param boardId - the id of the Board that owns the CardList
+     * @return the deleted CardList
+     * Returns null if the CardList does not exist
      */
     @Override
     public CardList deleteList(long boardId, long listId) {
@@ -89,10 +99,12 @@ public class CardListServiceImpl implements CardListService {
     }
 
     /**
-     * @param idOriginal
-     * @param idTarget
-     * @param idCard
-     * @return
+     * Reorder CardLists when drag and drop
+     * @param idOriginal - the original list
+     * @param idTarget - the target list
+     * @param idCard - the Card to be displaced
+     * @return the saved target list
+     * Returns null if IDs and position do not exist
      */
     @Override
     public CardList reorder(long idOriginal, long idTarget, long idCard) {

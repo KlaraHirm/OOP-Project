@@ -24,11 +24,20 @@ public class BoardServiceImpl implements BoardService {
         this.listRepo = listRepo;
     }
 
+    /**
+     * Retrieve all boards in the database
+     * @return list containing all boards
+     */
     @Override
     public List<Board> getAllBoards() {
         return boardRepo.findAll();
     }
 
+    /**
+     * Retrieve particular Board using ID
+     * @param boardId id of board
+     * @return board object
+     */
     @Override
     public Board getBoard(long boardId) {
         if (boardId < 0 || !boardRepo.existsById(boardId)) {
@@ -37,6 +46,11 @@ public class BoardServiceImpl implements BoardService {
         return boardRepo.findById(boardId).get();
     }
 
+    /**
+     * Write Board to server
+     * @param board board object to create/ write
+     * @return object representation of successfully written board
+     */
     @Override
     public Board addBoard(Board board) {
         if (board.title == null)
@@ -57,6 +71,13 @@ public class BoardServiceImpl implements BoardService {
         return boardRepo.save(board);
     }
 
+    /**
+     * Update a board
+     * @param changedBoard the board object to edit, with the corresponding id
+     * @return the edited board
+     * Gives null if the board does not exist
+     * Gives null if the body is malformed
+     */
     @Override
     public Board editBoard(Board changedBoard) {
         if (changedBoard==null || !boardRepo.existsById(changedBoard.id)) return null;
@@ -67,6 +88,11 @@ public class BoardServiceImpl implements BoardService {
         return boardRepo.save(changedBoard);
     }
 
+    /**
+     * Deletes a board with particular ID
+     * @param boardId id of board to delete
+     * @return deleted board
+     */
     @Override
     public Board deleteBoardByID(long boardId) {
         if (boardId < 0 || !boardRepo.existsById(boardId)) {
@@ -77,6 +103,12 @@ public class BoardServiceImpl implements BoardService {
         return board;
     }
 
+    /**
+     * Create a cardlist on board with id
+     * @param list cardlist object to write/ create
+     * @param boardId id of board to which cardlist should be attached
+     * @return representation of written cardlist
+     */
     @Override
     public CardList addCardList(CardList list, long boardId) {
         if(boardId < 0 || !boardRepo.existsById(boardId)) {
@@ -93,6 +125,13 @@ public class BoardServiceImpl implements BoardService {
         return saved;
     }
 
+    /**
+     * Reorder a cardlist on a board
+     * @param boardId id of the board
+     * @param listId id of the cardlist
+     * @param index new index of the cardlist
+     * @return the updated board
+     */
     @Override
     public Board reorderCardLists(long boardId, long listId, int index) {
         if(!boardRepo.existsById(boardId) || !listRepo.existsById(listId))

@@ -41,68 +41,88 @@ public class CardCtrl {
     private double mouseAnchorX;
     private double mouseAnchorY;
 
-    public void setBoard_element(HBox boardElement) {
+    /**
+     * Setter for boardElement
+     *
+     * @param boardElement - the HBox element of the Board
+     */
+    public void setBoardElement(HBox boardElement) {
         this.boardElement = boardElement;
     }
 
-    public void setList_element(VBox listElement) {
+    /**
+     * Setter for listElement
+     *
+     * @param listElement - the Vbox element of the List
+     */
+    public void setListElement(VBox listElement) {
         this.listElement = listElement;
     }
 
     /**
-     * setter for boardObject
-     * @param boardObject object of class Board where list is
+     * Setter for boardObject
+     *
+     * @param boardObject - object of class Board
      */
-    public void setBoard_object(Board boardObject) {
+    public void setBoardObject(Board boardObject) {
         this.boardObject = boardObject;
     }
 
     /**
-     * setter for listObject
-     * @param listObject object of class CardList where card is
+     * Setter for listObject
+     *
+     * @param listObject - object of class CardList
      */
-    public void setList_object(CardList listObject) {
+    public void setListObject(CardList listObject) {
         this.listObject = listObject;
     }
 
     /**
-     * setter for cardObject
-     * @param cardObject object of class Card representing this card
+     * Setter for cardObject
+     *
+     * @param cardObject - object of class Card
      */
-    public void setCard_object(Card cardObject) {
+    public void setCardObject(Card cardObject) {
         this.cardObject = cardObject;
     }
 
     /**
-     * setter for MainPageCtrl pageCtrl
-     * @param pageCtrl object of class MainPageCtrl
+     * Setter for pageCtrl
+     *
+     * @param pageCtrl - object of class MainPageCtrl
      */
     public void setPageCtrl(MainPageCtrl pageCtrl) {
         this.pageCtrl = pageCtrl;
     }
 
     /**
-     * set title which is shown in ui of card to its title with id in brackets
+     * Setter for title of a Card
+     * represented with the ID next to it
      */
     public void setTitle() {
         title.setText(cardObject.title + " (" + cardObject.id + ")");
     }
 
     /**
-     * used as onAction to delete card
+     * Use as onAction to delete Card
      */
     public void deleteCard() {
         pageCtrl.deleteCard(boardObject, listObject, cardObject, card);
     }
 
     /**
-     * used as onAction to go to edit scene
+     * Use as onAction to go to edit Scene
      */
     public void showEdit() {
         pageCtrl.showEditCard(boardObject, listObject, cardObject);
     }
 
 
+    /**
+     * Make the Card draggable for the drag and drop
+     * and reordering by priority + additional highlighting
+     * of the CardList when hovering through them
+     */
     public void makeDraggable() {
 
         card.setOnMousePressed(mouseEvent -> {
@@ -149,15 +169,13 @@ public class CardCtrl {
                     }
                 }
             }
-
         });
 
         card.setOnMouseReleased(mouseEvent -> {
             for (Node targetList : boardElement.getChildren()) {
                 if (targetList instanceof VBox) {
                     if (card.getBoundsInParent().intersects(targetList.getBoundsInParent())) {
-                        ((VBox) targetList).setBackground(new Background
-                                (new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
+                        ((VBox) targetList).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
                     }
                 }
             }
@@ -165,7 +183,7 @@ public class CardCtrl {
             for (Node targetList : boardElement.getChildren()) {
                 if (targetList instanceof VBox) {
                     if (card.getBoundsInParent().intersects(targetList.getBoundsInParent())) {
-                        setList_element((VBox) targetList);
+                        setListElement((VBox) targetList);
                         for (int indexCard = 0; indexCard < size; indexCard++) {
                             Node targetCard = listElement.getChildren().get(indexCard);
                             // Point testMouse = MouseInfo.getPointerInfo().getLocation();

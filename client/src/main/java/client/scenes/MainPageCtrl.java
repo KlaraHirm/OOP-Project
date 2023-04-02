@@ -236,14 +236,14 @@ public class MainPageCtrl implements Initializable {
         Parent p =  loader.load();
         CardCtrl cardCtrl = loader.getController();
         cardCtrl.setPageCtrl(this);
-        cardCtrl.setCard_object(card);
-        cardCtrl.setList_object(list);
-        cardCtrl.setBoard_object(board);
+        cardCtrl.setCardObject(card);
+        cardCtrl.setListObject(list);
+        cardCtrl.setBoardObject(board);
         cardCtrl.setTitle();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
-        cardCtrl.setBoard_element((HBox) list_element.getParent());
-        cardCtrl.setList_element(list_element);
+        cardCtrl.setBoardElement((HBox) list_element.getParent());
+        cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();
     }
 

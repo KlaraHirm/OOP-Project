@@ -119,88 +119,35 @@ public class CardCtrl {
 
 
     /**
-     * Make the Card draggable for the drag and drop
-     * and reordering by priority + additional highlighting
-     * of the CardList when hovering through them
+     * Drag and drop + Reorder by priority structure
      */
     public void makeDraggable() {
-
         card.setOnMousePressed(mouseEvent -> {
-            double x = card.getLayoutX();
-            double y = card.getLayoutY();
-
-            listElement.getChildren().remove(card);
-            boardElement.getChildren().add(card);
-            card.setManaged(false);
-
-            AnchorPane.setBottomAnchor(card, null);
-            AnchorPane.setTopAnchor(card, null);
-            AnchorPane.setLeftAnchor(card, null);
-            AnchorPane.setRightAnchor(card, null);
+            this.mousePressed();
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
-
-            card.setLayoutX(listElement.getLayoutX() + x);
-            card.setLayoutY(listElement.getLayoutY() + y);
-
         });
-
         card.setOnMouseDragged(mouseEvent -> {
-
-            //  Calculate the button's new position
             double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
             double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
             double newX = card.getLayoutX() + deltaX;
             double newY = card.getLayoutY() + deltaY;
 
-            // Update the button's position
             card.setLayoutX(newX);
             card.setLayoutY(newY);
 
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
-
-            for (Node targetList : boardElement.getChildren()) {
-                if (targetList instanceof VBox) {
-                    if (card.getBoundsInParent().intersects(targetList.getBoundsInParent())) {
-                        ((VBox) targetList).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-                    } else {
-                        ((VBox) targetList).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
-                    }
-                }
-            }
+            this.mouseHighlightStart();
         });
-
         card.setOnMouseReleased(mouseEvent -> {
-            for (Node targetList : boardElement.getChildren()) {
-                if (targetList instanceof VBox) {
-                    if (card.getBoundsInParent().intersects(targetList.getBoundsInParent())) {
-                        ((VBox) targetList).setBackground(new Background(new BackgroundFill(Color.web("#eff6fa"), CornerRadii.EMPTY, Insets.EMPTY)));
-                    }
-                }
-            }
-            int size = listElement.getChildren().size();
-            for (Node targetList : boardElement.getChildren()) {
-                if (targetList instanceof VBox) {
-                    if (card.getBoundsInParent().intersects(targetList.getBoundsInParent())) {
-                        setListElement((VBox) targetList);
-                        for (int indexCard = 0; indexCard < size; indexCard++) {
-                            Node targetCard = listElement.getChildren().get(indexCard);
-                            // Point testMouse = MouseInfo.getPointerInfo().getLocation();
-                            Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
-                            if (indexCard == 0 && (targetCard.contains(targetCard.screenToLocal(mousePoint)) || targetCard.contains(mousePoint))) {
-                                boardElement.getChildren().remove(card);
-                                listElement.getChildren().add(1, card);
-                                break;
-                            }
-                            if (listElement.getChildren().get(indexCard) instanceof VBox) {
-                                if (targetCard.contains(targetCard.screenToLocal(mousePoint)) || targetCard.contains(mousePoint)) {
-                                    boardElement.getChildren().remove(card);
-                                    listElement.getChildren().add(indexCard, card);
-                                    break;
-                                }
-                            }
-                        }
+            this.mouseHighlightEnd();
+            for (Node list : boardElement.getChildren()) {
+                if (list instanceof VBox) {
+                    if (card.getBoundsInParent()
+                            .intersects(list.getBoundsInParent())) {
+                        setListElement((VBox) list);
+                        this.cardsIntersect();
                         if (!listElement.getChildren().contains(card)) {
                             listElement.getChildren().add(card);
                         }
@@ -211,5 +158,89 @@ public class CardCtrl {
                 }
             }
         });
+    }
+
+    /**
+     * Make Card draggable when pressed
+     */
+    public void mousePressed() {
+        double x = card.getLayoutX();
+        double y = card.getLayoutY();
+
+        listElement.getChildren().remove(card);
+        boardElement.getChildren().add(card);
+        card.setManaged(false);
+
+        AnchorPane.setBottomAnchor(card, null);
+        AnchorPane.setTopAnchor(card, null);
+        AnchorPane.setLeftAnchor(card, null);
+        AnchorPane.setRightAnchor(card, null);
+
+        card.setLayoutX(listElement.getLayoutX() + x);
+        card.setLayoutY(listElement.getLayoutY() + y);
+    }
+
+    /**
+     * Change colour of CardList when hover over it
+     */
+    public void mouseHighlightStart() {
+        for (Node list : boardElement.getChildren()) {
+            if (list instanceof VBox) {
+                if (card.getBoundsInParent()
+                        .intersects(list.getBoundsInParent())) {
+                    ((VBox) list).setBackground(new Background(
+                            new BackgroundFill(Color.WHITE,
+                                    CornerRadii.EMPTY, Insets.EMPTY)));
+                } else {
+                    ((VBox) list).setBackground(new Background(
+                            new BackgroundFill(Color.web("#eff6fa"),
+                                    CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+            }
+        }
+    }
+
+    /**
+     * Return original colour to CardLists
+     * when Card is added to a CardList
+     */
+    public void mouseHighlightEnd() {
+        for (Node list : boardElement.getChildren()) {
+            if (list instanceof VBox) {
+                if (card.getBoundsInParent()
+                        .intersects(list.getBoundsInParent())) {
+                    ((VBox) list).setBackground(new Background(
+                            new BackgroundFill(Color.web("#eff6fa"),
+                                    CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if Card intersects with another
+     * and reorder the CardList
+     */
+    public void cardsIntersect() {
+        int size = listElement.getChildren().size();
+        for (int indexCard = 0; indexCard < size; indexCard++) {
+            Node aim = listElement.getChildren().get(indexCard);
+            // Point testMouse = MouseInfo.getPointerInfo().getLocation();
+            Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
+            if (indexCard == 0 && (aim.contains(aim.screenToLocal(mousePoint))
+                    || aim.contains(mousePoint))) {
+                boardElement.getChildren().remove(card);
+                listElement.getChildren().add(1, card);
+                break;
+            }
+            if (listElement.getChildren().get(indexCard) instanceof VBox) {
+                if (aim.contains(aim.screenToLocal(mousePoint))
+                        || aim.contains(mousePoint)) {
+                    boardElement.getChildren().remove(card);
+                    listElement.getChildren().add(indexCard, card);
+                    break;
+                }
+            }
+        }
     }
 }

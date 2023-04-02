@@ -67,6 +67,7 @@ public class EditCardCtrl {
 
     public void setTitleField(Card card) {
         titleField.setText(card.title);
+        bodyField.setText(card.description);
     }
 
     public void submit() throws IOException {

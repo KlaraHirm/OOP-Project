@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
 import commons.*;
+import server.database.CardListRepository;
 
 @RestController
 @RequestMapping("/api/board")
@@ -31,19 +32,21 @@ public class BoardController
 {
 
     private final BoardRepository repo;
+    private final CardListRepository listRepo;
 
     /**
      * Constructor for the BoardController
      */
-    public BoardController(BoardRepository repo) {
+    public BoardController(BoardRepository repo, CardListRepository listRepo) {
         this.repo = repo;
+        this.listRepo = listRepo;
     }
 
     /**
      * Retrieve all boards in the database
      * @return a json array containing all boards
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping("")
     public List<Board> getAll() {
         return repo.findAll();
     }
@@ -66,7 +69,7 @@ public class BoardController
      * @param board board object to create/ write
      * @return json representation of successfully written board
      */
-    @PostMapping(path = { "", "/" })
+    @PostMapping("")
     public ResponseEntity<Board> addBoard(@RequestBody Board board)
     {
         if (board.title == null)
@@ -74,8 +77,18 @@ public class BoardController
             return ResponseEntity.badRequest().build();
         }
 
+
+        if(board.cardLists == null) board.cardLists = new ArrayList<>();
+
+        else {
+            //set place value of lists
+            for (int i = 0; i < board.cardLists.size(); i++) {
+                CardList list = board.cardLists.get(i);
+                list.place = i;
+                listRepo.save(list);
+            }
+        }
         Board saved = repo.save(board);
-        if(saved.cardLists == null) saved.cardLists = new ArrayList<>();
         return ResponseEntity.ok(saved);
     }
 
@@ -86,7 +99,7 @@ public class BoardController
      * Gives 404 if the board does not exist
      * Gives 400 if the body is malformed
      */
-    @PutMapping(path = { "", "/" })
+    @PutMapping("")
     public ResponseEntity<Board> editBoard(@RequestBody Board changedBoard) {
         if (changedBoard == null) return ResponseEntity.badRequest().build();
 
@@ -104,7 +117,7 @@ public class BoardController
      * @param id id of board to delete
      * @return Response indicating success fo deletion
      */
-    @DeleteMapping(path = { "/{id}", "/{id}/" })
+    @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteBoardWithID(@PathVariable("id") long id)
     {
         if (id < 0 || !repo.existsById(id)) {
@@ -121,22 +134,59 @@ public class BoardController
      * @param id id of board to which cardlist should be attached
      * @return json representation of written cardlist
      */
-    @PostMapping(path = { "/{id}", "/{id}/" })
+    @PostMapping("/{id}")
     public ResponseEntity<CardList> addCardList(@RequestBody CardList cardList, @PathVariable("id") long id)
     {
         if (cardList == null || cardList.title == null) {
             return ResponseEntity.badRequest().build();
         }
-        if(id < 0 || !repo.existsById(id))
-        {
+        if(id < 0 || !repo.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
 
         Board board = repo.findById(id).get();
         board.cardLists.add(cardList);
         if(cardList.cards == null) cardList.cards = new ArrayList<>();
+        cardList.place = board.cardLists.indexOf(cardList);
 
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(cardList);
+        CardList saved = listRepo.save(cardList);
+        repo.save(board);
+        return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Reorder a cardlist on a board
+     * @param boardId id of the board
+     * @param listId id of the cardlist
+     * @param index new index of the cardlist
+     * @return the updated board
+     */
+    @PutMapping(path = { "/{id}/reorder" })
+    public ResponseEntity<Board> reorderCardLists(@PathVariable("id") long boardId, @RequestParam long listId, @RequestParam int index)
+    {
+        if(boardId <= 0 || listId <= 0 ||  !repo.existsById(boardId) || !listRepo.existsById(listId))
+            return ResponseEntity.notFound().build();
+        if(index < 0) return ResponseEntity.badRequest().build();
+
+
+        Board board = repo.findById(boardId).get();
+        CardList list = listRepo.findById(listId).get();
+
+        if(!board.cardLists.contains(list)) return ResponseEntity.badRequest().build();
+
+
+        board.cardLists.remove(list);
+
+        if(index >= board.cardLists.size()) board.cardLists.add(list);
+        else board.cardLists.add(index, list);
+
+        //Set place to index for all lists
+        for(int i = 0; i < board.cardLists.size(); i ++)
+        {
+            board.cardLists.get(i).place = i;
+        }
+
+        repo.save(board);
+        return ResponseEntity.ok(board);
     }
 }

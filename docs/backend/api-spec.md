@@ -14,7 +14,7 @@
 - PUT /
     - Modifies metadata of the board (title, color, etc.)
     - Return saved board
-- _PUT /reorder_
+- _PUT /{id}/reorder_
     - Moves a cardlist to a certain place
     - Parameters : carlist id, place
     - Return saved board

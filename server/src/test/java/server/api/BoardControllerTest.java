@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import server.database.BoardRepository;
+import server.database.CardListRepository;
 
 import java.util.*;
 
@@ -23,12 +24,15 @@ class BoardControllerTest
     @Mock
     private BoardRepository repo;
 
+    @Mock
+    private CardListRepository listRepo;
+
     private BoardController sut;
 
     @BeforeEach
     public void setup()
     {
-        sut = new BoardController(repo);
+        sut = new BoardController(repo, listRepo);
     }
 
     /**
@@ -93,6 +97,21 @@ class BoardControllerTest
         when(repo.save(board)).thenReturn(board);
         assertEquals(board, sut.addBoard(board).getBody());
         verify(repo, times(1)).save(board);
+    }
+
+    @Test
+    public void testAddBoardCreatesPlaces()
+    {
+        Board board = new Board("test");
+        board.cardLists = new ArrayList<>(List.of(new CardList[]{
+                new CardList("list1"), new CardList("list2")}));
+        when(repo.save(board)).thenReturn(board);
+        Board returned = sut.addBoard(board).getBody();
+        assertEquals(2, returned.cardLists.size());
+        for(int i = 0; i < 2; i++)
+        {
+            assertEquals(i, returned.cardLists.get(i).place);
+        }
     }
 
     /**
@@ -218,6 +237,7 @@ class BoardControllerTest
         when(repo.existsById(1L)).thenReturn(true);
         when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.save(board)).thenReturn(board);
+        when(listRepo.save(cardList)).thenReturn(cardList);
         assertEquals(cardList, sut.addCardList(cardList, 1L).getBody());
         verify(repo, times(1)).save(board);
         assertEquals(1, board.cardLists.size());
@@ -238,6 +258,7 @@ class BoardControllerTest
         when(repo.existsById(1L)).thenReturn(true);
         when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.save(board)).thenReturn(board);
+        when(listRepo.save(cardList)).thenReturn(cardList);
         assertEquals(cardList, sut.addCardList(cardList, 1L).getBody());
         assertNotNull(cardList.cards);
         verify(repo, times(1)).save(board);
@@ -283,4 +304,37 @@ class BoardControllerTest
         assertEquals(ResponseEntity.badRequest().build(), sut.addCardList(cardList, 1L));
     }
 
+    /**
+     * Test that reorderCardLists correctly places the cardlist at the index specified,
+     * and fixes all place values on the cardlists
+     */
+    @Test
+    public void testReorderCardLists()
+    {
+        Board board = new Board("test");
+        board.id = 1L;
+        CardList cardList1 = new CardList("test1", 0);
+        cardList1.id = 1L;
+        CardList cardList2 = new CardList("test2", 1);
+        cardList2.id = 2L;
+        CardList cardList3 = new CardList("test3", 2);
+        cardList3.id = 3L;
+        board.cardLists = new ArrayList<>(List.of(new CardList[]{cardList1, cardList2, cardList3}));
+
+        when(repo.existsById(1L)).thenReturn(true);
+        when(repo.findById(1L)).thenReturn(Optional.of(board));
+        when(repo.save(board)).thenReturn(board);
+        when(listRepo.existsById(3L)).thenReturn(true);
+        when(listRepo.findById(3L)).thenReturn(Optional.of(cardList3));
+
+        assertEquals(ResponseEntity.ok(board), sut.reorderCardLists(1L, 3L, 0));
+        assertEquals(3, board.cardLists.size());
+        assertEquals(3L, board.cardLists.get(0).id);
+        assertEquals(1L, board.cardLists.get(1).id);
+        assertEquals(2L, board.cardLists.get(2).id);
+        assertEquals(0, cardList3.place);
+        assertEquals(1, cardList1.place);
+        assertEquals(2, cardList2.place);
+        verify(repo, times(1)).save(board);
+    }
 }

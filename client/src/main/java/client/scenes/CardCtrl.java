@@ -70,9 +70,9 @@ public class CardCtrl {
     }
 
     /**
-     * set title which is shown in ui of card to its title with id in brackets
+     * set fields (title, description, done checkbox) which is shown in ui of card
      */
-    public void setTitle() {
+    public void setFields() {
         title.setText(card_object.title + " (" + card_object.id + ")");
         description.setText(card_object.description);
         done.setSelected(card_object.done);

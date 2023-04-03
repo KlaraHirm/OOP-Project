@@ -132,10 +132,18 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * get whether the client is connected to server
+     */
     public boolean isConnected(){
         return connected;
     }
 
+    /**
+     * connect to server with specified url
+     * @param URL server url
+     * @return true if succesfully connected, false otherwise
+     */
     public boolean connect(String URL){
         connected = false;
         try {
@@ -146,8 +154,19 @@ public class ServerUtils {
         return connected;
     }
 
+    /**
+     * disconnect from server
+     */
     public void disconnect(){
         connected = false;
+    }
+
+    /**
+     * get server url
+     * @return server url
+     */
+    public String getServerURL(){
+        return serverURL;
     }
 
 }

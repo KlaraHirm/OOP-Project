@@ -68,4 +68,11 @@ public class ServerConnectionCtrl {
         mainCtrl.refreshOverview();
         mainCtrl.showOverview();
     }
+
+    /**
+     * sets the initial values of the UI elements when the scene is loaded
+     */
+    public void setUIValues() {
+        server_address_field.setText(server.getServerURL());
+    }
 }

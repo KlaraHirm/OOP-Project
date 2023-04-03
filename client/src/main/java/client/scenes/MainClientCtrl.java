@@ -59,6 +59,7 @@ public class MainClientCtrl {
     public void showServer() {
         primaryStage.setTitle("Server Connection");
         primaryStage.setScene(serverCon);
+        serverCtrl.setUIValues();
     }
 
     /**

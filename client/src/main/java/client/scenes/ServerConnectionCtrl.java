@@ -66,7 +66,11 @@ public class ServerConnectionCtrl {
      */
     public void goToMainPage() {
         mainCtrl.refreshOverview();
-        mainCtrl.showOverview();
+        try {
+            mainCtrl.showOverview(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

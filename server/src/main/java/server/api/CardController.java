@@ -61,14 +61,16 @@ public class CardController {
     /**
      * Delete a card
      * @param cardId the id of the card to delete
+     * @param listId the id of the list where card is
+     * @param boardId
      * @return the whole board as updated
      * Returns 404 if the card, list or board do not exist
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Card> deleteCard(
-            @PathVariable("id") long cardId
+            @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
     ) {
-        Card ret = cardService.deleteCard(cardId);
+        Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
     }

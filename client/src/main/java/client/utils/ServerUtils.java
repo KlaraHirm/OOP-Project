@@ -105,9 +105,11 @@ public class ServerUtils {
      * @param card card object to delete
      * @return deleted card (for undo)
      */
-    public Card deleteCard(Card card) {
+    public Card deleteCard(Card card, CardList list, Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/card/"+card.id) //
+                .queryParam("boardId", board.id) //
+                .queryParam("listId", list.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete(Card.class);

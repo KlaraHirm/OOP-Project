@@ -30,6 +30,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import server.api.repository.TestBoardRepository;
+import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
 import server.services.BoardServiceImpl;
 import server.services.CardServiceImpl;
@@ -41,13 +43,19 @@ public class CardControllerTest {
     private TestCardRepository cardRepo;
 
     @Mock
+    private TestCardListRepository listRepo;
+
+    @Mock
+    private TestBoardRepository boardRepo;
+
+    @Mock
     private CardServiceImpl service;
     private CardController sut;
 
     @BeforeEach
     public void setup()
     {
-        service = new CardServiceImpl(cardRepo);
+        service = new CardServiceImpl(cardRepo, listRepo, boardRepo);
         sut = new CardController();
         sut.cardService = service;
     }
@@ -88,7 +96,7 @@ public class CardControllerTest {
         Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
         when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
         doNothing().when(cardRepo).deleteById(1L);
-        assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L));
+        assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L,1L,1L));
         verify(cardRepo, times(1)).deleteById(1L);
     }
 }

@@ -57,7 +57,6 @@ public class ListController {
         CardList cardList = repoList.findById(id).get();
         cardList.cards.add(card);
         repoList.save(cardList);
-        repoCard.save(card);
         return ResponseEntity.ok(card);
     }
 

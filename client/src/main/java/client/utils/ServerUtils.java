@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.net.http.HttpClient;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -25,6 +26,8 @@ public class ServerUtils {
      * @return list of all boards
      */
     public List<Board> getBoards() {
+        if(!connected)
+            return new ArrayList<>();
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //

@@ -56,9 +56,14 @@ public class ServerConnectionCtrl {
         status_label.setText("Connecting...");
         boolean success = server.connect(serverAddress);
         status_label.setText(success ? "Connected!" : "Connection failed");
+        mainCtrl.resetOverview();
         //will then go to main page onAction
     }
 
+    /**
+     * method to execute when the done button is clicked
+     * returns to main page of the UI
+     */
     public void goToMainPage() {
         mainCtrl.refreshOverview();
         mainCtrl.showOverview();

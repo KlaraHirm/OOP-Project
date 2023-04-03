@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -41,6 +42,10 @@ public class MainPageCtrl implements Initializable {
     private AnchorPane main_page;
     @FXML
     private Button connect_button;
+
+    @FXML
+    private Label connection_label;
+
 
 
     @Inject
@@ -102,7 +107,7 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
-//        refresh();
+        refresh();
     }
 
     /**
@@ -143,6 +148,10 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void newBoard() throws IOException {
+        if(!server.isConnected()) {
+            //JOptionPane.showMessageDialog(null, "You are not connected to a server!"); freezes for some reason
+            return;
+        }
         Board board = new Board("Untitled");
         board = server.addBoard(board);
         hideBoard(main_page.lookup("#board_container"));
@@ -299,8 +308,11 @@ public class MainPageCtrl implements Initializable {
      * refreshes data variable
      */
     public void refresh() {
-        connect_button.setText(server.isConnected() ? "Change server" : "Connect");
         var boards = server.getBoards();
+        connection_label.setText(server.isConnected() ? "Connected" : "Disconnected");
+        if(!server.isConnected()) {
+            reset();
+        }
         data = FXCollections.observableList(boards);
         boards_list.setItems(data);
     }
@@ -318,9 +330,19 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
+    /**
+     * loads the server connection management UI
+     */
     public void changeServerConnection(){
         mainCtrl.showServer();
-        connect_button.setText(server.isConnected() ? "Change server" : "Connect");
     }
 
+
+    /**
+     * removes the currently showing board from list selection and main ui
+     */
+    public void reset(){
+        hideBoard(main_page.lookup("#board_container"));
+        boards_list.getSelectionModel().clearSelection();
+    }
 }

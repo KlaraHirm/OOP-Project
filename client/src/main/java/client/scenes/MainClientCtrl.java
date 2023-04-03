@@ -61,13 +61,28 @@ public class MainClientCtrl {
         primaryStage.setScene(serverCon);
     }
 
+    /**
+     * Refresh main page
+     */
     public void refreshOverview() {
         overviewCtrl.refresh();
     }
 
+    /**
+     * Show edit card page
+     * @param card
+     */
     public void showEditCard(Card card) {
         primaryStage.setTitle("Edit Card");
         editCardCtrl.setTitleField(card);
         primaryStage.setScene(editCard);
+    }
+
+    /**
+     * Reset main page board selection
+     */
+    public void resetOverview()
+    {
+        overviewCtrl.reset();
     }
 }

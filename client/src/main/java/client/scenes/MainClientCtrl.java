@@ -1,10 +1,13 @@
 package client.scenes;
 
+import commons.Board;
 import commons.Card;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import java.io.IOException;
 
 
 /**
@@ -24,7 +27,7 @@ public class MainClientCtrl {
 
 
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<EditCardCtrl, Parent> editCard, Pair<ServerConnectionCtrl, Parent> serverConnection) {
+                           Pair<EditCardCtrl, Parent> editCard, Pair<ServerConnectionCtrl, Parent> serverConnection) throws IOException{
 
         this.primaryStage = primaryStage;
 
@@ -37,20 +40,23 @@ public class MainClientCtrl {
         this.serverCtrl = serverConnection.getKey();
         this.serverCon = new Scene(serverConnection.getValue());
 
-        showOverview();
+        showOverview(null);
+
         primaryStage.show();
         overviewCtrl.refresh();
-
-
 
     }
 
     /**
      * Show main page
      */
-    public void showOverview() {
+    public void showOverview(Board board) throws IOException {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
+        if(board!=null){
+            overviewCtrl.loadBoardContent(board);
+        }
+
     }
 
     /**
@@ -71,12 +77,15 @@ public class MainClientCtrl {
 
     /**
      * Show edit card page
-     * @param card
+     * @param card card to edit
+     * @param board that the card belongs to
      */
-    public void showEditCard(Card card) {
+    public void showEditCard(Card card, Board board) {
         primaryStage.setTitle("Edit Card");
-        editCardCtrl.setTitleField(card);
+        editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
+        editCardCtrl.setCard(card);
+        editCardCtrl.setBoard(board);
     }
 
     /**

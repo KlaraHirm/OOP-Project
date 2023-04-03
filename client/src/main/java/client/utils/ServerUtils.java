@@ -168,4 +168,12 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), CardList.class);
     }
 
+    public List<Card> getCards(long listId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list/"+listId+"/cards") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Card>>() {});
+    }
+
 }

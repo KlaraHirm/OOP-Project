@@ -254,15 +254,15 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
-        int place = 0;
         boolean foundPlace = false;
+        int place = 0;
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
-            place++;
             if (!foundPlace && indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);
-                cardObject.place = place;
+//                cardObject.place = place;
+//                pageCtrl.saveCard(cardObject);
                 foundPlace = true;
             }
             else if (!foundPlace && aim instanceof VBox) {
@@ -270,16 +270,18 @@ public class CardCtrl {
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
 
                     listElement.getChildren().add(indexCard, card);
-                    cardObject.place = place;
+//                    cardObject.place = place;
+//                    pageCtrl.saveCard(cardObject);
                     foundPlace = true;
                 }
             }
-            else if (aim instanceof VBox) {
+            else if (foundPlace && aim instanceof VBox) {
                 long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
                 Card listCard = pageCtrl.getCard(cardId);
-                listCard.place = place;
-                pageCtrl.reorderCard(listCard, listObject, listObject);
+//                listCard.place = place;
+//                pageCtrl.saveCard(listCard);
             }
+            place++;
         }
         boardElement.getChildren().remove(card);
     }

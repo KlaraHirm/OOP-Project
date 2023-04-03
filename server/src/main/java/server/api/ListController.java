@@ -9,6 +9,8 @@ import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/list")
 public class ListController {
@@ -102,13 +104,12 @@ public class ListController {
      * Reorder CardLists when drag and drop
      * @param idOld - the original list
      * @param idNew - the target list
-     * @param card_reorder - the Card to be displaced
      * @return the saved target list
      * Returns 404 if IDs and position do not exist
      */
     @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
-                                            @RequestParam("cardId") long cardId, @RequestBody Card card_reorder) {
+                                            @RequestParam("cardId") long cardId) {
         if ((idOld < 0 || !repoList.existsById(idOld)) &&
                 (idNew < 0 || !repoList.existsById(idNew))) {
             return  ResponseEntity.notFound().build();
@@ -119,16 +120,17 @@ public class ListController {
         int position = 0;
         Card card = repoCard.findById(cardId).get();
         if (!oldList.cards.contains(card)) return ResponseEntity.notFound().build();
-        // TODO - had to comment out this part because it was causing internal server error
-//        for (int i = 0; i < oldList.cards.size(); i++) {
-//            if (oldList.cards.get(i).equals(card)) {
-//                position++;
-//            }
-//        }
         oldList.cards.remove(card);
         newList.cards.add(position, card);
         repoList.save(oldList);
         repoList.save(newList);
         return ResponseEntity.ok(newList);
+    }
+
+    @GetMapping(path = {"/{id}/cards"})
+    public ResponseEntity<List<Card>> getCards(@PathVariable("id") long listId) {
+        if (listId < 0 || !repoList.existsById(listId)) return ResponseEntity.notFound().build();
+        CardList cardList = repoList.findById(listId).get();
+        return ResponseEntity.ok(cardList.cards);
     }
 }

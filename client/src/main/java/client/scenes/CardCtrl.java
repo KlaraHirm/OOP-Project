@@ -172,10 +172,8 @@ public class CardCtrl {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
                         setListElement((VBox) list);
-                        long newListId = Long.parseLong(list.getId().split("_")[1]); //retrieves object id from element id
+                        long newListId = Long.parseLong(listElement.getId().split("_")[1]); //retrieves object id from element id
                         setListObject(pageCtrl.getList(newListId));
-                        pageCtrl.reorderCard(cardObject, originalListElement, listObject);
-
                         break;
                     }
                 }
@@ -187,6 +185,7 @@ public class CardCtrl {
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
             card.setManaged(true);
+            pageCtrl.reorderCard(cardObject, originalListElement, listObject);
         });
     }
 
@@ -255,21 +254,31 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
+        int place = 0;
+        boolean foundPlace = false;
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
-            // Point testMouse = MouseInfo.getPointerInfo().getLocation();
-            // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
-            if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
+            place++;
+            if (!foundPlace && indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);
-                break;
+                cardObject.place = place;
+                foundPlace = true;
             }
-            if (listElement.getChildren().get(indexCard) instanceof VBox) {
+            else if (!foundPlace && aim instanceof VBox) {
                 if (card.localToScene(card.getBoundsInLocal())
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
+
                     listElement.getChildren().add(indexCard, card);
-                    break;
+                    cardObject.place = place;
+                    foundPlace = true;
                 }
+            }
+            else if (aim instanceof VBox) {
+                long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
+                Card listCard = pageCtrl.getCard(cardId);
+                listCard.place = place;
+                pageCtrl.reorderCard(listCard, listObject, listObject);
             }
         }
         boardElement.getChildren().remove(card);
@@ -280,5 +289,9 @@ public class CardCtrl {
      */
     public void toggleCardState() {
         pageCtrl.toggleCardState(boardObject, listObject, cardObject, card);
+    }
+
+    public void setCardId() {
+        card.setId("list_"+cardObject.id);
     }
 }

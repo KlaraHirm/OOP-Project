@@ -98,6 +98,19 @@ public class ServerUtils {
     }
 
     /**
+     * getter for card
+     * @param cardId id of card which we want to get
+     * @return object of class Card which has the same id as passed in cardId
+     */
+    public Card getCard(long cardId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/card/"+cardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Card>() {});
+    }
+
+    /**
      * add newly created card to db
      * @param list object of class CardList where the card is
      * @param card newly create object of class Card which is to be added to the db

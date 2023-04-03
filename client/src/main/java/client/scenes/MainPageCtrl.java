@@ -246,6 +246,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setBoardElement((HBox) list_element.getParent());
         cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();
+        cardCtrl.setCardId();
     }
 
     /**
@@ -256,8 +257,9 @@ public class MainPageCtrl implements Initializable {
      */
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
-        card = server.addCard(list, card);
         list.cards.add(card);
+        card.place = list.cards.size();
+        card = server.addCard(list, card);
         showCard(board, list, card, list_element);
     }
 
@@ -333,6 +335,15 @@ public class MainPageCtrl implements Initializable {
      */
     public CardList getList(long listId) {
         return server.getList(listId);
+    }
+
+    /**
+     * method used to get card based on id
+     * @param cardId id of card
+     * @return object of class Card which had the same id as passed in cardId
+     */
+    public Card getCard(long cardId) {
+        return server.getCard(cardId);
     }
 
 }

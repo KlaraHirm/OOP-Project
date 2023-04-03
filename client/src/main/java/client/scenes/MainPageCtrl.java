@@ -122,7 +122,6 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public Parent showBoard(Board board) throws IOException {
-        refresh();
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -144,6 +143,7 @@ public class MainPageCtrl implements Initializable {
         hideBoard(main_page.lookup("#board_container"));
         showBoard(board);
         boards_list.setValue(board);
+        refresh();
     }
 
     /**
@@ -278,7 +278,7 @@ public class MainPageCtrl implements Initializable {
      * @param card_element JavaFX element of the card
      */
     public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
-        //TODO - server.deleteCard
+        server.deleteCard(card);
         hideCard(card_element, (VBox) card_element.getParent());
         refresh();
     }
@@ -290,8 +290,9 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be edited
      */
     public void showEditCard(Board board, CardList list, Card card) {
-        mainCtrl.showEditCard(card);
+        mainCtrl.showEditCard(card, board);
     }
+
     /**
      * refreshes data variable
      */
@@ -301,5 +302,17 @@ public class MainPageCtrl implements Initializable {
         boards_list.setItems(data);
     }
 
+    /**
+     * method which marks a card as done (checkbox checked) or not done (unchecked)
+     * @param board object of class Board where card is - grandparent
+     * @param list object of class CardList where card is - parent
+     * @param card object of class Card which represents the card to be marked as done
+     * @param card_element JavaFX element of the card
+     */
+    public void toggleCardState(Board board, CardList list, Card card, VBox card_element) {
+        card.done = !card.done;
+        server.editCard(card);
+        refresh();
+    }
 
 }

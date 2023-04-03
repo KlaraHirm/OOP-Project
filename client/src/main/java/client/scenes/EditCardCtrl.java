@@ -3,6 +3,7 @@ package client.scenes;
 import client.objects.TagObjectCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
 import javafx.fxml.FXML;
 
@@ -10,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -40,6 +40,10 @@ public class EditCardCtrl {
     @FXML
     private TextArea bodyField;
 
+    private Card card;
+
+    private Board board;
+
     /**
      * \
      * @param server
@@ -52,16 +56,25 @@ public class EditCardCtrl {
         this.mainCtrl = mainCtrl;
     }
 
-    public void setTitleField(Card card) {
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void setFields(Card card) {
         titleField.setText(card.title);
+        bodyField.setText(card.description);
     }
 
-    public void submit(){
-        mainCtrl.showOverview();
+    public void submit() throws IOException {
+        card.title = titleField.getText();
+        card.description = bodyField.getText();
+        server.editCard(card);
+        mainCtrl.showOverview(board);
     }
-
-
-
 
     /**
      * adds a tag using fxml loader
@@ -91,14 +104,6 @@ public class EditCardCtrl {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * @param n
-     * deletes object from listpane
-     * **/
-    public void deleteTask(Node n) {
-        listPane.getChildren().remove(n);
     }
 
     public void createNewTag(String name) {

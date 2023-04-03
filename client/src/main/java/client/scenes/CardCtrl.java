@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,6 +25,12 @@ public class CardCtrl {
 
     @FXML
     private Label title;
+
+    @FXML
+    private Label description;
+
+    @FXML
+    private CheckBox done;
 
     private Board boardObject;
 
@@ -100,6 +107,16 @@ public class CardCtrl {
      */
     public void setTitle() {
         title.setText(cardObject.title + " (" + cardObject.id + ")");
+    }
+
+    /**
+     * Setter for (title, description, check) of a Card
+     * represented with the ID next to it
+     */
+    public void setFields() {
+        title.setText(cardObject.title + " (" + cardObject.id + ")");
+        description.setText(cardObject.description);
+        done.setSelected(cardObject.done);
     }
 
     /**
@@ -244,5 +261,12 @@ public class CardCtrl {
                 }
             }
         }
+    }
+
+    /**
+     * used as onAction to toggle the done value
+     */
+    public void toggleCardState() {
+        pageCtrl.toggleCardState(boardObject, listObject, cardObject, card);
     }
 }

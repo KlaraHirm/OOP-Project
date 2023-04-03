@@ -62,7 +62,7 @@ public class CardController {
      * Delete a card
      * @param cardId the id of the card to delete
      * @param listId the id of the list where card is
-     * @param boardId
+     * @param boardId the id of the board
      * @return the whole board as updated
      * Returns 404 if the card, list or board do not exist
      */

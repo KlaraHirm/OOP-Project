@@ -106,6 +106,7 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void loadBoardContent(Board selected_board) throws IOException {
+        refresh();
         hideBoard(main_page.lookup("#board_container"));
         AnchorPane board_container = (AnchorPane) showBoard(selected_board);
         for(CardList list:selected_board.cardLists){

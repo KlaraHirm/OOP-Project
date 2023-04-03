@@ -103,6 +103,8 @@ public class ServerUtils {
     /**
      * delete specified card
      * @param card card object to delete
+     * @param list list object to update
+     * @param board board object to update
      * @return deleted card (for undo)
      */
     public Card deleteCard(Card card, CardList list, Board board) {

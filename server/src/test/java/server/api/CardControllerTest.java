@@ -21,7 +21,9 @@ import static org.mockito.Mockito.*;
 import java.util.Objects;
 import java.util.Optional;
 
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +35,6 @@ import org.springframework.http.ResponseEntity;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
-import server.services.BoardServiceImpl;
 import server.services.CardServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -93,8 +94,14 @@ public class CardControllerTest {
     public void testDeleteCard() {
         Card c = new Card("Title");
         c.id = 1L;
+        Board b = new Board("Board");
+        CardList l = new CardList("List");
+        l.cards.add(c);
+        b.cardLists.add(l);
         Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
         when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(listRepo.findById(1L)).thenReturn(Optional.of(l));
+        when(boardRepo.findById(1L)).thenReturn(Optional.of(b));
         doNothing().when(cardRepo).deleteById(1L);
         assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L,1L,1L));
         verify(cardRepo, times(1)).deleteById(1L);

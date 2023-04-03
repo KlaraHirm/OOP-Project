@@ -5,7 +5,6 @@ import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -184,13 +183,15 @@ public class CardCtrl {
      * Change colour of CardList when hover over it
      */
     public void mouseHighlightStart() {
+        boolean intersectionFound = false;
         for (Node list : boardElement.getChildren()) {
             if (list instanceof VBox) {
-                if (card.getBoundsInParent()
+                if (!intersectionFound && card.getBoundsInParent()
                         .intersects(list.getBoundsInParent())) {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.WHITE,
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    intersectionFound = true;
                 } else {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.web("#eff6fa"),
@@ -199,6 +200,7 @@ public class CardCtrl {
             }
         }
     }
+
 
     /**
      * Return original colour to CardLists
@@ -226,16 +228,16 @@ public class CardCtrl {
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
             // Point testMouse = MouseInfo.getPointerInfo().getLocation();
-            Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
-            if (indexCard == 0 && (aim.contains(aim.screenToLocal(mousePoint))
-                    || aim.contains(mousePoint))) {
+            // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
+            if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
+                    .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 boardElement.getChildren().remove(card);
                 listElement.getChildren().add(1, card);
                 break;
             }
             if (listElement.getChildren().get(indexCard) instanceof VBox) {
-                if (aim.contains(aim.screenToLocal(mousePoint))
-                        || aim.contains(mousePoint)) {
+                if (card.localToScene(card.getBoundsInLocal())
+                        .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                     boardElement.getChildren().remove(card);
                     listElement.getChildren().add(indexCard, card);
                     break;

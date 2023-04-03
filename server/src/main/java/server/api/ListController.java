@@ -56,8 +56,9 @@ public class ListController {
         if (id < 0 || !repoList.existsById(id)) return ResponseEntity.notFound().build();
         CardList cardList = repoList.findById(id).get();
         cardList.cards.add(card);
+        Card saved = repoCard.save(card);
         repoList.save(cardList);
-        return ResponseEntity.ok(card);
+        return ResponseEntity.ok(saved);
     }
 
     /**

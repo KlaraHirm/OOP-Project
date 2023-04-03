@@ -261,8 +261,8 @@ public class CardCtrl {
             if (!foundPlace && indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);
-//                cardObject.place = place;
-//                pageCtrl.saveCard(cardObject);
+                cardObject.place = place;
+                pageCtrl.saveCard(cardObject);
                 foundPlace = true;
             }
             else if (!foundPlace && aim instanceof VBox) {
@@ -270,16 +270,16 @@ public class CardCtrl {
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
 
                     listElement.getChildren().add(indexCard, card);
-//                    cardObject.place = place;
-//                    pageCtrl.saveCard(cardObject);
+                    cardObject.place = place;
+                    pageCtrl.saveCard(cardObject);
                     foundPlace = true;
                 }
             }
             else if (foundPlace && aim instanceof VBox) {
                 long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
                 Card listCard = pageCtrl.getCard(cardId);
-//                listCard.place = place;
-//                pageCtrl.saveCard(listCard);
+                listCard.place = place;
+                pageCtrl.saveCard(listCard);
             }
             place++;
         }

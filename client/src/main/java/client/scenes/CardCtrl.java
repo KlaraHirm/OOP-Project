@@ -4,10 +4,13 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class CardCtrl {
 
@@ -15,10 +18,10 @@ public class CardCtrl {
     private VBox card;
 
     @FXML
-    private Button delete_card;
+    private Button deleteCard;
 
     @FXML
-    private Button edit_card;
+    private Button editCard;
 
     @FXML
     private Label title;
@@ -29,73 +32,241 @@ public class CardCtrl {
     @FXML
     private CheckBox done;
 
-    private Board board_object;
+    private Board boardObject;
 
-    private CardList list_object;
+    private HBox boardElement;
 
-    private Card card_object;
+    private CardList listObject;
+
+    private Card cardObject;
+
+    private VBox listElement;
 
     private MainPageCtrl pageCtrl;
 
+    private double mouseAnchorX;
+    private double mouseAnchorY;
+
     /**
-     * setter for board_object
-     * @param board_object object of class Board where list is
+     * Setter for boardElement
+     *
+     * @param boardElement - the HBox element of the Board
      */
-    public void setBoard_object(Board board_object) {
-        this.board_object = board_object;
+    public void setBoardElement(HBox boardElement) {
+        this.boardElement = boardElement;
     }
 
     /**
-     * setter for list_object
-     * @param list_object object of class CardList where card is
+     * Setter for listElement
+     *
+     * @param listElement - the Vbox element of the List
      */
-    public void setList_object(CardList list_object) {
-        this.list_object = list_object;
+    public void setListElement(VBox listElement) {
+        this.listElement = listElement;
     }
 
     /**
-     * setter for card_object
-     * @param card_object   object of class Card representing this card
+     * Setter for boardObject
+     *
+     * @param boardObject - object of class Board
      */
-    public void setCard_object(Card card_object) {
-        this.card_object = card_object;
+    public void setBoardObject(Board boardObject) {
+        this.boardObject = boardObject;
     }
 
     /**
-     * setter for MainPageCtrl pageCtrl
-     * @param pageCtrl object of class MainPageCtrl
+     * Setter for listObject
+     *
+     * @param listObject - object of class CardList
+     */
+    public void setListObject(CardList listObject) {
+        this.listObject = listObject;
+    }
+
+    /**
+     * Setter for cardObject
+     *
+     * @param cardObject - object of class Card
+     */
+    public void setCardObject(Card cardObject) {
+        this.cardObject = cardObject;
+    }
+
+    /**
+     * Setter for pageCtrl
+     *
+     * @param pageCtrl - object of class MainPageCtrl
      */
     public void setPageCtrl(MainPageCtrl pageCtrl) {
         this.pageCtrl = pageCtrl;
     }
 
     /**
-     * set fields (title, description, done checkbox) which is shown in ui of card
+     * Setter for title of a Card
+     * represented with the ID next to it
+     */
+    public void setTitle() {
+        title.setText(cardObject.title + " (" + cardObject.id + ")");
+    }
+
+    /**
+     * Setter for (title, description, check) of a Card
+     * represented with the ID next to it
      */
     public void setFields() {
-        title.setText(card_object.title + " (" + card_object.id + ")");
-        description.setText(card_object.description);
-        done.setSelected(card_object.done);
+        title.setText(cardObject.title + " (" + cardObject.id + ")");
+        description.setText(cardObject.description);
+        done.setSelected(cardObject.done);
     }
 
     /**
-     * used as onAction to delete card
+     * Use as onAction to delete Card
      */
     public void deleteCard() {
-        pageCtrl.deleteCard(board_object, list_object, card_object, card);
+        pageCtrl.deleteCard(boardObject, listObject, cardObject, card);
     }
 
     /**
-     * used as onAction to go to edit scene
+     * Use as onAction to go to edit Scene
      */
     public void showEdit() {
-        pageCtrl.showEditCard(board_object, list_object, card_object);
+        pageCtrl.showEditCard(boardObject, listObject, cardObject);
+    }
+
+
+    /**
+     * Drag and drop + Reorder by priority structure
+     */
+    public void makeDraggable() {
+        card.setOnMousePressed(mouseEvent -> {
+            this.mousePressed();
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+        });
+        card.setOnMouseDragged(mouseEvent -> {
+            double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
+            double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
+            double newX = card.getLayoutX() + deltaX;
+            double newY = card.getLayoutY() + deltaY;
+
+            card.setLayoutX(newX);
+            card.setLayoutY(newY);
+
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+            this.mouseHighlightStart();
+        });
+        card.setOnMouseReleased(mouseEvent -> {
+            this.mouseHighlightEnd();
+            for (Node list : boardElement.getChildren()) {
+                if (list instanceof VBox) {
+                    if (card.getBoundsInParent()
+                            .intersects(list.getBoundsInParent())) {
+                        setListElement((VBox) list);
+                        break;
+                    }
+                }
+            }
+            this.cardsIntersect();
+            if (!listElement.getChildren().contains(card)) {
+                listElement.getChildren().add(card);
+            }
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+            card.setManaged(true);
+        });
+    }
+
+    /**
+     * Make Card draggable when pressed
+     */
+    public void mousePressed() {
+        double x = card.getLayoutX();
+        double y = card.getLayoutY();
+
+        listElement.getChildren().remove(card);
+        boardElement.getChildren().add(card);
+        card.setManaged(false);
+
+        AnchorPane.setBottomAnchor(card, null);
+        AnchorPane.setTopAnchor(card, null);
+        AnchorPane.setLeftAnchor(card, null);
+        AnchorPane.setRightAnchor(card, null);
+
+        card.setLayoutX(listElement.getLayoutX() + x);
+        card.setLayoutY(listElement.getLayoutY() + y);
+    }
+
+    /**
+     * Change colour of CardList when hover over it
+     */
+    public void mouseHighlightStart() {
+        boolean intersectionFound = false;
+        for (Node list : boardElement.getChildren()) {
+            if (list instanceof VBox) {
+                if (!intersectionFound && card.getBoundsInParent()
+                        .intersects(list.getBoundsInParent())) {
+                    ((VBox) list).setBackground(new Background(
+                            new BackgroundFill(Color.WHITE,
+                                    CornerRadii.EMPTY, Insets.EMPTY)));
+                    intersectionFound = true;
+                } else {
+                    ((VBox) list).setBackground(new Background(
+                            new BackgroundFill(Color.web("#eff6fa"),
+                                    CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Return original colour to CardLists
+     * when Card is added to a CardList
+     */
+    public void mouseHighlightEnd() {
+        for (Node list : boardElement.getChildren()) {
+            if (list instanceof VBox) {
+                if (card.getBoundsInParent()
+                        .intersects(list.getBoundsInParent())) {
+                    ((VBox) list).setBackground(new Background(
+                            new BackgroundFill(Color.web("#eff6fa"),
+                                    CornerRadii.EMPTY, Insets.EMPTY)));
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if Card intersects with another
+     * and reorder the CardList
+     */
+    public void cardsIntersect() {
+        int size = listElement.getChildren().size();
+        for (int indexCard = 0; indexCard < size; indexCard++) {
+            Node aim = listElement.getChildren().get(indexCard);
+            // Point testMouse = MouseInfo.getPointerInfo().getLocation();
+            // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
+            if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
+                    .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
+                listElement.getChildren().add(1, card);
+                break;
+            }
+            if (listElement.getChildren().get(indexCard) instanceof VBox) {
+                if (card.localToScene(card.getBoundsInLocal())
+                        .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
+                    listElement.getChildren().add(indexCard, card);
+                    break;
+                }
+            }
+        }
+        boardElement.getChildren().remove(card);
     }
 
     /**
      * used as onAction to toggle the done value
      */
     public void toggleCardState() {
-        pageCtrl.toggleCardState(board_object, list_object, card_object, card);
+        pageCtrl.toggleCardState(boardObject, listObject, cardObject, card);
     }
 }

@@ -76,9 +76,6 @@ public class EditCardCtrl {
         mainCtrl.showOverview(board);
     }
 
-
-
-
     /**
      * adds a tag using fxml loader
      * loads TagObject.fxml

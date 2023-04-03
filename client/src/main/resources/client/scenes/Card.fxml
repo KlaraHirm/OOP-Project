@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+
 <VBox fx:id="card" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: transparent;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
       <HBox alignment="CENTER" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">

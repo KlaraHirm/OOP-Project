@@ -2,6 +2,7 @@ package client.scenes;
 
 import commons.Board;
 import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,9 +23,19 @@ public class MainClientCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;  //edit card page
 
+    private EditListCtrl editListCtrl;
+    private Scene editList; // edit list page
 
-    public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
-                           Pair<EditCardCtrl, Parent> editCard) throws IOException {
+    private EditBoardCtrl editBoardCtrl;
+    private Scene editBoard;
+
+
+    public void initialize(Stage primaryStage,
+                           Pair<MainPageCtrl, Parent> overview,
+                           Pair<EditCardCtrl, Parent> editCard,
+                           Pair<EditListCtrl, Parent> editList,
+                           Pair<EditBoardCtrl, Parent> editBoard
+    ) throws IOException {
 
         this.primaryStage = primaryStage;
 
@@ -33,6 +44,12 @@ public class MainClientCtrl {
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
+
+        this.editListCtrl = editList.getKey();
+        this.editList = new Scene(editList.getValue());
+
+        this.editBoardCtrl = editBoard.getKey();
+        this.editBoard = new Scene(editBoard.getValue());
 
         showOverview(null);
         primaryStage.show();
@@ -66,5 +83,20 @@ public class MainClientCtrl {
         primaryStage.setScene(editCard);
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
+    }
+
+    public void showEditList(CardList list, Board board) {
+        primaryStage.setTitle("Edit List");
+        editListCtrl.setFields(list);
+        primaryStage.setScene(editList);
+        editListCtrl.setList(list);
+        editListCtrl.setBoard(board);
+    }
+
+    public void showEditBoard(Board board) {
+        primaryStage.setTitle("Edit Board");
+        editBoardCtrl.setFields(board);
+        primaryStage.setScene(editBoard);
+        editBoardCtrl.setBoard(board);
     }
 }

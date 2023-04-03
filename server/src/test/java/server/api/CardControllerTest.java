@@ -15,9 +15,10 @@
  */
 package server.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import commons.Card;
@@ -28,7 +29,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import server.api.repository.TestCardRepository;
+import server.services.BoardServiceImpl;
 import server.services.CardServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,12 +40,16 @@ public class CardControllerTest {
     @Mock
     private TestCardRepository cardRepo;
 
-    private CardServiceImpl sut;
+    @Mock
+    private CardServiceImpl service;
+    private CardController sut;
 
     @BeforeEach
     public void setup()
     {
-        sut = new CardServiceImpl(cardRepo);
+        service = new CardServiceImpl(cardRepo);
+        sut = new CardController();
+        sut.cardService = service;
     }
 
     @Test
@@ -51,7 +58,8 @@ public class CardControllerTest {
         when(cardRepo.existsById(1L)).thenReturn(true);
         when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
 
-        assertEquals("Title", sut.getCard(1L).title);
+        assertNotNull(service.getCard(1L));
+        assertEquals("Title", Objects.requireNonNull(sut.getCard(1L).getBody()).title);
     }
 
     @Test
@@ -69,7 +77,7 @@ public class CardControllerTest {
         Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
         when(cardRepo.save(a)).thenReturn(a);
 
-        assertEquals(a, sut.editCard(e));
+        assertEquals(ResponseEntity.ok(a), sut.editCard(e));
         verify(cardRepo, times(1)).save(e);
     }
 
@@ -80,7 +88,7 @@ public class CardControllerTest {
         Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
         when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
         doNothing().when(cardRepo).deleteById(1L);
-        assertEquals(c, sut.deleteCard(1L));
+        assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L));
         verify(cardRepo, times(1)).deleteById(1L);
     }
 }

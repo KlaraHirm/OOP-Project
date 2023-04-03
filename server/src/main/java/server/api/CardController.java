@@ -34,6 +34,9 @@ public class CardController {
             @PathVariable("id") long cardId
     ) {
         Card ret = cardService.getCard(cardId);
+        if(ret==null){
+            ResponseEntity.notFound().build();
+        }
 
         return ResponseEntity.ok(ret);
     }

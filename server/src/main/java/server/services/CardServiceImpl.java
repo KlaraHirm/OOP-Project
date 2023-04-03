@@ -50,10 +50,11 @@ public class CardServiceImpl implements CardService {
      * Delete a card
      * @param cardId the id of the card to delete
      * @return the whole board as updated
-     * Returns nukk if the card, list or board do not exist
+     * Returns null if the card, list or board do not exist
      */
     @Override
     public Card deleteCard(long cardId) {
+        if(cardId < 0) return null;
         if (!cardRepo.existsById(cardId)) return null;
 
         Card deleted = cardRepo.findById(cardId).get();

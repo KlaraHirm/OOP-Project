@@ -74,4 +74,11 @@ public class ListCtrl {
     public void deleteList() {
         pageCtrl.deleteList(board_object, list_object, list);
     }
+
+    /**
+     * used as onAction to show the page to edit the list
+     */
+    public void showEdit() {
+        pageCtrl.showEditList(board_object, list_object);
+    }
 }

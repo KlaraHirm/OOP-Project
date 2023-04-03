@@ -76,6 +76,10 @@ public class EditCardCtrl {
         mainCtrl.showOverview(board);
     }
 
+    public void cancel() throws IOException {
+        mainCtrl.showOverview(board);
+    }
+
 
 
 

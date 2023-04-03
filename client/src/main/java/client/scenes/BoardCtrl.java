@@ -68,5 +68,10 @@ public class BoardCtrl {
         pageCtrl.newList(board_object, board);
     }
 
-
+    /**
+     * used as onAction to show the page to edit the board
+     */
+    public void showEdit() {
+        pageCtrl.showEditBoard(board_object);
+    }
 }

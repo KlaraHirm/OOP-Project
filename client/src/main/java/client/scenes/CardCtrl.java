@@ -163,16 +163,17 @@ public class CardCtrl {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
                         setListElement((VBox) list);
-                        this.cardsIntersect();
-                        if (!listElement.getChildren().contains(card)) {
-                            listElement.getChildren().add(card);
-                        }
-                        mouseAnchorX = mouseEvent.getSceneX();
-                        mouseAnchorY = mouseEvent.getSceneY();
-                        card.setManaged(true);
+                        break;
                     }
                 }
             }
+            this.cardsIntersect();
+            if (!listElement.getChildren().contains(card)) {
+                listElement.getChildren().add(card);
+            }
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
+            card.setManaged(true);
         });
     }
 
@@ -248,19 +249,18 @@ public class CardCtrl {
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                boardElement.getChildren().remove(card);
                 listElement.getChildren().add(1, card);
                 break;
             }
             if (listElement.getChildren().get(indexCard) instanceof VBox) {
                 if (card.localToScene(card.getBoundsInLocal())
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                    boardElement.getChildren().remove(card);
                     listElement.getChildren().add(indexCard, card);
                     break;
                 }
             }
         }
+        boardElement.getChildren().remove(card);
     }
 
     /**

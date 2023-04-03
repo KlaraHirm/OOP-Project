@@ -46,10 +46,9 @@ public class EditCardCtrl {
     private Board board;
 
     /**
-     * \
+     * Sets EditCardCtrl
      * @param server
      * @param mainCtrl
-     * Sets EditCardCtrl
      */
     @Inject
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {

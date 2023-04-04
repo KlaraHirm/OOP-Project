@@ -258,7 +258,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setCardObject(card);
         cardCtrl.setListObject(list);
         cardCtrl.setBoardObject(board);
-        cardCtrl.setTitle();
+        cardCtrl.setFields();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
         cardCtrl.setBoardElement((HBox) list_element.getParent());

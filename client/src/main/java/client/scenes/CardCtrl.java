@@ -274,6 +274,9 @@ public class CardCtrl {
         boardElement.getChildren().remove(card);
     }
 
+    /**
+     * Iterates through whole list and assigns places to cards based on their position in VBox
+     */
     public void changePlaces() {
         for (int indexCard = 0; indexCard < listElement.getChildren().size(); indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
@@ -284,7 +287,6 @@ public class CardCtrl {
                 pageCtrl.saveCard(listCard);
             }
         }
-        boardElement.getChildren().remove(card);
     }
 
 
@@ -295,7 +297,10 @@ public class CardCtrl {
         pageCtrl.toggleCardState(boardObject, listObject, cardObject, card);
     }
 
+    /**
+     * setter for id of VBox representing card
+     */
     public void setCardId() {
-        card.setId("list_"+cardObject.id);
+        card.setId("card_"+cardObject.id);
     }
 }

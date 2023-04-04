@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="350.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditBoardCtrl">
+    <children>
+        <Label alignment="CENTER" layoutX="5.0" layoutY="27.0" prefHeight="17.0" prefWidth="700.0" text="Edit Board" textAlignment="CENTER" textFill="#2274a5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="titleField" layoutX="23.0" layoutY="82.0" promptText="Title" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" />
+
+        <Button alignment="CENTER" layoutX="20.0" layoutY="300.0" mnemonicParsing="false" onAction="#submit" text="Save" textFill="#2274a5">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor></Button>
+      <Button alignment="CENTER" layoutX="77.0" layoutY="300.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" textFill="#2274a5">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+    </children>
+</AnchorPane>

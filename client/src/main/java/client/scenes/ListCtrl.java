@@ -79,6 +79,13 @@ public class ListCtrl {
      * sets id of element representing list to contain its object id
      */
     public void setListId() {
-        list.setId("list_"+list_object.id);
+        list.setId("list_" + list_object.id);
+    }
+
+    /**
+     * used as onAction to show the page to edit the list
+     */
+    public void showEdit() {
+        pageCtrl.showEditList(board_object, list_object);
     }
 }

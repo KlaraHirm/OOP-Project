@@ -3,11 +3,14 @@ package server.api;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.services.BoardServiceImpl;
+import server.services.CardListServiceImpl;
 
 import java.util.List;
 
@@ -15,19 +18,8 @@ import java.util.List;
 @RequestMapping("/api/list")
 public class ListController {
 
-    private final BoardRepository repoBoard;
-    private final CardListRepository repoList;
-
-    private final CardRepository repoCard;
-
-    /**
-     * Constructor for the ListController
-     */
-    public ListController(BoardRepository repoBoard, CardListRepository repoList, CardRepository repoCard) {
-        this.repoBoard = repoBoard;
-        this.repoList = repoList;
-        this.repoCard = repoCard;
-    }
+    @Autowired
+    CardListServiceImpl listService;
 
     /**
      * Get a particular CardList using ID
@@ -37,8 +29,9 @@ public class ListController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<CardList> getList(@PathVariable("id") long id) {
-        if (id < 0 || !repoList.existsById(id)) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(repoList.findById(id).get());
+        CardList ret = listService.getList(id);
+        if(ret==null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -53,12 +46,9 @@ public class ListController {
     public ResponseEntity<Card> addCard(@RequestBody Card card, @PathVariable("id") long id)
     {
         if (card == null || card.title == null) return ResponseEntity.badRequest().build();
-        if (id < 0 || !repoList.existsById(id)) return ResponseEntity.notFound().build();
-        CardList cardList = repoList.findById(id).get();
-        cardList.cards.add(card);
-        Card saved = repoCard.save(card);
-        repoList.save(cardList);
-        return ResponseEntity.ok(saved);
+        Card ret = listService.addCard(card, id);
+        if (ret == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -71,11 +61,9 @@ public class ListController {
     @PutMapping(path = {""})
     public ResponseEntity<CardList> editList(@RequestBody CardList cardListNew) {
         if (cardListNew == null || cardListNew.title == null) return ResponseEntity.badRequest().build();
-        if (!repoList.existsById(cardListNew.id)) return ResponseEntity.notFound().build();
-        CardList cardListOld = repoList.findById(cardListNew.id).get();
-        cardListNew.cards = cardListOld.cards;
-        repoList.save(cardListNew);
-        return ResponseEntity.ok(cardListNew);
+        CardList ret = listService.editList(cardListNew);
+        if (ret == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -87,17 +75,9 @@ public class ListController {
      */
     @DeleteMapping(path = {"/{id}"})
     public ResponseEntity<CardList> deleteList(@RequestParam("boardId") long boardId, @PathVariable("id") long id) {
-        if (id < 0 || !repoList.existsById(id)) return ResponseEntity.notFound().build();
-        if (id < 0 || !repoBoard.existsById(boardId)) return ResponseEntity.notFound().build();
-        CardList cardList = repoList.findById(id).get();
-        Board board = repoBoard.findById(boardId).get();
-        for (int i = 0; i < cardList.cards.size(); i++) {
-            repoCard.deleteById(cardList.cards.get(i).id);
-        }
-        board.cardLists.remove(cardList);
-        repoList.deleteById(id);
-        repoBoard.save(board);
-        return ResponseEntity.ok(cardList);
+        CardList ret = listService.deleteList(boardId, id);
+        if (ret == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -109,28 +89,24 @@ public class ListController {
      */
     @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
-                                            @RequestParam("cardId") long cardId) {
-        if ((idOld < 0 || !repoList.existsById(idOld)) &&
-                (idNew < 0 || !repoList.existsById(idNew))) {
+                                  @RequestParam("cardId") long idCard) {
+        CardList ret = listService.reorder(idOld, idNew, idCard);
+        if (ret == null) {
             return  ResponseEntity.notFound().build();
         }
-        if (cardId < 0 || !repoCard.existsById(cardId)) return ResponseEntity.notFound().build();
-        CardList oldList = repoList.findById(idOld).get();
-        CardList newList = repoList.findById(idNew).get();
-        int position = 0;
-        Card card = repoCard.findById(cardId).get();
-        if (!oldList.cards.contains(card)) return ResponseEntity.notFound().build();
-        oldList.cards.remove(card);
-        newList.cards.add(position, card);
-        repoList.save(oldList);
-        repoList.save(newList);
-        return ResponseEntity.ok(newList);
+        return ResponseEntity.ok(ret);
     }
 
+    /**
+     * Getter for cards in list
+     * @param listId id of a list
+     * @return ordered list of cards by place
+     * Returns 404 when ID not exists
+     */
     @GetMapping(path = {"/{id}/cards"})
     public ResponseEntity<List<Card>> getCards(@PathVariable("id") long listId) {
-        if (listId < 0 || !repoList.existsById(listId)) return ResponseEntity.notFound().build();
-        CardList cardList = repoList.findById(listId).get();
-        return ResponseEntity.ok(cardList.cards);
+        List<Card> ret = listService.getCards(listId);
+        if (ret == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 }

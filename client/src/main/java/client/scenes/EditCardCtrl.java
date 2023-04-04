@@ -76,6 +76,13 @@ public class EditCardCtrl {
         mainCtrl.showOverview(board);
     }
 
+    public void cancel() throws IOException {
+        mainCtrl.showOverview(board);
+    }
+
+
+
+
     /**
      * adds a tag using fxml loader
      * loads TagObject.fxml

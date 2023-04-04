@@ -90,7 +90,7 @@ public class CardListServiceImpl implements CardListService {
         CardList cardList = listRepo.findById(listId).get();
         Board board = boardRepo.findById(boardId).get();
         for (int i = 0; i < cardList.cards.size(); i++) {
-            boardRepo.deleteById(cardList.cards.get(i).id);
+            cardRepo.deleteById(cardList.cards.get(i).id);
         }
         board.cardLists.remove(cardList);
         listRepo.deleteById(listId);

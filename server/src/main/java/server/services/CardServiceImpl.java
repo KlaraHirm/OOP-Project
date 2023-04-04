@@ -1,8 +1,12 @@
 package server.services;
 
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.database.BoardRepository;
+import server.database.CardListRepository;
 import server.database.CardRepository;
 import server.services.interfaces.CardService;
 
@@ -12,8 +16,17 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private CardRepository cardRepo;
 
-    public CardServiceImpl(CardRepository cardRepo) {
+    @Autowired
+    private CardListRepository listRepo;
+
+    @Autowired
+    private BoardRepository boardRepo;
+
+    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo) {
+
         this.cardRepo = cardRepo;
+        this.listRepo = listRepo;
+        this.boardRepo = boardRepo;
     }
 
 
@@ -49,14 +62,25 @@ public class CardServiceImpl implements CardService {
     /**
      * Delete a card
      * @param cardId the id of the card to delete
+     * @param listId the id of the list where card is
+     * @param boardId the id of the board
      * @return the whole board as updated
-     * Returns nukk if the card, list or board do not exist
+     * Returns null if the card, list or board do not exist
      */
     @Override
-    public Card deleteCard(long cardId) {
+    public Card deleteCard(long boardId, long listId, long cardId) {
+        if(cardId < 0) return null;
         if (!cardRepo.existsById(cardId)) return null;
 
+        CardList cardList = listRepo.findById(listId).get();
+        Board board = boardRepo.findById(boardId).get();
         Card deleted = cardRepo.findById(cardId).get();
+        int listIndex = board.cardLists.indexOf(cardList);
+
+        cardList.cards.remove(deleted);
+        board.cardLists.set(listIndex, cardList);
+        boardRepo.save(board);
+        listRepo.save(cardList);
         cardRepo.deleteById(cardId);
 
         return deleted;

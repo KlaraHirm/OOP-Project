@@ -106,6 +106,7 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void loadBoardContent(Board selected_board) throws IOException {
+        refresh();
         hideBoard(main_page.lookup("#board_container"));
         AnchorPane board_container = (AnchorPane) showBoard(selected_board);
         for(CardList list:selected_board.cardLists){
@@ -278,7 +279,7 @@ public class MainPageCtrl implements Initializable {
      * @param card_element JavaFX element of the card
      */
     public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
-        server.deleteCard(card);
+        server.deleteCard(card, list, board);
         hideCard(card_element, (VBox) card_element.getParent());
         refresh();
     }

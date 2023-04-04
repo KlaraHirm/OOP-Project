@@ -15,66 +15,95 @@
  */
 package server.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import java.util.Random;
+import java.util.Objects;
+import java.util.Optional;
 
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import commons.Person;
-import commons.Quote;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import server.api.repository.TestBoardRepository;
-import server.api.repository.TestCardRepository;
 import server.api.repository.TestCardListRepository;
-import server.api.util.RandomMock;
+import server.api.repository.TestCardRepository;
+import server.services.CardServiceImpl;
 
+@ExtendWith(MockitoExtension.class)
 public class CardControllerTest {
 
-    public int nextInt;
-    private RandomMock random;
-    private TestBoardRepository repo;
-    private TestCardListRepository listRepo;
+    @Mock
     private TestCardRepository cardRepo;
 
+    @Mock
+    private TestCardListRepository listRepo;
+
+    @Mock
+    private TestBoardRepository boardRepo;
+
+    @Mock
+    private CardServiceImpl service;
     private CardController sut;
 
     @BeforeEach
-    public void setup() {
-        random = new RandomMock();
-        cardRepo = new TestCardRepository();
-        sut = new CardController(random, cardRepo);
+    public void setup()
+    {
+        service = new CardServiceImpl(cardRepo, listRepo, boardRepo);
+        sut = new CardController();
+        sut.cardService = service;
     }
 
     @Test
     public void testGetCard() {
         Card c = new Card("Title");
-        Card saved = cardRepo.save(c);
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
 
-        assertEquals(sut.getCard(saved.id).getBody().title, "Title");
+        assertNotNull(service.getCard(1L));
+        assertEquals("Title", Objects.requireNonNull(sut.getCard(1L).getBody()).title);
     }
 
     @Test
     public void testPutCard() {
         Card c = new Card("Title");
-        Card saved = cardRepo.save(c);
+        c.id = 1L;
 
-        saved.title = "Title2";
-        sut.editCard(saved);
+        Card e = new Card("Title2");
+        e.id = 1L;
 
-        assertEquals(cardRepo.findById(saved.id).get().title, "Title2");
+        Card a = new Card("Title2");
+        a.id = 1L;
+
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(cardRepo.save(a)).thenReturn(a);
+
+        assertEquals(ResponseEntity.ok(a), sut.editCard(e));
+        verify(cardRepo, times(1)).save(e);
     }
 
     @Test
     public void testDeleteCard() {
         Card c = new Card("Title");
-        Card saved = cardRepo.save(c);
-
-        sut.deleteCard(saved.id);
-
-        assertTrue(cardRepo.findById(saved.id).isEmpty());
+        c.id = 1L;
+        Board b = new Board("Board");
+        CardList l = new CardList("List");
+        l.cards.add(c);
+        b.cardLists.add(l);
+        Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(listRepo.findById(1L)).thenReturn(Optional.of(l));
+        when(boardRepo.findById(1L)).thenReturn(Optional.of(b));
+        doNothing().when(cardRepo).deleteById(1L);
+        assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L,1L,1L));
+        verify(cardRepo, times(1)).deleteById(1L);
     }
 }

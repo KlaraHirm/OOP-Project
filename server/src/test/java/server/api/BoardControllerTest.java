@@ -8,8 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
+import server.api.repository.TestBoardRepository;
+import server.api.repository.TestCardListRepository;
+import server.services.BoardServiceImpl;
 
 import java.util.*;
 
@@ -22,17 +23,21 @@ class BoardControllerTest
 {
 
     @Mock
-    private BoardRepository repo;
+    private TestBoardRepository repo;
 
     @Mock
-    private CardListRepository listRepo;
+    private TestCardListRepository listRepo;
 
+    @Mock
+    private BoardServiceImpl service;
     private BoardController sut;
 
     @BeforeEach
     public void setup()
     {
-        sut = new BoardController(repo, listRepo);
+        service = new BoardServiceImpl(repo, listRepo);
+        sut = new BoardController();
+        sut.boardService = service;
     }
 
     /**
@@ -43,7 +48,8 @@ class BoardControllerTest
     {
         List<Board> boards = new ArrayList<>(List.of(new Board[]{new Board("test1"), new Board("test2")}));
         when(repo.findAll()).thenReturn(boards);
-        assertEquals(boards, sut.getAll());
+        assertEquals(ResponseEntity.ok(boards), sut.getAll());
+
     }
     /**
      * Test that getAll returns an empty list when the repo is empty
@@ -53,7 +59,7 @@ class BoardControllerTest
     {
         List<Board> boards = new ArrayList<>();
         when(repo.findAll()).thenReturn(boards);
-        assertEquals(boards, sut.getAll());
+        assertEquals(ResponseEntity.ok(boards), sut.getAll());
     }
 
     /**
@@ -65,7 +71,7 @@ class BoardControllerTest
         Board board = new Board("test");
         when(repo.existsById(1L)).thenReturn(true);
         when(repo.findById(1L)).thenReturn(Optional.of(board));
-        assertEquals(board, sut.getBoard(1L).getBody());
+        assertEquals(ResponseEntity.ok(board), sut.getBoard(1L));
     }
 
     /**
@@ -95,7 +101,7 @@ class BoardControllerTest
     {
         Board board = new Board("test");
         when(repo.save(board)).thenReturn(board);
-        assertEquals(board, sut.addBoard(board).getBody());
+        assertEquals(ResponseEntity.ok(board), sut.addBoard(board));
         verify(repo, times(1)).save(board);
     }
 
@@ -107,6 +113,7 @@ class BoardControllerTest
                 new CardList("list1"), new CardList("list2")}));
         when(repo.save(board)).thenReturn(board);
         Board returned = sut.addBoard(board).getBody();
+        assertNotNull(returned);
         assertEquals(2, returned.cardLists.size());
         for(int i = 0; i < 2; i++)
         {
@@ -123,7 +130,7 @@ class BoardControllerTest
         Board board = new Board("test");
         board.cardLists = null;
         when(repo.save(board)).thenReturn(board);
-        assertEquals(board, sut.addBoard(board).getBody());
+        assertEquals(ResponseEntity.ok(board), sut.addBoard(board));
         assertNotNull(board.cardLists);
         verify(repo, times(1)).save(board);
     }
@@ -132,7 +139,7 @@ class BoardControllerTest
      * Test that addBoard returns a bad request and doesn't attempt to save to the repo when title = null
      */
     @Test
-    public void testAddboardNullTitle()
+    public void testAddBoardNullTitle()
     {
         Board board = new Board(null);
         assertEquals(ResponseEntity.badRequest().build(), sut.addBoard(board));
@@ -161,13 +168,13 @@ class BoardControllerTest
         when(repo.findById(1L)).thenReturn(Optional.of(beforeBoard));
         when(repo.save(afterBoard)).thenReturn(afterBoard);
 
-        assertEquals(afterBoard, sut.editBoard(changeBoard).getBody());
+        assertEquals(ResponseEntity.ok(afterBoard), sut.editBoard(changeBoard));
 
         verify(repo, times(1)).save(afterBoard);
     }
 
     /**
-     * Test that editBoard returns a bad request when given a board object with a non-existent id, and doesn't attempt to modify the repo
+     * Test that editBoard returns a not found request when given a board object with a non-existent id, and doesn't attempt to modify the repo
      */
     @Test
     public void testEditBoardNonExistent()
@@ -238,7 +245,7 @@ class BoardControllerTest
         when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.save(board)).thenReturn(board);
         when(listRepo.save(cardList)).thenReturn(cardList);
-        assertEquals(cardList, sut.addCardList(cardList, 1L).getBody());
+        assertEquals(ResponseEntity.ok(cardList), sut.addCardList(cardList, 1L));
         verify(repo, times(1)).save(board);
         assertEquals(1, board.cardLists.size());
     }
@@ -259,7 +266,7 @@ class BoardControllerTest
         when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.save(board)).thenReturn(board);
         when(listRepo.save(cardList)).thenReturn(cardList);
-        assertEquals(cardList, sut.addCardList(cardList, 1L).getBody());
+        assertEquals(ResponseEntity.ok(cardList), sut.addCardList(cardList, 1L));
         assertNotNull(cardList.cards);
         verify(repo, times(1)).save(board);
     }

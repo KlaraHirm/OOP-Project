@@ -3,11 +3,14 @@ package server.api;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.services.CardListServiceImpl;
+import server.services.CardServiceImpl;
 
 import java.util.Optional;
 import java.util.Random;
@@ -16,13 +19,8 @@ import java.util.Random;
 @RequestMapping("/api/card")
 public class CardController {
 
-    private final Random random;
-    private final CardRepository cardRepo;
-
-    public CardController(Random random, CardRepository cardRepo) {
-        this.random = random;
-        this.cardRepo = cardRepo;
-    }
+    @Autowired
+    CardServiceImpl cardService;
 
 
     /**
@@ -35,10 +33,12 @@ public class CardController {
     public ResponseEntity<Card> getCard(
             @PathVariable("id") long cardId
     ) {
-        if (!cardRepo.existsById(cardId)) return ResponseEntity.notFound().build();
-        Card card = cardRepo.findById(cardId).get();
+        Card ret = cardService.getCard(cardId);
+        if(ret==null){
+            ResponseEntity.notFound().build();
+        }
 
-        return ResponseEntity.ok(card);
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -53,28 +53,25 @@ public class CardController {
             @RequestBody Card newCard
     ) {
         if (newCard == null) return ResponseEntity.badRequest().build();
-
-        if (!cardRepo.existsById(newCard.id)) return ResponseEntity.notFound().build();
-
-        Card saved = cardRepo.save(newCard);
-        return ResponseEntity.ok(saved);
+        Card ret = cardService.editCard(newCard);
+        if (ret == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 
     /**
      * Delete a card
      * @param cardId the id of the card to delete
+     * @param listId the id of the list where card is
+     * @param boardId the id of the board
      * @return the whole board as updated
      * Returns 404 if the card, list or board do not exist
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Card> deleteCard(
-            @PathVariable("id") long cardId
+            @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
     ) {
-        if (!cardRepo.existsById(cardId)) return ResponseEntity.notFound().build();
-
-        Card deleted = cardRepo.findById(cardId).get();
-        cardRepo.deleteById(cardId);
-
-        return ResponseEntity.ok(deleted);
+        Card ret = cardService.deleteCard(boardId, listId, cardId);
+        if (ret == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 }

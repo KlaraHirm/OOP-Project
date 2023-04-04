@@ -16,8 +16,8 @@
                </padding></CheckBox>
             <VBox>
                <children>
-                  <Label fx:id="title" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" style="-fx-background-color: transparent;" text="Title" textAlignment="CENTER" textFill="#2274a5" wrapText="true" />
-                  <Label fx:id="description" text="Description" />
+                  <Label fx:id="title" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" style="-fx-background-color: transparent;" textAlignment="CENTER" textFill="#2274a5" wrapText="true" />
+                  <Label fx:id="description" />
                </children>
                <opaqueInsets>
                   <Insets />

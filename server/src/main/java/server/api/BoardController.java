@@ -15,40 +15,29 @@
  */
 package server.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import server.database.BoardRepository;
-
 import commons.*;
-import server.database.CardListRepository;
+import server.services.BoardServiceImpl;
 
 @RestController
 @RequestMapping("/api/board")
 public class BoardController
 {
-
-    private final BoardRepository repo;
-    private final CardListRepository listRepo;
-
-    /**
-     * Constructor for the BoardController
-     */
-    public BoardController(BoardRepository repo, CardListRepository listRepo) {
-        this.repo = repo;
-        this.listRepo = listRepo;
-    }
+    @Autowired
+    BoardServiceImpl boardService;
 
     /**
      * Retrieve all boards in the database
      * @return a json array containing all boards
      */
     @GetMapping("")
-    public List<Board> getAll() {
-        return repo.findAll();
+    public ResponseEntity<List<Board>> getAll() {
+        return ResponseEntity.ok(boardService.getAllBoards());
     }
 
     /**
@@ -58,10 +47,11 @@ public class BoardController
      */
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoard(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+        Board ret = boardService.getBoard(id);
+        if (ret==null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -71,25 +61,13 @@ public class BoardController
      */
     @PostMapping("")
     public ResponseEntity<Board> addBoard(@RequestBody Board board)
-    {
-        if (board.title == null)
+    {   Board ret = boardService.addBoard(board);
+        if (ret == null)
         {
             return ResponseEntity.badRequest().build();
         }
 
-
-        if(board.cardLists == null) board.cardLists = new ArrayList<>();
-
-        else {
-            //set place value of lists
-            for (int i = 0; i < board.cardLists.size(); i++) {
-                CardList list = board.cardLists.get(i);
-                list.place = i;
-                listRepo.save(list);
-            }
-        }
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -102,14 +80,9 @@ public class BoardController
     @PutMapping("")
     public ResponseEntity<Board> editBoard(@RequestBody Board changedBoard) {
         if (changedBoard == null) return ResponseEntity.badRequest().build();
-
-        if (!repo.existsById(changedBoard.id)) return ResponseEntity.notFound().build();
-        Board board = repo.findById(changedBoard.id).get();
-
-        changedBoard.cardLists = board.cardLists;
-
-        Board saved = repo.save(changedBoard);
-        return ResponseEntity.ok(saved);
+        Board ret = boardService.editBoard(changedBoard);
+        if (ret==null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -120,12 +93,11 @@ public class BoardController
     @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteBoardWithID(@PathVariable("id") long id)
     {
-        if (id < 0 || !repo.existsById(id)) {
+        Board ret = boardService.deleteBoardByID(id);
+        if (ret  == null) {
             return ResponseEntity.badRequest().build();
         }
-        Board board = repo.findById(id).get();
-        repo.deleteById(id);
-        return ResponseEntity.ok(board);
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -140,18 +112,11 @@ public class BoardController
         if (cardList == null || cardList.title == null) {
             return ResponseEntity.badRequest().build();
         }
-        if(id < 0 || !repo.existsById(id)) {
+        CardList ret = boardService.addCardList(cardList,id);
+        if(ret==null) {
             return ResponseEntity.notFound().build();
         }
-
-        Board board = repo.findById(id).get();
-        board.cardLists.add(cardList);
-        if(cardList.cards == null) cardList.cards = new ArrayList<>();
-        cardList.place = board.cardLists.indexOf(cardList);
-
-        CardList saved = listRepo.save(cardList);
-        repo.save(board);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(ret);
     }
 
     /**
@@ -164,29 +129,12 @@ public class BoardController
     @PutMapping(path = { "/{id}/reorder" })
     public ResponseEntity<Board> reorderCardLists(@PathVariable("id") long boardId, @RequestParam long listId, @RequestParam int index)
     {
-        if(boardId <= 0 || listId <= 0 ||  !repo.existsById(boardId) || !listRepo.existsById(listId))
+        if(boardId <= 0 || listId <= 0 || index < 0)
             return ResponseEntity.notFound().build();
-        if(index < 0) return ResponseEntity.badRequest().build();
-
-
-        Board board = repo.findById(boardId).get();
-        CardList list = listRepo.findById(listId).get();
-
-        if(!board.cardLists.contains(list)) return ResponseEntity.badRequest().build();
-
-
-        board.cardLists.remove(list);
-
-        if(index >= board.cardLists.size()) board.cardLists.add(list);
-        else board.cardLists.add(index, list);
-
-        //Set place to index for all lists
-        for(int i = 0; i < board.cardLists.size(); i ++)
-        {
-            board.cardLists.get(i).place = i;
+        Board ret = boardService.reorderCardLists(boardId, listId, index);
+        if(ret==null){
+            return ResponseEntity.badRequest().build();
         }
-
-        repo.save(board);
-        return ResponseEntity.ok(board);
+        return ResponseEntity.ok(ret);
     }
 }

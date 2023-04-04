@@ -159,6 +159,15 @@ public class MainPageCtrl implements Initializable {
     }
 
     /**
+     * method which loads a scene to edit board
+     * @param board object of class Board - board to be edited
+     */
+    public void showEditBoard(Board board) {
+        mainCtrl.showEditBoard(board);
+    }
+
+
+    /**
      * deletes board currently shown from server and client
      * @param board board to be deleted
      */
@@ -212,6 +221,15 @@ public class MainPageCtrl implements Initializable {
         board.getChildren().remove(n);
     }
 
+    /**
+     * method which loads a scene to edit list
+     * @param board object of class Board - grandparent of card
+     * @param list object of class CardList - list to be edited
+     */
+    public void showEditList(Board board, CardList list) {
+        mainCtrl.showEditList(list, board);
+    }
+
 
     /**
      * deletes list specified in parameters
@@ -219,7 +237,7 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList which is to be deleted
      */
     public void deleteList(Board board, CardList list, VBox list_container) {
-        server.deleteList(board, list);
+        server.deleteList(list);
         hideList(list_container, ((HBox)list_container.getParent()));
         refresh();
     }
@@ -240,7 +258,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setCardObject(card);
         cardCtrl.setListObject(list);
         cardCtrl.setBoardObject(board);
-        cardCtrl.setTitle();
+        cardCtrl.setFields();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
         cardCtrl.setBoardElement((HBox) list_element.getParent());

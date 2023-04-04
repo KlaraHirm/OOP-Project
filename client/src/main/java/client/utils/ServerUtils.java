@@ -43,6 +43,19 @@ public class ServerUtils {
     }
 
     /**
+     * edit board
+     * @param board object of class Board to be edited (with corresponding id)
+     * @return the edited board
+     */
+    public Board editBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/board") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    /**
      * delete board based on its id
      * @param board object of class Board to be deleted
      * @return response
@@ -55,13 +68,11 @@ public class ServerUtils {
                 .delete();
     }
 
-    //TODO - getLists()
-
     /**
      * add newly created list to db
      * @param board object of class Board in which the list is
      * @param list object of class CardList which is to be added to db
-     * @return should be the same list but with the generated id //TODO for now it is not working the id is still 0
+     * @return should be the same list but with the generated id
      */
     public CardList addList(Board board, CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -72,15 +83,26 @@ public class ServerUtils {
     }
 
     /**
+     * edit a list
+     * @param list object of class CardList to be edited (with corresponding id)
+     * @return edited card list
+     */
+    public CardList editList(CardList list) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(list, APPLICATION_JSON), CardList.class);
+    }
+
+    /**
      * delete list based on the board id and list id
-     * @param board object of class Board where the list is
-     * @param list object of class CardList to be deleted //TODO for now not rly working because we dont have the real id of list
+     * @param list object of class CardList to be deleted
      * @return response
      */
-    public Response deleteList(Board board, CardList list) {
+    public Response deleteList(CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/list/"+list.id) //
-                .queryParam("boardId", board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();

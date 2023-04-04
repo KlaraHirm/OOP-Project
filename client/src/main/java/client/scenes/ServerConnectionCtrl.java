@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class ServerConnectionCtrl {
@@ -57,20 +58,15 @@ public class ServerConnectionCtrl {
         boolean success = server.connect(serverAddress);
         status_label.setText(success ? "Connected!" : "Connection failed");
         mainCtrl.resetOverview();
-        //will then go to main page onAction
-    }
-
-    /**
-     * method to execute when the done button is clicked
-     * returns to main page of the UI
-     */
-    public void goToMainPage() {
         mainCtrl.refreshOverview();
-        try {
-            mainCtrl.showOverview(null);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(success) {
+            try {
+                mainCtrl.showOverview(null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        //will then go to main page onAction
     }
 
     /**

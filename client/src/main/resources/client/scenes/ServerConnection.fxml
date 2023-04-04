@@ -17,7 +17,6 @@
             <Cursor fx:constant="HAND" />
             </cursor>
       </Button>
-      <Button layoutX="49.0" layoutY="86.0" mnemonicParsing="false" onAction="#goToMainPage" text="Exit" />
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

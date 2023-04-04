@@ -25,8 +25,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-import javax.swing.*;
-
 
 public class MainPageCtrl implements Initializable {
 
@@ -41,7 +39,7 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private AnchorPane main_page;
     @FXML
-    private Button connect_button;
+    private Button disconnect_button;
 
     @FXML
     private Label connection_label;

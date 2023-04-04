@@ -254,37 +254,39 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
-        boolean foundPlace = false;
-        int place = 0;
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
-            if (!foundPlace && indexCard == 0 && card.localToScene(card.getBoundsInLocal())
+            if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);
-                cardObject.place = place;
-                pageCtrl.saveCard(cardObject);
-                foundPlace = true;
+                break;
             }
-            else if (!foundPlace && aim instanceof VBox) {
+            else if (aim instanceof VBox) {
                 if (card.localToScene(card.getBoundsInLocal())
-                        .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
+                        .intersects(aim.localToScene(aim.getBoundsInLocal())) || indexCard == size-1) {
 
-                    listElement.getChildren().add(indexCard, card);
-                    cardObject.place = place;
-                    pageCtrl.saveCard(cardObject);
-                    foundPlace = true;
+                    listElement.getChildren().add(indexCard+1, card);
+                    break;
                 }
             }
-            else if (foundPlace && aim instanceof VBox) {
+        }
+        changePlaces();
+        boardElement.getChildren().remove(card);
+    }
+
+    public void changePlaces() {
+        for (int indexCard = 0; indexCard < listElement.getChildren().size(); indexCard++) {
+            Node aim = listElement.getChildren().get(indexCard);
+            if (aim instanceof VBox) {
                 long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
                 Card listCard = pageCtrl.getCard(cardId);
-                listCard.place = place;
+                listCard.place = indexCard+1;
                 pageCtrl.saveCard(listCard);
             }
-            place++;
         }
         boardElement.getChildren().remove(card);
     }
+
 
     /**
      * used as onAction to toggle the done value

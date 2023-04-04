@@ -12,7 +12,7 @@
                 <Font size="18.0" />
             </font>
         </Label>
-        <TextField fx:id="titleField" layoutX="23.0" layoutY="82.0" promptText="Title" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="520.0" />
+        <TextField fx:id="titleField" layoutX="23.0" layoutY="82.0" promptText="Title" style="-fx-border-color: black;" AnchorPane.leftAnchor="20.0" />
 
         <Button alignment="CENTER" layoutX="20.0" layoutY="300.0" mnemonicParsing="false" onAction="#submit" text="Save" textFill="#2274a5">
             <cursor>

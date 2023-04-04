@@ -97,7 +97,6 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
-//        refresh();
     }
 
     /**
@@ -143,8 +142,8 @@ public class MainPageCtrl implements Initializable {
         board = server.addBoard(board);
         hideBoard(main_page.lookup("#board_container"));
         showBoard(board);
-        boards_list.setValue(board);
         refresh();
+        boards_list.setValue(board);
     }
 
     /**
@@ -299,8 +298,10 @@ public class MainPageCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        data = FXCollections.observableList(boards);
-        boards_list.setItems(data);
+        if(!boards.equals(boards_list.getItems())) {
+            data = FXCollections.observableList(boards);
+            boards_list.setItems(data);
+        }
     }
 
     /**

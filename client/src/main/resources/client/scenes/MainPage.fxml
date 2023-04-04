@@ -9,7 +9,7 @@
    <children>
       <AnchorPane prefHeight="70.0" prefWidth="600.0" style="-fx-background-color: f8f9fa;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="connection_label" layoutX="531.0" layoutY="48.0" text="Disconnected" />
+            <Label fx:id="connection_label" layoutX="531.0" layoutY="48.0" text="Disconnected"  AnchorPane.rightAnchor="50.0" />
             <Label alignment="CENTER" layoutY="24.0" maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="600.0" text="Welcome to your digital workspace!" textFill="#2274a5" wrapText="true" AnchorPane.leftAnchor="0.0">
                <font>
                   <Font size="18.0" />

@@ -40,7 +40,7 @@ public class MainClientCtrl {
         this.serverCtrl = serverConnection.getKey();
         this.serverCon = new Scene(serverConnection.getValue());
 
-        showOverview(null);
+        showServer();
 
         primaryStage.show();
         overviewCtrl.refresh();

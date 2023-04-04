@@ -254,36 +254,36 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
-        for (int indexCard = 1; indexCard <= size; indexCard++) {
+        boolean foundPlace = false;
+        int place = 0;
+        for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
-            if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
+            if (!foundPlace && indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                listElement.getChildren().add(indexCard, card);
+                listElement.getChildren().add(1, card);
+                cardObject.place = place;
                 pageCtrl.saveCard(cardObject);
-                break;
+                foundPlace = true;
             }
-            else if (aim instanceof VBox) {
+            else if (!foundPlace && aim instanceof VBox) {
                 if (card.localToScene(card.getBoundsInLocal())
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
+
                     listElement.getChildren().add(indexCard, card);
+                    cardObject.place = place;
                     pageCtrl.saveCard(cardObject);
+                    foundPlace = true;
                 }
             }
-        }
-        boardElement.getChildren().remove(card);
-        changePlaces();
-    }
-
-    public void changePlaces() {
-        for (int indexCard = 0; indexCard < listElement.getChildren().size(); indexCard++) {
-            Node aim = listElement.getChildren().get(indexCard);
-            if (aim instanceof VBox) {
+            else if (foundPlace && aim instanceof VBox) {
                 long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
                 Card listCard = pageCtrl.getCard(cardId);
-                listCard.place = indexCard-1;
+                listCard.place = place;
                 pageCtrl.saveCard(listCard);
             }
+            place++;
         }
+        boardElement.getChildren().remove(card);
     }
 
     /**

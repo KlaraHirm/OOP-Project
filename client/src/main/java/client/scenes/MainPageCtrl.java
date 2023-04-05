@@ -20,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -117,10 +118,11 @@ public class MainPageCtrl implements Initializable {
         refresh();
         hideBoard(main_page.lookup("#board_container"));
         AnchorPane board_container = (AnchorPane) showBoard(selected_board);
+        HBox board_hbox = (HBox) board_container.lookup("#board");
         for(CardList list:selected_board.cardLists){
-            VBox list_container = (VBox) showList(selected_board, list, (HBox) board_container.lookup("#board"));
+            VBox list_container = (VBox)showList(selected_board, list, board_hbox);
             for(Card card:list.cards){
-                showCard(selected_board, list, card, list_container);
+                showCard(selected_board, list, card, list_container, board_hbox);
             }
         }
     }
@@ -197,7 +199,7 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList which is to be shown
      * @throws IOException
      */
-    public Parent showList(Board board, CardList list, HBox board_element) throws IOException {
+    public VBox showList(Board board, CardList list, HBox board_element) throws IOException {
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -209,7 +211,7 @@ public class MainPageCtrl implements Initializable {
         board_element.getChildren().addAll(p);
         HBox.setMargin(p, new Insets(10, 10, 10, 10));
         refresh();
-        return p;
+        return (VBox)((ScrollPane)p.getChildrenUnmodifiable().get(1)).getContent();
     }
 
     /**
@@ -261,7 +263,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be shown
      * @throws IOException
      */
-    public void showCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
+    public void showCard(Board board, CardList list, Card card, VBox list_element, HBox board_element) throws IOException {
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -273,7 +275,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setFields();
         list_element.getChildren().addAll(p);
         VBox.setMargin(p, new Insets(5, 5, 5, 5));
-        cardCtrl.setBoardElement((HBox) list_element.getParent());
+        cardCtrl.setBoardElement(board_element);
         cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();
     }
@@ -288,7 +290,7 @@ public class MainPageCtrl implements Initializable {
         Card card = new Card("Untitled");
         card = server.addCard(list, card);
         list.cards.add(card);
-        showCard(board, list, card, list_element);
+        showCard(board, list, card, list_element, (HBox) main_page.lookup("#board"));
     }
 
     /**

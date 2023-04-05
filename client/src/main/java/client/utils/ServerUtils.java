@@ -196,4 +196,15 @@ public class ServerUtils {
         return serverURL;
     }
 
+    /**
+     * set values for server url and connect directly
+     * SHOULD ONLY BE USED FOR TESTS
+     * @param serverURL the value for the serverURL property
+     * @param connected the value for the connected property
+     */
+    public void _setValues(String serverURL, boolean connected){
+        ServerUtils.serverURL = serverURL;
+        ServerUtils.connected = connected;
+    }
+
 }

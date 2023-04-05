@@ -162,7 +162,7 @@ public class CardCtrl {
                 if (list instanceof VBox) {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
-                        setListElement((VBox) list);
+                        setListElement((VBox) list.lookup("#list_container"));
                         break;
                     }
                 }
@@ -193,8 +193,9 @@ public class CardCtrl {
         AnchorPane.setLeftAnchor(card, null);
         AnchorPane.setRightAnchor(card, null);
 
-        card.setLayoutX(listElement.getLayoutX() + x);
-        card.setLayoutY(listElement.getLayoutY() + y);
+        Node listParent = listElement.getParent().getParent().getParent().getParent();
+        card.setLayoutX(listParent.getLayoutX() + x);
+        card.setLayoutY(listParent.getLayoutY() + y + listElement.getParent().getParent().getParent().getLayoutY());
     }
 
     /**

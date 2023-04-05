@@ -5,6 +5,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -16,6 +17,9 @@ public class ListCtrl {
 
     @FXML
     private VBox list;
+
+    @FXML
+    private VBox list_container;
 
     @FXML
     private Label list_title;
@@ -65,14 +69,14 @@ public class ListCtrl {
      * @throws IOException
      */
     public void newCard() throws IOException {
-        pageCtrl.newCard(board_object, list_object, list);
+        pageCtrl.newCard(board_object, list_object, list_container);
     }
 
     /**
      * used as onAction to delete current list
      */
     public void deleteList() {
-        pageCtrl.deleteList(board_object, list_object, list);
+        pageCtrl.deleteList(board_object, list_object, list_container);
     }
 
     /**

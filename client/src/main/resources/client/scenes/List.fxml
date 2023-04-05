@@ -41,5 +41,8 @@
             </Button>
          </children>
       </HBox>
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;">
+         <VBox fx:id="list_container" prefWidth="375.0" style="-fx-background-color: transparent;" />
+      </ScrollPane>
    </children>
 </VBox>

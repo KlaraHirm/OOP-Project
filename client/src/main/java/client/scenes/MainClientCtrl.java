@@ -23,6 +23,9 @@ public class MainClientCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;  //edit card page
 
+    private ServerConnectionCtrl serverCtrl;
+    private Scene serverCon; //server connection page
+
     private EditListCtrl editListCtrl;
     private Scene editList; // edit list page
 
@@ -34,7 +37,8 @@ public class MainClientCtrl {
                            Pair<MainPageCtrl, Parent> overview,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<EditListCtrl, Parent> editList,
-                           Pair<EditBoardCtrl, Parent> editBoard
+                           Pair<EditBoardCtrl, Parent> editBoard,
+                           Pair<ServerConnectionCtrl, Parent> serverConnection
     ) throws IOException {
 
         this.primaryStage = primaryStage;
@@ -45,13 +49,17 @@ public class MainClientCtrl {
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
 
+        this.serverCtrl = serverConnection.getKey();
+        this.serverCon = new Scene(serverConnection.getValue());
+
         this.editListCtrl = editList.getKey();
         this.editList = new Scene(editList.getValue());
 
         this.editBoardCtrl = editBoard.getKey();
         this.editBoard = new Scene(editBoard.getValue());
 
-        showOverview(null);
+        showServer();
+
         primaryStage.show();
         overviewCtrl.refresh();
 
@@ -74,15 +82,36 @@ public class MainClientCtrl {
      */
     public void showServer() {
         primaryStage.setTitle("Server Connection");
-        primaryStage.setScene(overview);
+        primaryStage.setScene(serverCon);
+        serverCtrl.setUIValues();
     }
 
+    /**
+     * Refresh main page
+     */
+    public void refreshOverview() {
+        overviewCtrl.refresh();
+    }
+
+    /**
+     * Show edit card page
+     * @param card card to edit
+     * @param board that the card belongs to
+     */
     public void showEditCard(Card card, Board board) {
         primaryStage.setTitle("Edit Card");
         editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
+    }
+
+    /**
+     * Reset main page board selection
+     */
+    public void resetOverview()
+    {
+        overviewCtrl.reset();
     }
 
     public void showEditList(CardList list, Board board) {

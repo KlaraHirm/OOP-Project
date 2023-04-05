@@ -1,6 +1,7 @@
 package client.utils;
 
 import client.socket.ClientSocket;
+import client.socket.StompSessionHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -22,6 +23,7 @@ public class ServerUtils {
     private static final String SERVER = "http://localhost:8080/";
 
     private StompSession session;
+    private StompSessionHandler stompSessionHandler;
 
     /**
      * get all existing boards in db
@@ -169,4 +171,10 @@ public class ServerUtils {
         this.session = session;
     }
 
+    public void passStompSessionHandler(StompSessionHandler handler) {
+        this.stompSessionHandler = handler;
+    }
+    public void subscribe(long id) {
+        stompSessionHandler.subscribe(id);
+    }
 }

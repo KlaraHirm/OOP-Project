@@ -129,6 +129,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoard_object(board);
         boardCtrl.setTitle();
+        server.subscribe(board.id);
         main_page.getChildren().addAll(p);
         return p;
     }

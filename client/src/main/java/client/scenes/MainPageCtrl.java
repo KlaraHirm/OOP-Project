@@ -197,6 +197,7 @@ public class MainPageCtrl implements Initializable {
      * method which shows existing list
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be shown
+     * @param board_element the element corresponding to the board container
      * @throws IOException
      */
     public VBox showList(Board board, CardList list, HBox board_element) throws IOException {
@@ -217,6 +218,7 @@ public class MainPageCtrl implements Initializable {
     /**
      * method which creates new list (used as onAction) to a board specified by id
      * @param board object of class Board where list is added
+     * @param board_element the element corresponding to the board container
      * @throws IOException
      */
     public void newList(Board board, HBox board_element) throws IOException {
@@ -249,6 +251,8 @@ public class MainPageCtrl implements Initializable {
      * deletes list specified in parameters
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be deleted
+     * @param list_container the element corresponding to the list container (this should be the element
+     *                       which has the cards as direct children)
      */
     public void deleteList(Board board, CardList list, VBox list_container) {
         server.deleteList(board, list);
@@ -261,6 +265,9 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
      * @param card object of class Card which is to be shown
+     * @param list_element the element corresponding to the list container (this should be the element
+     *      which has the cards as direct children)
+     * @param board_element the element corresponding to the board container
      * @throws IOException
      */
     public void showCard(Board board, CardList list, Card card, VBox list_element, HBox board_element) throws IOException {
@@ -284,6 +291,8 @@ public class MainPageCtrl implements Initializable {
      * method which creates new card (used as onAction)
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
+     * @param list_element the element corresponding to the list container (this should be the element
+     *      which has the cards as direct children)
      * @throws IOException
      */
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {

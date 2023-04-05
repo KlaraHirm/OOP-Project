@@ -29,5 +29,6 @@ public class MyModule implements Module {
         binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditBoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerConnectionCtrl.class).in(Scopes.SINGLETON);
     }
 }

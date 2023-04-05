@@ -19,16 +19,22 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class ServerConnectionCtrl {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
-    private String server_address;
 
     @FXML
     private TextField server_address_field;
+
+    @FXML
+    private Label status_label;
 
 
     /**
@@ -47,8 +53,26 @@ public class ServerConnectionCtrl {
      * should connect to the given server address and go to the main page of that address
      */
     public void connectServer() {
-        server_address = server_address_field.getText();
-        server_address_field.clear();
+        String serverAddress = server_address_field.getText();
+        status_label.setText("Connecting...");
+        boolean success = server.connect(serverAddress);
+        status_label.setText(success ? "Connected!" : "Connection failed");
+        mainCtrl.resetOverview();
+        mainCtrl.refreshOverview();
+        if(success) {
+            try {
+                mainCtrl.showOverview(null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         //will then go to main page onAction
+    }
+
+    /**
+     * sets the initial values of the UI elements when the scene is loaded
+     */
+    public void setUIValues() {
+        server_address_field.setText(server.getServerURL());
     }
 }

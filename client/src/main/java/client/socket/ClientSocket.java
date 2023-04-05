@@ -1,5 +1,6 @@
 package client.socket;
 
+import client.utils.ServerUtils;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -8,6 +9,11 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ClientSocket implements Runnable{
 
     private String server;
+    private ServerUtils serverUtils;
+
+    public ClientSocket(ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
 
     public void run() {
 
@@ -17,7 +23,7 @@ public class ClientSocket implements Runnable{
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         //connect to server
-        stompClient.connect("http://localhost:8080/hello", new StompSessionHandler());
+        stompClient.connect("http://localhost:8080/hello", new StompSessionHandler(serverUtils));
 
         while(true) { }
     }

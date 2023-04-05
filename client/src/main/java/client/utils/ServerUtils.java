@@ -1,5 +1,6 @@
 package client.utils;
 
+import client.socket.ClientSocket;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -8,6 +9,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.List;
 
@@ -16,6 +18,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
+
+    private StompSession session;
 
     /**
      * get all existing boards in db
@@ -151,6 +155,16 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public void socketInit() {
+        ClientSocket clientSocket = new ClientSocket(this);
+        Thread thread = new Thread(clientSocket);
+        thread.start();
+    }
+
+    public void passSession(StompSession session) {
+        this.session = session;
     }
 
 }

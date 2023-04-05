@@ -34,6 +34,10 @@ public class MainClientCtrl {
 
     private ServerUtils serverUtils;
 
+    /**
+     * constructor for MainClientCtrl for the dependency injection, never actually used
+     * @param serverUtils
+     */
     @Inject
     public MainClientCtrl(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;

@@ -20,11 +20,20 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
 
     private List<Subscription> subscriptionList;
 
+    /**
+     * constructor for the stomp session handler
+     * @param serverUtils
+     */
     public StompSessionHandler(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
         subscriptionList = new ArrayList<>();
     }
 
+    /**
+     * passes session and handler to server utils upon connection
+     * @param session the client STOMP session
+     * @param headers the STOMP CONNECTED frame headers
+     */
     public void afterConnected(StompSession session, StompHeaders headers) {
         serverUtils.passSession(session);
         serverUtils.passStompSessionHandler(this);

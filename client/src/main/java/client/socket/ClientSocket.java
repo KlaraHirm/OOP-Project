@@ -23,7 +23,7 @@ public class ClientSocket implements Runnable{
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         //connect to server
-        stompClient.connect("http://localhost:8080/hello", new StompSessionHandler(serverUtils));
+        stompClient.connect("ws://localhost:8080/hello", new StompSessionHandler(serverUtils));
 
         while(true) { }
     }

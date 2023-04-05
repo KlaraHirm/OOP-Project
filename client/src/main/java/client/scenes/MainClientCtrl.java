@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -7,7 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.catalina.Server;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 
@@ -28,6 +31,13 @@ public class MainClientCtrl {
 
     private EditBoardCtrl editBoardCtrl;
     private Scene editBoard;
+
+    private ServerUtils serverUtils;
+
+    @Inject
+    public MainClientCtrl(ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
 
 
     public void initialize(Stage primaryStage,
@@ -55,6 +65,7 @@ public class MainClientCtrl {
         primaryStage.show();
         overviewCtrl.refresh();
 
+        serverUtils.socketInit();
     }
 
     /**

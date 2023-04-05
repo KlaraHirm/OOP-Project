@@ -16,6 +16,6 @@ public class SocketConfiguration implements WebSocketMessageBrokerConfigurer {
     }
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/hello/");
+        registry.addEndpoint("/hello");
     }
 }

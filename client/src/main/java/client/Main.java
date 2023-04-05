@@ -44,5 +44,7 @@ public class Main extends Application {
         var editBoard = FXML.load(EditBoardCtrl.class, "client", "scenes", "EditBoard.fxml");
         var mainCtrl = INJECTOR.getInstance(MainClientCtrl.class);
         mainCtrl.initialize(primaryStage, overview, editCard, editList, editBoard);
+
+
     }
 }

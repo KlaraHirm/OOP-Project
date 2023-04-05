@@ -10,11 +10,13 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Service
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";

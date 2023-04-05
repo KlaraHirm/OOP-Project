@@ -97,7 +97,6 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
-//        refresh();
     }
 
     /**
@@ -143,8 +142,8 @@ public class MainPageCtrl implements Initializable {
         board = server.addBoard(board);
         hideBoard(main_page.lookup("#board_container"));
         showBoard(board);
-        boards_list.setValue(board);
         refresh();
+        boards_list.setValue(board);
     }
 
     /**
@@ -186,7 +185,6 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public Parent showList(Board board, CardList list, HBox board_element) throws IOException {
-        refresh();
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent p =  loader.load();
@@ -198,6 +196,7 @@ public class MainPageCtrl implements Initializable {
         board_element.getChildren().addAll(p);
         HBox.setMargin(p, new Insets(10, 10, 10, 10));
         listCtrl.setListId();
+        refresh();
         return p;
     }
 
@@ -238,7 +237,7 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList which is to be deleted
      */
     public void deleteList(Board board, CardList list, VBox list_container) {
-        server.deleteList(list);
+        server.deleteList(board, list);
         hideList(list_container, ((HBox)list_container.getParent()));
         refresh();
     }
@@ -320,8 +319,10 @@ public class MainPageCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        data = FXCollections.observableList(boards);
-        boards_list.setItems(data);
+        if(!boards.equals(boards_list.getItems())) {
+            data = FXCollections.observableList(boards);
+            boards_list.setItems(data);
+        }
     }
 
     /**

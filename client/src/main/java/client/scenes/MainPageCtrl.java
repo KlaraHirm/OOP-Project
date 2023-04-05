@@ -135,13 +135,13 @@ public class MainPageCtrl implements Initializable {
     public Parent showBoard(Board board) throws IOException {
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
-        Parent p =  loader.load();
+        Parent parent =  loader.load();
         BoardCtrl boardCtrl = loader.getController();
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoard_object(board);
         boardCtrl.setTitle();
-        main_page.getChildren().addAll(p);
-        return p;
+        main_page.getChildren().addAll(parent);
+        return parent;
     }
 
     /**
@@ -203,16 +203,16 @@ public class MainPageCtrl implements Initializable {
     public VBox showList(Board board, CardList list, HBox board_element) throws IOException {
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
-        Parent p =  loader.load();
+        Parent parent =  loader.load();
         ListCtrl listCtrl = loader.getController();
         listCtrl.setPageCtrl(this);
         listCtrl.setList_object(list);
         listCtrl.setBoard_object(board);
         listCtrl.setTitle();
-        board_element.getChildren().addAll(p);
-        HBox.setMargin(p, new Insets(10, 10, 10, 10));
+        board_element.getChildren().addAll(parent);
+        HBox.setMargin(parent, new Insets(10, 10, 10, 10));
         refresh();
-        return (VBox)((ScrollPane)p.getChildrenUnmodifiable().get(1)).getContent();
+        return (VBox)((ScrollPane)parent.getChildrenUnmodifiable().get(1)).getContent();
     }
 
     /**
@@ -273,15 +273,15 @@ public class MainPageCtrl implements Initializable {
     public void showCard(Board board, CardList list, Card card, VBox list_element, HBox board_element) throws IOException {
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
-        Parent p =  loader.load();
+        Parent parent =  loader.load();
         CardCtrl cardCtrl = loader.getController();
         cardCtrl.setPageCtrl(this);
         cardCtrl.setCardObject(card);
         cardCtrl.setListObject(list);
         cardCtrl.setBoardObject(board);
         cardCtrl.setFields();
-        list_element.getChildren().addAll(p);
-        VBox.setMargin(p, new Insets(5, 5, 5, 5));
+        list_element.getChildren().addAll(parent);
+        VBox.setMargin(parent, new Insets(5, 5, 5, 5));
         cardCtrl.setBoardElement(board_element);
         cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();

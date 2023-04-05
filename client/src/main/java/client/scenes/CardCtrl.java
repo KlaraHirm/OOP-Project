@@ -256,6 +256,8 @@ public class CardCtrl {
         int size = listElement.getChildren().size();
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
+            // Point testMouse = MouseInfo.getPointerInfo().getLocation();
+            // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);

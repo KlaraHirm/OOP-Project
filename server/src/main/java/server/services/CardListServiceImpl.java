@@ -57,8 +57,8 @@ public class CardListServiceImpl implements CardListService {
         if (listId < 0 || !listRepo.existsById(listId)) return null;
         CardList cardList = listRepo.findById(listId).get();
         cardList.cards.add(card);
+        card = cardRepo.save(card);
         listRepo.save(cardList);
-        cardRepo.save(card);
         return card;
     }
 

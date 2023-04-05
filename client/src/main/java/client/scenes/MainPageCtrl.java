@@ -17,7 +17,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,6 +38,12 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private AnchorPane main_page;
+    @FXML
+    private Button disconnect_button;
+
+    @FXML
+    private Label connection_label;
+
 
 
     @Inject
@@ -97,6 +105,7 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
+        refresh();
     }
 
     /**
@@ -138,6 +147,10 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public void newBoard() throws IOException {
+        if(!server.isConnected()) {
+            //JOptionPane.showMessageDialog(null, "You are not connected to a server!"); freezes for some reason
+            return;
+        }
         Board board = new Board("Untitled");
         board = server.addBoard(board);
         hideBoard(main_page.lookup("#board_container"));
@@ -319,10 +332,15 @@ public class MainPageCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        if(!boards.equals(boards_list.getItems())) {
+        connection_label.setText(server.isConnected() ? "Connected" : "Disconnected");
+        if(!server.isConnected()) {
+            reset();
+        } else if(!boards.equals(boards_list.getItems())) {
             data = FXCollections.observableList(boards);
             boards_list.setItems(data);
         }
+        data = FXCollections.observableList(boards);
+        boards_list.setItems(data);
     }
 
     /**
@@ -370,4 +388,19 @@ public class MainPageCtrl implements Initializable {
         server.editCard(card);
     }
 
+    /**
+     * loads the server connection management UI
+     */
+    public void changeServerConnection(){
+        mainCtrl.showServer();
+    }
+
+
+    /**
+     * removes the currently showing board from list selection and main ui
+     */
+    public void reset(){
+        hideBoard(main_page.lookup("#board_container"));
+        boards_list.getSelectionModel().clearSelection();
+    }
 }

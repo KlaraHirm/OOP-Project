@@ -9,21 +9,25 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static String serverURL = "http://localhost:8080/";
+    private static boolean connected = false;
 
     /**
      * get all existing boards in db
      * @return list of all boards
      */
     public List<Board> getBoards() {
+        if(!connected)
+            return new ArrayList<>();
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board") //
+                .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Board>>() {});
@@ -36,7 +40,7 @@ public class ServerUtils {
      */
     public Board addBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board") //
+                .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -49,7 +53,7 @@ public class ServerUtils {
      */
     public Board editBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board") //
+                .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -62,7 +66,7 @@ public class ServerUtils {
      */
     public Response deleteBoard(Board board){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board/"+board.id) //
+                .target(serverURL).path("api/board/"+board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
@@ -75,7 +79,7 @@ public class ServerUtils {
      */
     public CardList getList(long listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list/"+listId) //
+                .target(serverURL).path("api/list/"+listId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<CardList>() {});
@@ -89,7 +93,7 @@ public class ServerUtils {
      */
     public CardList addList(Board board, CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/board/"+board.id) //
+                .target(serverURL).path("api/board/"+board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(list, APPLICATION_JSON), CardList.class);
@@ -102,7 +106,7 @@ public class ServerUtils {
      */
     public CardList editList(CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list") //
+                .target(serverURL).path("api/list") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(list, APPLICATION_JSON), CardList.class);
@@ -115,7 +119,7 @@ public class ServerUtils {
      */
     public Response deleteList(Board board, CardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list/"+list.id) //
+                .target(serverURL).path("api/list/"+list.id) //
                 .queryParam("boardId", board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -129,7 +133,7 @@ public class ServerUtils {
      */
     public Card getCard(long cardId) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/card/"+cardId) //
+                .target(serverURL).path("api/card/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Card>() {});
@@ -143,7 +147,7 @@ public class ServerUtils {
      */
     public Card addCard(CardList list, Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list/"+list.id) //
+                .target(serverURL).path("api/list/"+list.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
@@ -158,7 +162,7 @@ public class ServerUtils {
      */
     public Card deleteCard(Card card, CardList list, Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/card/"+card.id) //
+                .target(serverURL).path("api/card/"+card.id) //
                 .queryParam("boardId", board.id) //
                 .queryParam("listId", list.id) //
                 .request(APPLICATION_JSON) //
@@ -173,7 +177,7 @@ public class ServerUtils {
      */
     public Card editCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/card") //
+                .target(serverURL).path("api/card") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
@@ -188,7 +192,7 @@ public class ServerUtils {
      */
     public CardList editCardPosition(Card card, CardList original, CardList target) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list/reorder") //
+                .target(serverURL).path("api/list/reorder") //
                 .queryParam("original", original.id) //
                 .queryParam("target", target.id) //
                 .queryParam("cardId", card.id) //
@@ -204,10 +208,48 @@ public class ServerUtils {
      */
     public List<Card> getCards(long listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list/"+listId+"/cards") //
+                .target(serverURL).path("api/list/" + listId + "/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Card>>() {});
+                .get(new GenericType<List<Card>>() {
+                });
+    }
+
+    /**
+     * get whether the client is connected to server
+     */
+    public boolean isConnected(){
+        return connected;
+    }
+
+    /**
+     * connect to server with specified url
+     * @param URL server url
+     * @return true if succesfully connected, false otherwise
+     */
+    public boolean connect(String URL){
+        connected = false;
+        try {
+            serverURL = URL;
+            Response response = ClientBuilder.newClient(new ClientConfig()).target(URL).path("api/board").request(APPLICATION_JSON).accept(APPLICATION_JSON).get();
+            connected = response.getStatus() == 200;
+        } catch (Exception e) {}
+        return connected;
+    }
+
+    /**
+     * disconnect from server
+     */
+    public void disconnect(){
+        connected = false;
+    }
+
+    /**
+     * get server url
+     * @return server url
+     */
+    public String getServerURL(){
+        return serverURL;
     }
 
 }

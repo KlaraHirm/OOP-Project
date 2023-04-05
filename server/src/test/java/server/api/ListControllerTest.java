@@ -82,6 +82,7 @@ class ListControllerTest {
         when(listRepo.existsById(1L)).thenReturn(true);
         when(listRepo.findById(1L)).thenReturn(Optional.of(cardList));
         when(listRepo.save(cardList)).thenReturn(cardList);
+        when(cardRepo.save(card)).thenReturn(card);
         assertEquals(ResponseEntity.ok(card), sut.addCard(card, 1L));
         verify(listRepo, times(1)).save(cardList);
         verify(cardRepo, times(1)).save(card);

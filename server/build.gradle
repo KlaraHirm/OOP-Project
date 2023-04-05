@@ -4,8 +4,11 @@ plugins {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.7.8'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.8'
+	implementation 'org.springframework:spring-websocket:5.3.24'
+	implementation 'org.springframework:spring-messaging:5.3.24'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.8'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
 	implementation project(":commons")

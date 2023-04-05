@@ -49,7 +49,6 @@ public class CardControllerTest {
     @Mock
     private TestBoardRepository boardRepo;
 
-    @Mock
     private CardServiceImpl service;
     private CardController sut;
 
@@ -67,8 +66,14 @@ public class CardControllerTest {
         when(cardRepo.existsById(1L)).thenReturn(true);
         when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
 
-        assertNotNull(service.getCard(1L));
+        assertNotNull(sut.getCard(1L));
         assertEquals("Title", Objects.requireNonNull(sut.getCard(1L).getBody()).title);
+    }
+
+    @Test
+    public void testGetCardNotFound() {
+        assertEquals(ResponseEntity.notFound().build(), sut.getCard(1L));
+        assertEquals(ResponseEntity.notFound().build(), sut.getCard(-1L));
     }
 
     @Test
@@ -91,19 +96,45 @@ public class CardControllerTest {
     }
 
     @Test
+    public void editCardBadRequest() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.editCard(null));
+    }
+
+    @Test
+    public void editCardNotFound() {
+        assertEquals(ResponseEntity.notFound().build(), sut.editCard(new Card("Title")));
+    }
+
+    @Test
     public void testDeleteCard() {
         Card c = new Card("Title");
         c.id = 1L;
         Board b = new Board("Board");
+        b.id = 1L;
         CardList l = new CardList("List");
+        l.id = 1L;
         l.cards.add(c);
         b.cardLists.add(l);
         Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
         when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(listRepo.existsById(1L)).thenReturn(true);
         when(listRepo.findById(1L)).thenReturn(Optional.of(l));
         when(boardRepo.findById(1L)).thenReturn(Optional.of(b));
+        when(boardRepo.existsById(1L)).thenReturn(true);
         doNothing().when(cardRepo).deleteById(1L);
         assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L,1L,1L));
         verify(cardRepo, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void deleteCardbadRequest() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteCard(-1L, 1L, 1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteCard(1L, -1L, 1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteCard(1L, 1L, -1L));
+    }
+
+    @Test
+    public void deleteCardNotFound() {
+        assertEquals(ResponseEntity.notFound().build(), sut.deleteCard(1L, 1L, 1L));
     }
 }

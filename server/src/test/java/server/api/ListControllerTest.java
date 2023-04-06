@@ -261,7 +261,7 @@ class ListControllerTest {
         Mockito.lenient().when(listRepo.existsById(2L)).thenReturn(true);
         when(listRepo.findById(2L)).thenReturn(Optional.of(cl2));
         cl1.cards.add(c1);
-        assertTrue(Objects.requireNonNull(sut.reorder(1L, 2L, 1L).getBody()).cards.contains(c1));
+        assertTrue(Objects.requireNonNull(sut.reorder(1L, 2L, 1L, 1).getBody()).cards.contains(c1));
         assertFalse(Objects.requireNonNull(sut.getList(1L).getBody()).cards.contains(c1));
     }
 
@@ -280,7 +280,7 @@ class ListControllerTest {
         cl2.id = 2L;
         Mockito.lenient().when(listRepo.existsById(2L)).thenReturn(true);
         when(listRepo.findById(2L)).thenReturn(Optional.of(cl2));
-        assertEquals(ResponseEntity.notFound().build(), sut.reorder(1L, 2L, 1L));
+        assertEquals(ResponseEntity.notFound().build(), sut.reorder(1L, 2L, 1L, 1));
     }
 
 }

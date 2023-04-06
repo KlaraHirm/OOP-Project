@@ -190,12 +190,13 @@ public class ServerUtils {
      * @param target list target of drag
      * @return updated target
      */
-    public CardList editCardPosition(Card card, CardList original, CardList target) {
+    public CardList editCardPosition(Card card, CardList original, CardList target, int cardPlace) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/list/reorder") //
                 .queryParam("original", original.id) //
                 .queryParam("target", target.id) //
                 .queryParam("cardId", card.id) //
+                .queryParam("cardPlace", cardPlace) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), CardList.class);

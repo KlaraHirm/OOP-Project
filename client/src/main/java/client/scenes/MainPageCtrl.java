@@ -289,7 +289,6 @@ public class MainPageCtrl implements Initializable {
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
         list.cards.add(card);
-        card.place = list.cards.size();
         card = server.addCard(list, card);
         showCard(board, list, card, list_element);
     }
@@ -362,8 +361,8 @@ public class MainPageCtrl implements Initializable {
      * @param original object of class CardList representing the origin of drag
      * @param target object of class CardList representing the target of drag
      */
-    public void reorderCard(Card card, CardList original, CardList target) {
-        server.editCardPosition(card, original, target);
+    public void reorderCard(Card card, CardList original, CardList target, int cardPlace) {
+        server.editCardPosition(card, original, target, cardPlace);
     }
 
     /**

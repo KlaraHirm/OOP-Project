@@ -10,6 +10,6 @@ public interface CardListService {
     Card addCard(Card card, long listId);
     CardList editList(CardList list);
     CardList deleteList(long boardId, long listId);
-    CardList reorder(long idOriginal, long idTarget, long idCard);
+    CardList reorder(long idOriginal, long idTarget, long idCard, int cardPlace);
     List<Card> getCards(long listId);
 }

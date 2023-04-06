@@ -89,8 +89,8 @@ public class ListController {
      */
     @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
-                                  @RequestParam("cardId") long idCard) {
-        CardList ret = listService.reorder(idOld, idNew, idCard);
+                                  @RequestParam("cardId") long idCard, @RequestParam("cardPlace") int placeCard) {
+        CardList ret = listService.reorder(idOld, idNew, idCard, placeCard);
         if (ret == null) {
             return  ResponseEntity.notFound().build();
         }

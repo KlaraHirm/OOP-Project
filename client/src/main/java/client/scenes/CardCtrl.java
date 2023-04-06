@@ -42,8 +42,6 @@ public class CardCtrl {
 
     private VBox listElement;
 
-    private VBox originalListElement;
-
     private MainPageCtrl pageCtrl;
 
     private double mouseAnchorX;
@@ -65,10 +63,6 @@ public class CardCtrl {
      */
     public void setListElement(VBox listElement) {
         this.listElement = listElement;
-    }
-
-    public void setOriginalListElement(VBox originalListElement) {
-        this.originalListElement = originalListElement;
     }
 
     /**
@@ -189,7 +183,6 @@ public class CardCtrl {
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
             card.setManaged(true);
-            pageCtrl.reorderCard(cardObject, originalListObject, listObject);
         });
     }
 
@@ -200,7 +193,6 @@ public class CardCtrl {
         double x = card.getLayoutX();
         double y = card.getLayoutY();
         listElement.getChildren().remove(card);
-        setOriginalListElement(listElement);
         boardElement.getChildren().add(card);
         card.setManaged(false);
 
@@ -266,6 +258,7 @@ public class CardCtrl {
             if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);
+                pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard+1);
                 break;
             }
             else if (aim instanceof VBox) {
@@ -273,28 +266,12 @@ public class CardCtrl {
                         .intersects(aim.localToScene(aim.getBoundsInLocal())) || indexCard == size-1) {
 
                     listElement.getChildren().add(indexCard+1, card);
+                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard+1);
                     break;
                 }
             }
         }
-        updatePlaces(listElement);
-        updatePlaces(originalListElement);
         boardElement.getChildren().remove(card);
-    }
-
-    /**
-     * Iterates through whole list and assigns places to cards based on their position in VBox
-     */
-    public void updatePlaces(VBox list) {
-        for (int indexCard = 0; indexCard < list.getChildren().size(); indexCard++) {
-            Node aim = list.getChildren().get(indexCard);
-            if (aim instanceof VBox) {
-                long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
-                Card listCard = pageCtrl.getCard(cardId);
-                listCard.place = indexCard;
-                pageCtrl.saveCard(listCard);
-            }
-        }
     }
 
 

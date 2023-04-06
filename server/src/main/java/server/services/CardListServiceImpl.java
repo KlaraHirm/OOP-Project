@@ -57,6 +57,7 @@ public class CardListServiceImpl implements CardListService {
         if (listId < 0 || !listRepo.existsById(listId)) return null;
         CardList cardList = listRepo.findById(listId).get();
         cardList.cards.add(card);
+        card.place = cardList.cards.size();
         card = cardRepo.save(card);
         listRepo.save(cardList);
         return card;
@@ -110,7 +111,7 @@ public class CardListServiceImpl implements CardListService {
      * Returns null if IDs and position do not exist
      */
     @Override
-    public CardList reorder(long idOriginal, long idTarget, long idCard) {
+    public CardList reorder(long idOriginal, long idTarget, long idCard, int cardPlace) {
         if ((idOriginal < 0 || !listRepo.existsById(idOriginal)) &&
                 (idTarget < 0 || !listRepo.existsById(idTarget))) {
             return  null;
@@ -121,12 +122,23 @@ public class CardListServiceImpl implements CardListService {
         Card card = cardRepo.findById(idCard).get();
         if (!oldList.cards.contains(card)) return null;
         oldList.cards.remove(card);
-        if(card.place-1==newList.cards.size()+1){
-            newList.cards.add(card);
+        int place = 1;
+        for(Card c : oldList.cards) {
+            c.place = place;
+            place++;
         }
-        else{
-            newList.cards.add(card.place-1, card);
+        newList.cards.add(cardPlace-1, card);
+        place = 1;
+        for(Card c : newList.cards) {
+            c.place = place;
+            place++;
         }
+//        if(card.place-1==newList.cards.size()+1){
+//            newList.cards.add(card);
+//        }
+//        else{
+//            newList.cards.add(card.place-1, card);
+//        }
         listRepo.save(oldList);
         listRepo.save(newList);
         return newList;

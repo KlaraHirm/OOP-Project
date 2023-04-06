@@ -6,10 +6,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -159,11 +156,13 @@ public class CardCtrl {
         });
         card.setOnMouseReleased(mouseEvent -> {
             this.mouseHighlightEnd();
-            for (Node list : boardElement.getChildren()) {
+            for (int i = 0; i < boardElement.getChildren().size(); i++) {
+                Node list = boardElement.getChildren().get(i);
                 if (list instanceof VBox) {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
                         setListElement((VBox) list.lookup("#list_container"));
+                        setListObject(boardObject.cardLists.get(i));
                         break;
                     }
                 }
@@ -194,10 +193,10 @@ public class CardCtrl {
         AnchorPane.setLeftAnchor(card, null);
         AnchorPane.setRightAnchor(card, null);
 
-        Node listParent = boardElement.lookup("#scroll_pane_" + listObject.id).getParent();
-        System.out.println(listParent);
+        ScrollPane listScrollPane = (ScrollPane)boardElement.lookup("#scroll_pane_" + listObject.id);
+        VBox listParent = (VBox)listScrollPane.getParent();
         card.setLayoutX(listParent.getLayoutX() + x);
-        card.setLayoutY(listParent.getLayoutY() + y);
+        card.setLayoutY(listParent.getLayoutY() + y + listScrollPane.getLayoutY());
     }
 
     /**

@@ -31,18 +31,18 @@ public class CardCtrl {
 
     @FXML
     private CheckBox done;
+    private Card cardObject;
 
     private Board boardObject;
 
     private HBox boardElement;
 
     private CardList listObject;
-
-    private Card cardObject;
+    private CardList originalListObject;
 
     private VBox listElement;
 
-    private CardList originalListElement;
+    private VBox originalListElement;
 
     private MainPageCtrl pageCtrl;
 
@@ -67,6 +67,10 @@ public class CardCtrl {
         this.listElement = listElement;
     }
 
+    public void setOriginalListElement(VBox originalListElement) {
+        this.originalListElement = originalListElement;
+    }
+
     /**
      * Setter for boardObject
      *
@@ -87,10 +91,10 @@ public class CardCtrl {
 
     /**
      * setter for original_lis_element which is used in drag and drop to represent the origin of drag
-     * @param originalListElement object of class CardList
+     * @param originalListObject object of class CardList
      */
-    public void setOriginalListElement(CardList originalListElement) {
-        this.originalListElement = originalListElement;
+    public void setOriginalListObject(CardList originalListObject) {
+        this.originalListObject = originalListObject;
     }
 
     /**
@@ -147,7 +151,7 @@ public class CardCtrl {
      */
     public void makeDraggable() {
         card.setOnMousePressed(mouseEvent -> {
-            setOriginalListElement(listObject);
+            setOriginalListObject(listObject);
             this.mousePressed();
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
@@ -185,7 +189,7 @@ public class CardCtrl {
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
             card.setManaged(true);
-            pageCtrl.reorderCard(cardObject, originalListElement, listObject);
+            pageCtrl.reorderCard(cardObject, originalListObject, listObject);
         });
     }
 
@@ -196,6 +200,7 @@ public class CardCtrl {
         double x = card.getLayoutX();
         double y = card.getLayoutY();
         listElement.getChildren().remove(card);
+        setOriginalListElement(listElement);
         boardElement.getChildren().add(card);
         card.setManaged(false);
 
@@ -272,20 +277,21 @@ public class CardCtrl {
                 }
             }
         }
-        changePlaces();
+        updatePlaces(listElement);
+        updatePlaces(originalListElement);
         boardElement.getChildren().remove(card);
     }
 
     /**
      * Iterates through whole list and assigns places to cards based on their position in VBox
      */
-    public void changePlaces() {
-        for (int indexCard = 0; indexCard < listElement.getChildren().size(); indexCard++) {
-            Node aim = listElement.getChildren().get(indexCard);
+    public void updatePlaces(VBox list) {
+        for (int indexCard = 0; indexCard < list.getChildren().size(); indexCard++) {
+            Node aim = list.getChildren().get(indexCard);
             if (aim instanceof VBox) {
                 long cardId = Long.parseLong(aim.getId().split("_")[1]); //retrieves object id from element id
                 Card listCard = pageCtrl.getCard(cardId);
-                listCard.place = indexCard+1;
+                listCard.place = indexCard;
                 pageCtrl.saveCard(listCard);
             }
         }

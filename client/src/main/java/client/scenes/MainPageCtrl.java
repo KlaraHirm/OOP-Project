@@ -289,7 +289,7 @@ public class MainPageCtrl implements Initializable {
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
         list.cards.add(card);
-        card.place = list.cards.size()-1;
+        card.place = list.cards.size();
         card = server.addCard(list, card);
         showCard(board, list, card, list_element);
     }

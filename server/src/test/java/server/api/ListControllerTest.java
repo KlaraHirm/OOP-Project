@@ -220,4 +220,42 @@ class ListControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), sut.editList(new CardList(null)));
     }
 
+    @Test
+    public void testGetCards() {
+        Card c1 = new Card("Card1");
+        c1.place = 1;
+        Card c2 = new Card("Card2");
+        c2.place = 2;
+        CardList list = new CardList("List");
+        list.id = 1L;
+        List<Card> listCards = new ArrayList<>();
+        listCards.add(c1);
+        listCards.add(c2);
+        list.cards.add(c2);
+        list.cards.add(c1);
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(list));
+        assertEquals(ResponseEntity.ok(listCards), sut.getCards(1L));
+
+    }
+
+    @Test
+    public void testGetCardsWrongOrder() {
+        Card c1 = new Card("Card1");
+        c1.place = 1;
+        Card c2 = new Card("Card2");
+        c2.place = 2;
+        CardList list = new CardList("List");
+        list.id = 1L;
+        List<Card> listCards = new ArrayList<>();
+        listCards.add(c2);
+        listCards.add(c1);
+        list.cards.add(c2);
+        list.cards.add(c1);
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(list));
+        assertNotEquals(ResponseEntity.ok(listCards), sut.getCards(1L));
+
+    }
+
 }

@@ -27,6 +27,9 @@ public class ListCtrl {
     @FXML
     private Button new_card;
 
+    @FXML
+    private ScrollPane scroll_pane;
+
     private Board board_object;
 
     private CardList list_object;
@@ -72,11 +75,25 @@ public class ListCtrl {
         pageCtrl.newCard(board_object, list_object, list_container);
     }
 
+    /*
+     * Returns the inner list container (where the cards go)
+     */
+    public VBox getListContainer() {
+        return list_container;
+    }
+
+    /*
+     * Returns the outer list container (under the board HBox)
+     */
+    public VBox getList() {
+        return list;
+    }
+
     /**
      * used as onAction to delete current list
      */
     public void deleteList() {
-        pageCtrl.deleteList(board_object, list_object, list_container);
+        pageCtrl.deleteList(board_object, list_object, list);
     }
 
     /**

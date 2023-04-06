@@ -212,7 +212,7 @@ public class MainPageCtrl implements Initializable {
         board_element.getChildren().addAll(parent);
         HBox.setMargin(parent, new Insets(10, 10, 10, 10));
         refresh();
-        return (VBox)((ScrollPane)parent.getChildrenUnmodifiable().get(1)).getContent();
+        return listCtrl.getListContainer();
     }
 
     /**

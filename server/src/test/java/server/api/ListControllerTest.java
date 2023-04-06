@@ -232,8 +232,8 @@ class ListControllerTest {
         List<Card> listCards = new ArrayList<>();
         listCards.add(c1);
         listCards.add(c2);
-        list.cards.add(c2);
         list.cards.add(c1);
+        list.cards.add(c2);
         when(listRepo.existsById(1L)).thenReturn(true);
         when(listRepo.findById(1L)).thenReturn(Optional.of(list));
         assertEquals(ResponseEntity.ok(listCards), sut.getCards(1L));

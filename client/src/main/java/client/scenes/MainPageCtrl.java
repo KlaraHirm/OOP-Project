@@ -209,6 +209,7 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setList_object(list);
         listCtrl.setBoard_object(board);
         listCtrl.setTitle();
+        listCtrl.setScrollPaneId();
         board_element.getChildren().addAll(parent);
         HBox.setMargin(parent, new Insets(10, 10, 10, 10));
         refresh();

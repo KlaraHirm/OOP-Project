@@ -194,9 +194,10 @@ public class CardCtrl {
         AnchorPane.setLeftAnchor(card, null);
         AnchorPane.setRightAnchor(card, null);
 
-        Node listParent = listElement.getParent().getParent().getParent().getParent();
+        Node listParent = boardElement.lookup("#scroll_pane_" + listObject.id).getParent();
+        System.out.println(listParent);
         card.setLayoutX(listParent.getLayoutX() + x);
-        card.setLayoutY(listParent.getLayoutY() + y + listElement.getParent().getParent().getParent().getLayoutY());
+        card.setLayoutY(listParent.getLayoutY() + y);
     }
 
     /**

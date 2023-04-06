@@ -89,6 +89,10 @@ public class ListCtrl {
         return list;
     }
 
+    public void setScrollPaneId() {
+        scroll_pane.setId("scroll_pane_" + list_object.id);
+    }
+
     /**
      * used as onAction to delete current list
      */

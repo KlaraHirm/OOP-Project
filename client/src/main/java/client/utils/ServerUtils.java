@@ -237,38 +237,4 @@ public class ServerUtils {
     public void subscribe(long id) {
         stompSessionHandler.subscribe(id);
     }
-
-    /**
-     * start the socket thread
-     */
-    public void socketInit() {
-        ClientSocket clientSocket = new ClientSocket(this);
-        //create and start the thread for the socket
-        Thread thread = new Thread(clientSocket);
-        thread.start();
-    }
-
-    /**
-     * passes the session
-     * @param session
-     */
-    public void passSession(StompSession session) {
-        this.session = session;
-    }
-
-    /**
-     * passes the session handler
-     * @param handler
-     */
-    public void passStompSessionHandler(StompSessionHandler handler) {
-        this.stompSessionHandler = handler;
-    }
-
-    /**
-     * calls the subscribe method from the session handler
-     * @param id
-     */
-    public void subscribe(long id) {
-        stompSessionHandler.subscribe(id);
-    }
 }

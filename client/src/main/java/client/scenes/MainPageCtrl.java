@@ -17,13 +17,13 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
+import client.scenes.*;
+import javafx.util.converter.IntegerStringConverter;
 
 
 public class MainPageCtrl implements Initializable {
@@ -43,6 +43,12 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private Label connection_label;
+
+    @FXML
+    private TextField ID_field;
+
+    @FXML
+    private Button Load_board_button;
 
 
 
@@ -105,6 +111,9 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
+        //force only Ints to be entered in ID_field
+//        ID_field.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+
         refresh();
     }
 
@@ -139,6 +148,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setBoard_object(board);
         boardCtrl.setTitle();
         main_page.getChildren().addAll(p);
+        ID_field.setText(board.id + "");
         return p;
     }
 
@@ -279,6 +289,17 @@ public class MainPageCtrl implements Initializable {
     }
 
     /**
+     * onAction method which show the baord with id currently in id_field
+     */
+    public void showBoard() throws IOException
+    {
+        long boardID = Integer.parseInt(ID_field.getText());
+        Board board = server.getBoard(boardID);
+        if(board!=null)
+            showBoard(server.getBoard(boardID));
+    }
+
+    /**
      * method which creates new card (used as onAction)
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
@@ -367,5 +388,6 @@ public class MainPageCtrl implements Initializable {
     public void reset(){
         hideBoard(main_page.lookup("#board_container"));
         boards_list.getSelectionModel().clearSelection();
+        ID_field.setText("");
     }
 }

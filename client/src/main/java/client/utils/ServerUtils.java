@@ -35,6 +35,17 @@ public class ServerUtils {
                 .get(new GenericType<List<Board>>() {});
     }
 
+    public Board getBoard(long id)
+    {
+        if(!connected)
+            return null;
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/board/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(Board.class);
+    }
+
     /**
      * add new board to db
      * @param board object of class Board to be added

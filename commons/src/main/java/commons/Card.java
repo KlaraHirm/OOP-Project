@@ -4,10 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Card
@@ -40,6 +39,13 @@ public class Card
     public boolean done;
 
     /**
+     * List of SUbTasks in the card
+     */
+    @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("place")
+    public List<SubTask> subTasks;
+
+    /**
      * Empty constructor for object mappers
      */
     @SuppressWarnings("unused")
@@ -53,12 +59,14 @@ public class Card
      * @param place Place of the card (to determine order in the list)
      * @param description Description of the card
      * @param done If the card is checked/done
+     *
      */
     public Card(String title, int place, String description, boolean done){
         this.title = title;
         this.place = place;
         this.description = description;
         this.done = done;
+        this.subTasks = new ArrayList<SubTask>();
     }
 
     /**
@@ -70,6 +78,7 @@ public class Card
         this.place = 0;
         this.description = "";
         this.done = false;
+        this.subTasks = new ArrayList<SubTask>();
     }
 
     /**
@@ -91,6 +100,7 @@ public class Card
                 .append(title, card.title)
                 .append(description, card.description)
                 .append(done, card.done)
+                .append(subTasks, card.subTasks)
                 .isEquals();
     }
 
@@ -106,6 +116,7 @@ public class Card
                 .append(title)
                 .append(description)
                 .append(done)
+                .append(subTasks)
                 .toHashCode();
     }
 
@@ -122,6 +133,7 @@ public class Card
                 .append("place", place)
                 .append("description", description)
                 .append("done", done)
+                .append("subTasks", subTasks)
                 .toString();
     }
 }

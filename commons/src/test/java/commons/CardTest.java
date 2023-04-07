@@ -3,6 +3,8 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardTest
@@ -14,6 +16,7 @@ class CardTest
     public void setUp()
     {
         card = new Card("Test Card", 1, "Description", true);
+        card.subTasks = new ArrayList<>();
         card.id = 7L;
     }
 
@@ -23,7 +26,9 @@ class CardTest
     @Test
     public void testConstructor()
     {
+
         assertEquals("Test Card", card.title);
+        assertEquals(0, card.subTasks.size());
     }
 
     /**

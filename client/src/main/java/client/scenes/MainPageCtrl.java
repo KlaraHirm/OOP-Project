@@ -338,8 +338,6 @@ public class MainPageCtrl implements Initializable {
             data = FXCollections.observableList(boards);
             boards_list.setItems(data);
         }
-        data = FXCollections.observableList(boards);
-        boards_list.setItems(data);
     }
 
     /**
@@ -372,19 +370,6 @@ public class MainPageCtrl implements Initializable {
      */
     public CardList getList(long listId) {
         return server.getList(listId);
-    }
-
-    /**
-     * method used to get card based on id
-     * @param cardId id of card
-     * @return object of class Card which had the same id as passed in cardId
-     */
-    public Card getCard(long cardId) {
-        return server.getCard(cardId);
-    }
-
-    public void saveCard(Card card) {
-        server.editCard(card);
     }
 
     /**

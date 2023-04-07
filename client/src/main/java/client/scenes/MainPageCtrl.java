@@ -20,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -117,10 +118,11 @@ public class MainPageCtrl implements Initializable {
         refresh();
         hideBoard(main_page.lookup("#board_container"));
         AnchorPane board_container = (AnchorPane) showBoard(selectedBoard);
+        HBox boardHbox = (HBox) board_container.lookup("#board");
         for(CardList list:selectedBoard.cardLists){
-            VBox listContainer = (VBox) showList(selectedBoard, list, (HBox) board_container.lookup("#board"));
+            VBox listContainer = (VBox) showList(selectedBoard, list, boardHbox);
             for(Card card :server.getCards(list.id)){
-                showCard(selectedBoard, list, card, listContainer);
+                showCard(selectedBoard, list, card, listContainer, boardHbox);
             }
         }
     }
@@ -133,13 +135,13 @@ public class MainPageCtrl implements Initializable {
     public Parent showBoard(Board board) throws IOException {
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
-        Parent p =  loader.load();
+        Parent parent =  loader.load();
         BoardCtrl boardCtrl = loader.getController();
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoard_object(board);
         boardCtrl.setTitle();
-        main_page.getChildren().addAll(p);
-        return p;
+        main_page.getChildren().addAll(parent);
+        return parent;
     }
 
     /**
@@ -195,34 +197,37 @@ public class MainPageCtrl implements Initializable {
      * method which shows existing list
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be shown
+     * @param boardElement the element corresponding to the board container
      * @throws IOException
      */
-    public Parent showList(Board board, CardList list, HBox board_element) throws IOException {
+    public VBox showList(Board board, CardList list, HBox boardElement) throws IOException {
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
-        Parent p =  loader.load();
+        Parent parent =  loader.load();
         ListCtrl listCtrl = loader.getController();
         listCtrl.setPageCtrl(this);
         listCtrl.setList_object(list);
         listCtrl.setBoard_object(board);
         listCtrl.setTitle();
-        board_element.getChildren().addAll(p);
-        HBox.setMargin(p, new Insets(10, 10, 10, 10));
+        listCtrl.setScrollPaneId();
         listCtrl.setListId();
+        boardElement.getChildren().addAll(parent);
+        HBox.setMargin(parent, new Insets(10, 10, 10, 10));
         refresh();
-        return p;
+        return listCtrl.getListContainer();
     }
 
     /**
      * method which creates new list (used as onAction) to a board specified by id
      * @param board object of class Board where list is added
+     * @param boardElement the element corresponding to the board container
      * @throws IOException
      */
-    public void newList(Board board, HBox board_element) throws IOException {
+    public void newList(Board board, HBox boardElement) throws IOException {
         CardList list = new CardList("Untitled");
         list = server.addList(board, list);
         refresh();
-        showList(board, list, board_element);
+        showList(board, list, boardElement);
     }
 
     /**
@@ -248,6 +253,8 @@ public class MainPageCtrl implements Initializable {
      * deletes list specified in parameters
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be deleted
+     * @param list_container the element corresponding to the list container (this should be the element
+     *                       which has the cards as direct children)
      */
     public void deleteList(Board board, CardList list, VBox list_container) {
         server.deleteList(board, list);
@@ -260,21 +267,24 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
      * @param card object of class Card which is to be shown
+     * @param list_element the element corresponding to the list container (this should be the element
+     *      which has the cards as direct children)
+     * @param board_element the element corresponding to the board container
      * @throws IOException
      */
-    public void showCard(Board board, CardList list, Card card, VBox list_element) throws IOException {
+    public void showCard(Board board, CardList list, Card card, VBox list_element, HBox board_element) throws IOException {
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
-        Parent p =  loader.load();
+        Parent parent =  loader.load();
         CardCtrl cardCtrl = loader.getController();
         cardCtrl.setPageCtrl(this);
         cardCtrl.setCardObject(card);
         cardCtrl.setListObject(list);
         cardCtrl.setBoardObject(board);
         cardCtrl.setFields();
-        list_element.getChildren().addAll(p);
-        VBox.setMargin(p, new Insets(5, 5, 5, 5));
-        cardCtrl.setBoardElement((HBox) list_element.getParent());
+        list_element.getChildren().addAll(parent);
+        VBox.setMargin(parent, new Insets(5, 5, 5, 5));
+        cardCtrl.setBoardElement(board_element);
         cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();
         cardCtrl.setCardId();
@@ -284,13 +294,15 @@ public class MainPageCtrl implements Initializable {
      * method which creates new card (used as onAction)
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
+     * @param list_element the element corresponding to the list container (this should be the element
+     *      which has the cards as direct children)
      * @throws IOException
      */
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
         list.cards.add(card);
         card = server.addCard(list, card);
-        showCard(board, list, card, list_element);
+        showCard(board, list, card, list_element, (HBox) main_page.lookup("#board"));
     }
 
     /**

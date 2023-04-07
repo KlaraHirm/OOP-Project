@@ -6,9 +6,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -166,13 +164,13 @@ public class CardCtrl {
         card.setOnMouseReleased(mouseEvent -> {
             this.mouseHighlightEnd();
             boolean foundList = false;
-            for (Node list : boardElement.getChildren()) {
+            for (int i = 0; i < boardElement.getChildren().size(); i++) {
+                Node list = boardElement.getChildren().get(i);
                 if (list instanceof VBox) {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
-                        setListElement((VBox) list);
-                        long newListId = Long.parseLong(listElement.getId().split("_")[1]); //retrieves object id from element id
-                        setListObject(pageCtrl.getList(newListId));
+                        setListElement((VBox) list.lookup("#list_container"));
+                        setListObject(boardObject.cardLists.get(i));
                         foundList = true;
                         break;
                     }
@@ -207,8 +205,10 @@ public class CardCtrl {
         AnchorPane.setLeftAnchor(card, null);
         AnchorPane.setRightAnchor(card, null);
 
-        card.setLayoutX(listElement.getLayoutX() + x);
-        card.setLayoutY(listElement.getLayoutY() + y);
+        ScrollPane listScrollPane = (ScrollPane)boardElement.lookup("#scroll_pane_" + listObject.id);
+        VBox listParent = (VBox)listScrollPane.getParent();
+        card.setLayoutX(listParent.getLayoutX() + x);
+        card.setLayoutY(listParent.getLayoutY() + y + listScrollPane.getLayoutY());
     }
 
     /**
@@ -269,7 +269,6 @@ public class CardCtrl {
             }
         }
     }
-
 
     /**
      * used as onAction to toggle the done value

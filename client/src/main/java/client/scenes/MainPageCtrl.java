@@ -110,17 +110,17 @@ public class MainPageCtrl implements Initializable {
 
     /**
      * method which loads board along with its content
-     * @param selected_board object of class Board to be loaded
+     * @param selectedBoard object of class Board to be loaded
      * @throws IOException
      */
-    public void loadBoardContent(Board selected_board) throws IOException {
+    public void loadBoardContent(Board selectedBoard) throws IOException {
         refresh();
         hideBoard(main_page.lookup("#board_container"));
-        AnchorPane board_container = (AnchorPane) showBoard(selected_board);
-        for(CardList list:selected_board.cardLists){
-            VBox list_container = (VBox) showList(selected_board, list, (HBox) board_container.lookup("#board"));
-            for(Card card:list.cards){
-                showCard(selected_board, list, card, list_container);
+        AnchorPane board_container = (AnchorPane) showBoard(selectedBoard);
+        for(CardList list:selectedBoard.cardLists){
+            VBox listContainer = (VBox) showList(selectedBoard, list, (HBox) board_container.lookup("#board"));
+            for(Card card :server.getCards(list.id)){
+                showCard(selectedBoard, list, card, listContainer);
             }
         }
     }
@@ -208,6 +208,7 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setTitle();
         board_element.getChildren().addAll(p);
         HBox.setMargin(p, new Insets(10, 10, 10, 10));
+        listCtrl.setListId();
         refresh();
         return p;
     }
@@ -276,6 +277,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setBoardElement((HBox) list_element.getParent());
         cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();
+        cardCtrl.setCardId();
     }
 
     /**
@@ -286,8 +288,8 @@ public class MainPageCtrl implements Initializable {
      */
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
-        card = server.addCard(list, card);
         list.cards.add(card);
+        card = server.addCard(list, card);
         showCard(board, list, card, list_element);
     }
 
@@ -336,8 +338,6 @@ public class MainPageCtrl implements Initializable {
             data = FXCollections.observableList(boards);
             boards_list.setItems(data);
         }
-        data = FXCollections.observableList(boards);
-        boards_list.setItems(data);
     }
 
     /**
@@ -351,6 +351,26 @@ public class MainPageCtrl implements Initializable {
         card.done = !card.done;
         server.editCard(card);
         refresh();
+    }
+
+    /**
+     * calls server to reorder card, used during drag and drop
+     * @param card object of class Card representing the card being dragged
+     * @param original object of class CardList representing the origin of drag
+     * @param target object of class CardList representing the target of drag
+     */
+    public void reorderCard(Card card, CardList original, CardList target, int cardPlace) {
+        server.editCardPosition(card, original, target, cardPlace);
+        refresh();
+    }
+
+    /**
+     * method used to get list based on id
+     * @param listId id of list
+     * @return object of class CardList which had the same id as passed in listId
+     */
+    public CardList getList(long listId) {
+        return server.getList(listId);
     }
 
     /**

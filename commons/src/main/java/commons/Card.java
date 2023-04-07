@@ -4,10 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Card
@@ -40,6 +39,13 @@ public class Card
     public boolean done;
 
     /**
+     * List of Tags in the CardList
+     */
+    @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("place")
+    public List<Tag> tags;
+
+    /**
      * Empty constructor for object mappers
      */
     @SuppressWarnings("unused")
@@ -59,6 +65,7 @@ public class Card
         this.place = place;
         this.description = description;
         this.done = done;
+        this.tags = new ArrayList<>();
     }
 
     /**
@@ -121,6 +128,7 @@ public class Card
                 .append("title", title)
                 .append("place", place)
                 .append("description", description)
+                .append("tags", tags)
                 .append("done", done)
                 .toString();
     }

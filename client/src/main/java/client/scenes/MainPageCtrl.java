@@ -295,8 +295,10 @@ public class MainPageCtrl implements Initializable {
     {
         long boardID = Integer.parseInt(ID_field.getText());
         Board board = server.getBoard(boardID);
+
         if(board!=null)
-            showBoard(server.getBoard(boardID));
+            loadBoardContent(server.getBoard(boardID));
+        else reset();
     }
 
     /**

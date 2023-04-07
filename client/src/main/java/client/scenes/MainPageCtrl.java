@@ -111,18 +111,18 @@ public class MainPageCtrl implements Initializable {
 
     /**
      * method which loads board along with its content
-     * @param selected_board object of class Board to be loaded
+     * @param selectedBoard object of class Board to be loaded
      * @throws IOException
      */
-    public void loadBoardContent(Board selected_board) throws IOException {
+    public void loadBoardContent(Board selectedBoard) throws IOException {
         refresh();
         hideBoard(main_page.lookup("#board_container"));
-        AnchorPane board_container = (AnchorPane) showBoard(selected_board);
-        HBox board_hbox = (HBox) board_container.lookup("#board");
-        for(CardList list:selected_board.cardLists){
-            VBox list_container = (VBox)showList(selected_board, list, board_hbox);
-            for(Card card:list.cards){
-                showCard(selected_board, list, card, list_container, board_hbox);
+        AnchorPane board_container = (AnchorPane) showBoard(selectedBoard);
+        HBox boardHbox = (HBox) board_container.lookup("#board");
+        for(CardList list:selectedBoard.cardLists){
+            VBox listContainer = (VBox) showList(selectedBoard, list, boardHbox);
+            for(Card card :server.getCards(list.id)){
+                showCard(selectedBoard, list, card, listContainer, boardHbox);
             }
         }
     }
@@ -197,10 +197,10 @@ public class MainPageCtrl implements Initializable {
      * method which shows existing list
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be shown
-     * @param board_element the element corresponding to the board container
+     * @param boardElement the element corresponding to the board container
      * @throws IOException
      */
-    public VBox showList(Board board, CardList list, HBox board_element) throws IOException {
+    public VBox showList(Board board, CardList list, HBox boardElement) throws IOException {
         URL location = getClass().getResource("List.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent parent =  loader.load();
@@ -210,7 +210,8 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setBoard_object(board);
         listCtrl.setTitle();
         listCtrl.setScrollPaneId();
-        board_element.getChildren().addAll(parent);
+        listCtrl.setListId();
+        boardElement.getChildren().addAll(parent);
         HBox.setMargin(parent, new Insets(10, 10, 10, 10));
         refresh();
         return listCtrl.getListContainer();
@@ -219,14 +220,14 @@ public class MainPageCtrl implements Initializable {
     /**
      * method which creates new list (used as onAction) to a board specified by id
      * @param board object of class Board where list is added
-     * @param board_element the element corresponding to the board container
+     * @param boardElement the element corresponding to the board container
      * @throws IOException
      */
-    public void newList(Board board, HBox board_element) throws IOException {
+    public void newList(Board board, HBox boardElement) throws IOException {
         CardList list = new CardList("Untitled");
         list = server.addList(board, list);
         refresh();
-        showList(board, list, board_element);
+        showList(board, list, boardElement);
     }
 
     /**
@@ -286,6 +287,7 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setBoardElement(board_element);
         cardCtrl.setListElement(list_element);
         cardCtrl.makeDraggable();
+        cardCtrl.setCardId();
     }
 
     /**
@@ -298,8 +300,8 @@ public class MainPageCtrl implements Initializable {
      */
     public void newCard(Board board, CardList list, VBox list_element) throws IOException {
         Card card = new Card("Untitled");
-        card = server.addCard(list, card);
         list.cards.add(card);
+        card = server.addCard(list, card);
         showCard(board, list, card, list_element, (HBox) main_page.lookup("#board"));
     }
 
@@ -348,8 +350,6 @@ public class MainPageCtrl implements Initializable {
             data = FXCollections.observableList(boards);
             boards_list.setItems(data);
         }
-        data = FXCollections.observableList(boards);
-        boards_list.setItems(data);
     }
 
     /**
@@ -363,6 +363,26 @@ public class MainPageCtrl implements Initializable {
         card.done = !card.done;
         server.editCard(card);
         refresh();
+    }
+
+    /**
+     * calls server to reorder card, used during drag and drop
+     * @param card object of class Card representing the card being dragged
+     * @param original object of class CardList representing the origin of drag
+     * @param target object of class CardList representing the target of drag
+     */
+    public void reorderCard(Card card, CardList original, CardList target, int cardPlace) {
+        server.editCardPosition(card, original, target, cardPlace);
+        refresh();
+    }
+
+    /**
+     * method used to get list based on id
+     * @param listId id of list
+     * @return object of class CardList which had the same id as passed in listId
+     */
+    public CardList getList(long listId) {
+        return server.getList(listId);
     }
 
     /**

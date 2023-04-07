@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import server.api.repository.TestBoardRepository;
@@ -82,6 +83,7 @@ class ListControllerTest {
         when(listRepo.existsById(1L)).thenReturn(true);
         when(listRepo.findById(1L)).thenReturn(Optional.of(cardList));
         when(listRepo.save(cardList)).thenReturn(cardList);
+        when(cardRepo.save(card)).thenReturn(card);
         assertEquals(ResponseEntity.ok(card), sut.addCard(card, 1L));
         verify(listRepo, times(1)).save(cardList);
         verify(cardRepo, times(1)).save(card);
@@ -217,6 +219,76 @@ class ListControllerTest {
     {
         assertEquals(ResponseEntity.badRequest().build(), sut.editList(null));
         assertEquals(ResponseEntity.badRequest().build(), sut.editList(new CardList(null)));
+    }
+
+    @Test
+    public void testGetCards() {
+        Card card1 = new Card("Card1");
+        card1.place = 1;
+        Card card2 = new Card("Card2");
+        card2.place = 2;
+        CardList list = new CardList("List");
+        list.id = 1L;
+        List<Card> listCards = new ArrayList<>();
+        listCards.add(card1);
+        listCards.add(card2);
+        list.cards.add(card1);
+        list.cards.add(card2);
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(list));
+        assertEquals(ResponseEntity.ok(listCards), sut.getCards(1L));
+
+    }
+
+    @Test
+    public void testGetCards404() {
+        assertEquals(ResponseEntity.notFound().build(), sut.getCards(1L));
+    }
+
+    @Test
+    public void testReorder() {
+        Card card1 = new Card("Card1");
+        card1.id = 1L;
+        card1.place = 1;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card1));
+        CardList cardList = new CardList("CL1");
+        cardList.id = 1L;
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(cardList));
+        CardList cardList1 = new CardList("CL2");
+        cardList1.id = 2L;
+        Mockito.lenient().when(listRepo.existsById(2L)).thenReturn(true);
+        when(listRepo.findById(2L)).thenReturn(Optional.of(cardList1));
+        cardList.cards.add(card1);
+        assertTrue(Objects.requireNonNull(sut.reorder(1L, 2L, 1L, 1).getBody()).cards.contains(card1));
+        assertFalse(Objects.requireNonNull(sut.getList(1L).getBody()).cards.contains(card1));
+    }
+
+    @Test
+    public void testReorder404() {
+        Card card1 = new Card("Card1");
+        card1.id = 1L;
+        card1.place = 1;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card1));
+        CardList cardList = new CardList("CL1");
+        cardList.id = 1L;
+        when(listRepo.existsById(1L)).thenReturn(true);
+        when(listRepo.findById(1L)).thenReturn(Optional.of(cardList));
+        CardList cardList1 = new CardList("CL2");
+        cardList1.id = 2L;
+        Mockito.lenient().when(listRepo.existsById(2L)).thenReturn(true);
+        when(listRepo.findById(2L)).thenReturn(Optional.of(cardList1));
+        assertEquals(ResponseEntity.notFound().build(), sut.reorder(1L, 2L, 1L, 1));
+    }
+
+    @Test
+    public void testReorder400() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(-1L, 2L, 1L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, -2L, 1L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, -1L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, 1L, -1));
     }
 
 }

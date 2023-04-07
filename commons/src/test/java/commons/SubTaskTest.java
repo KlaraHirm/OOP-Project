@@ -13,7 +13,7 @@ public class SubTaskTest {
     @BeforeEach
     public void setUp()
     {
-        subTask = new SubTask("Test SubTask", true);
+        subTask = new SubTask("Test SubTask", true, 1);
         subTask.id = 7L;
     }
 
@@ -32,7 +32,7 @@ public class SubTaskTest {
     @Test
     public void testEqualsHashcode()
     {
-        SubTask subTask2 = new SubTask("Test SubTask", true);
+        SubTask subTask2 = new SubTask("Test SubTask", true, 1);
         subTask2.id = 7L;
         assertEquals(subTask, subTask2);
         assertEquals(subTask.hashCode(), subTask2.hashCode());
@@ -44,7 +44,7 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsID()
     {
-        SubTask subTask1 = new SubTask("Test SubTask 1", true);
+        SubTask subTask1 = new SubTask("Test SubTask 1", true, 1);
         subTask1.id = 8L;
         assertNotEquals(subTask, subTask1);
         assertNotEquals(subTask.hashCode(), subTask1.hashCode());
@@ -56,7 +56,7 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsTitle()
     {
-        SubTask subTask3 = new SubTask("Test SubTask 3", true);
+        SubTask subTask3 = new SubTask("Test SubTask 3", true, 1);
         subTask3.id = 7L;
         assertNotEquals(subTask, subTask3);
         assertNotEquals(subTask.hashCode(), subTask3.hashCode());
@@ -68,7 +68,19 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsDone()
     {
-        SubTask subTask2 = new SubTask("Test SubTask",false);
+        SubTask subTask2 = new SubTask("Test SubTask",false,1);
+        subTask2.id = 7L;
+        assertNotEquals(subTask, subTask2);
+        assertNotEquals(subTask.hashCode(), subTask2.hashCode());
+    }
+
+    /**
+     * Test that the SubTask Equals method returns false and the hashcodes differ when different place values
+     */
+    @Test
+    public void testNotEqualsPlace()
+    {
+        SubTask subTask2 = new SubTask("Test SubTask",false,2);
         subTask2.id = 7L;
         assertNotEquals(subTask, subTask2);
         assertNotEquals(subTask.hashCode(), subTask2.hashCode());

@@ -34,7 +34,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ComboBox>
-      <TextField fx:id="ID_field" layoutX="462.0" layoutY="86.0" prefHeight="26.0" prefWidth="76.0" promptText="Board ID..." AnchorPane.rightAnchor="162.0" />
-      <Button fx:id="Load_board_button" layoutX="546.0" layoutY="86.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="26.0" prefWidth="84.0" text="Open Board" AnchorPane.rightAnchor="70.0" />
+      <TextField fx:id="ID_field" layoutX="462.0" layoutY="86.0" minWidth="66.0" prefHeight="26.0" prefWidth="66.0" promptText="Board ID" AnchorPane.rightAnchor="162.0" />
+      <Button fx:id="Load_board_button" layoutX="546.0" layoutY="86.0" minWidth="84.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="26.0" prefWidth="84.0" text="Open Board" AnchorPane.rightAnchor="70.0" />
    </children>
 </AnchorPane>

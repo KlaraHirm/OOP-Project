@@ -35,7 +35,7 @@ public class Card
     public String description;
 
     /**
-     * Wether the card is checked/done
+     * Whether the card is checked/done
      */
     public boolean done;
 

@@ -12,14 +12,26 @@ import javax.persistence.Id;
 @Entity
 public class SubTask {
 
+    /**
+     * Id of a SubTask
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
+    /**
+     * Title of a SubTask
+     */
     public String title;
 
+    /**
+     * Done status of a SubTask
+     */
     public boolean done;
 
+    /**
+     * Place of a SubTask in a card
+     */
     public int place;
 
     /**

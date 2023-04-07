@@ -184,6 +184,7 @@ public class CardCtrl {
             boardElement.getChildren().remove(card);
             if (!listElement.getChildren().contains(card)) {
                 listElement.getChildren().add(card);
+                pageCtrl.reorderCard(cardObject, originalListObject, listObject, listObject.cards.size());
             }
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();

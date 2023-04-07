@@ -90,7 +90,7 @@ public class ListController {
     @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
                                   @RequestParam("cardId") long idCard, @RequestParam("cardPlace") int placeCard) {
-        if(placeCard < 1 || idOld < 0 || idNew < 0 || idCard < 0) {
+        if(placeCard < 0 || idOld < 0 || idNew < 0 || idCard < 0) {
             return ResponseEntity.badRequest().build();
         }
         CardList ret = listService.reorder(idOld, idNew, idCard, placeCard);

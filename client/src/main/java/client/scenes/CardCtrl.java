@@ -165,6 +165,7 @@ public class CardCtrl {
         });
         card.setOnMouseReleased(mouseEvent -> {
             this.mouseHighlightEnd();
+            boolean foundList = false;
             for (Node list : boardElement.getChildren()) {
                 if (list instanceof VBox) {
                     if (card.getBoundsInParent()
@@ -172,11 +173,15 @@ public class CardCtrl {
                         setListElement((VBox) list);
                         long newListId = Long.parseLong(listElement.getId().split("_")[1]); //retrieves object id from element id
                         setListObject(pageCtrl.getList(newListId));
+                        foundList = true;
                         break;
                     }
                 }
             }
-            this.cardsIntersect();
+            if(foundList) {
+                this.cardsIntersect();
+            }
+            boardElement.getChildren().remove(card);
             if (!listElement.getChildren().contains(card)) {
                 listElement.getChildren().add(card);
             }
@@ -258,7 +263,7 @@ public class CardCtrl {
             if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 listElement.getChildren().add(1, card);
-                pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard+1);
+                pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
                 break;
             }
             else if (aim instanceof VBox) {
@@ -266,12 +271,11 @@ public class CardCtrl {
                         .intersects(aim.localToScene(aim.getBoundsInLocal())) || indexCard == size-1) {
 
                     listElement.getChildren().add(indexCard+1, card);
-                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard+1);
+                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
                     break;
                 }
             }
         }
-        boardElement.getChildren().remove(card);
     }
 
 

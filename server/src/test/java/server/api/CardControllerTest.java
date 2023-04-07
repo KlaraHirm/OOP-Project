@@ -62,9 +62,9 @@ public class CardControllerTest {
 
     @Test
     public void testGetCard() {
-        Card c = new Card("Title");
+        Card card = new Card("Title");
         when(cardRepo.existsById(1L)).thenReturn(true);
-        when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
 
         assertNotNull(sut.getCard(1L));
         assertEquals("Title", Objects.requireNonNull(sut.getCard(1L).getBody()).title);
@@ -78,21 +78,21 @@ public class CardControllerTest {
 
     @Test
     public void testPutCard() {
-        Card c = new Card("Title");
-        c.id = 1L;
+        Card card = new Card("Title");
+        card.id = 1L;
 
-        Card e = new Card("Title2");
-        e.id = 1L;
+        Card card1 = new Card("Title2");
+        card1.id = 1L;
 
-        Card a = new Card("Title2");
-        a.id = 1L;
+        Card card2 = new Card("Title2");
+        card2.id = 1L;
 
         when(cardRepo.existsById(1L)).thenReturn(true);
-        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
-        when(cardRepo.save(a)).thenReturn(a);
+        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        when(cardRepo.save(card2)).thenReturn(card2);
 
-        assertEquals(ResponseEntity.ok(a), sut.editCard(e));
-        verify(cardRepo, times(1)).save(e);
+        assertEquals(ResponseEntity.ok(card2), sut.editCard(card1));
+        verify(cardRepo, times(1)).save(card1);
     }
 
     @Test
@@ -107,27 +107,27 @@ public class CardControllerTest {
 
     @Test
     public void testDeleteCard() {
-        Card c = new Card("Title");
-        c.id = 1L;
-        Board b = new Board("Board");
-        b.id = 1L;
-        CardList l = new CardList("List");
-        l.id = 1L;
-        l.cards.add(c);
-        b.cardLists.add(l);
+        Card card = new Card("Title");
+        card.id = 1L;
+        Board board = new Board("Board");
+        board.id = 1L;
+        CardList list = new CardList("List");
+        list.id = 1L;
+        list.cards.add(card);
+        board.cardLists.add(list);
         Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
-        when(cardRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
         when(listRepo.existsById(1L)).thenReturn(true);
-        when(listRepo.findById(1L)).thenReturn(Optional.of(l));
-        when(boardRepo.findById(1L)).thenReturn(Optional.of(b));
+        when(listRepo.findById(1L)).thenReturn(Optional.of(list));
+        when(boardRepo.findById(1L)).thenReturn(Optional.of(board));
         when(boardRepo.existsById(1L)).thenReturn(true);
         doNothing().when(cardRepo).deleteById(1L);
-        assertEquals(ResponseEntity.ok(c), sut.deleteCard(1L,1L,1L));
+        assertEquals(ResponseEntity.ok(card), sut.deleteCard(1L,1L,1L));
         verify(cardRepo, times(1)).deleteById(1L);
     }
 
     @Test
-    public void deleteCardbadRequest() {
+    public void deleteCardBadRequest() {
         assertEquals(ResponseEntity.badRequest().build(), sut.deleteCard(-1L, 1L, 1L));
         assertEquals(ResponseEntity.badRequest().build(), sut.deleteCard(1L, -1L, 1L));
         assertEquals(ResponseEntity.badRequest().build(), sut.deleteCard(1L, 1L, -1L));

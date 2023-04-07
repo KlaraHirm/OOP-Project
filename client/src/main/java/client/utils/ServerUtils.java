@@ -35,6 +35,11 @@ public class ServerUtils {
                 .get(new GenericType<List<Board>>() {});
     }
 
+    /**
+     * get board with ID
+     * @param id id of board to be returned
+     * @return board with board.id == id
+     */
     public Board getBoard(long id)
     {
         if(!connected)

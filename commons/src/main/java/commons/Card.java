@@ -41,7 +41,7 @@ public class Card
     /**
      * List of Tags in the CardList
      */
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @OrderBy("place")
     public List<Tag> tags;
 
@@ -97,6 +97,7 @@ public class Card
                 .append(id, card.id)
                 .append(title, card.title)
                 .append(description, card.description)
+                .append(tags, card.tags)
                 .append(done, card.done)
                 .isEquals();
     }
@@ -113,6 +114,7 @@ public class Card
                 .append(title)
                 .append(description)
                 .append(done)
+                .append(tags)
                 .toHashCode();
     }
 

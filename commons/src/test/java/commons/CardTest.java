@@ -3,6 +3,8 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardTest
@@ -14,6 +16,7 @@ class CardTest
     public void setUp()
     {
         card = new Card("Test Card", 1, "Description", true);
+        card.tags = new ArrayList<>();
         card.id = 7L;
     }
 
@@ -34,9 +37,11 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 7L;
+        card2.tags = new ArrayList<>();
         assertEquals(card, card2);
         assertEquals(card.hashCode(), card2.hashCode());
     }
+
 
     /**
      * Test that the Card Equals method returns false and the hashcodes differ when different IDs
@@ -46,6 +51,21 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 8L;
+        card2.tags = new ArrayList<>();
+        assertNotEquals(card, card2);
+        assertNotEquals(card.hashCode(), card2.hashCode());
+    }
+
+    /**
+     * Test that the Card Equals method returns false and the hashcodes differ when different Tags
+     */
+    @Test
+    public void testNotEqualsTags()
+    {
+        Card card2 = new Card("Test Card", 1, "Description", true);
+        card2.id = 7L;
+        Tag tag = new Tag("Test Tag", 1);
+        card2.tags.add(tag);
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
     }
@@ -58,6 +78,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card 2", 1, "Description", true);
         card2.id = 7L;
+        card2.tags = new ArrayList<>();
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
     }
@@ -70,6 +91,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description 2", true);
         card2.id = 7L;
+        card2.tags = new ArrayList<>();
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
     }
@@ -82,7 +104,10 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", false);
         card2.id = 7L;
+        Tag tag = new Tag("Test Tag", 1);
+        card2.tags.add(tag);
         assertNotEquals(card, card2);
+        assertNotEquals(card.tags, card2.tags);
         assertNotEquals(card.hashCode(), card2.hashCode());
     }
 
@@ -95,6 +120,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 3, "Description", true);
         card2.id = 7L;
+        card2.tags = new ArrayList<>();
         assertEquals(card, card2);
         assertEquals(card.hashCode(), card2.hashCode());
     }

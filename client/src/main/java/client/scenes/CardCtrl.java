@@ -3,12 +3,15 @@ package client.scenes;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -139,9 +142,18 @@ public class CardCtrl {
      */
     public void makeDraggable() {
         card.setOnMousePressed(mouseEvent -> {
-            this.mousePressed();
-            mouseAnchorX = mouseEvent.getSceneX();
-            mouseAnchorY = mouseEvent.getSceneY();
+            switch(mouseEvent.getClickCount()){
+                case 1:
+                    System.out.println("SINGLE CLICK");
+                    this.mousePressed();
+                    mouseAnchorX = mouseEvent.getSceneX();
+                    mouseAnchorY = mouseEvent.getSceneY();
+                    break;
+                case 2:
+                    System.out.println("DOUBLE CLICK");
+                    pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                    break;
+            }
         });
         card.setOnMouseDragged(mouseEvent -> {
             double deltaX = mouseEvent.getSceneX() - mouseAnchorX;

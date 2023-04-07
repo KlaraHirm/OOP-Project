@@ -148,7 +148,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setBoard_object(board);
         boardCtrl.setTitle();
         main_page.getChildren().addAll(p);
-        ID_field.setText(board.id + "");
+        ID_field.setText(Long.toString(board.id));
         return p;
     }
 
@@ -297,7 +297,7 @@ public class MainPageCtrl implements Initializable {
         Board board = server.getBoard(boardID);
 
         if(board!=null)
-            loadBoardContent(server.getBoard(boardID));
+            loadBoardContent(board);
         else reset();
     }
 

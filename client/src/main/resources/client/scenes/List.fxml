@@ -42,7 +42,7 @@
          </children>
       </HBox>
       <ScrollPane fx:id="scroll_pane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;">
-         <VBox fx:id="list_container" prefWidth="375.0" style="-fx-background-color: transparent;" styleClass="list_container" />
+         <VBox fx:id="list_container" prefWidth="375.0" style="-fx-background-color: #eff6fa;" styleClass="list_container" />
       </ScrollPane>
    </children>
 </VBox>

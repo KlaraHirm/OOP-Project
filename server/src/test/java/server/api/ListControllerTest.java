@@ -288,7 +288,7 @@ class ListControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), sut.reorder(-1L, 2L, 1L, 1));
         assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, -2L, 1L, 1));
         assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, -1L, 1));
-        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, 1L, 0));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, 1L, -1));
     }
 
 }

@@ -283,4 +283,12 @@ class ListControllerTest {
         assertEquals(ResponseEntity.notFound().build(), sut.reorder(1L, 2L, 1L, 1));
     }
 
+    @Test
+    public void testReorder400() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(-1L, 2L, 1L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, -2L, 1L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, -1L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, 1L, 0));
+    }
+
 }

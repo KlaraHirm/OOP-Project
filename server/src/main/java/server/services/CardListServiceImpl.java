@@ -123,22 +123,16 @@ public class CardListServiceImpl implements CardListService {
         if (!oldList.cards.contains(card)) return null;
         oldList.cards.remove(card);
         int place = 1;
-        for(Card c : oldList.cards) {
-            c.place = place;
+        for(Card oldListCard : oldList.cards) {
+            oldListCard.place = place;
             place++;
         }
         newList.cards.add(cardPlace-1, card);
         place = 1;
-        for(Card c : newList.cards) {
-            c.place = place;
+        for(Card newListCard : newList.cards) {
+            newListCard.place = place;
             place++;
         }
-//        if(card.place-1==newList.cards.size()+1){
-//            newList.cards.add(card);
-//        }
-//        else{
-//            newList.cards.add(card.place-1, card);
-//        }
         listRepo.save(oldList);
         listRepo.save(newList);
         return newList;

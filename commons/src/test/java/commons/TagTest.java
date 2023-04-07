@@ -81,8 +81,8 @@ class TagTest
     public void hasToString()
     {
         String actual = tag.toString();
-        assertTrue(actual.contains("id=7"));
-        assertTrue(actual.contains("title=Test Card"));
+        assertTrue(actual.contains("id=1"));
+        assertTrue(actual.contains("title=Test Tag"));
         assertTrue(actual.contains("place=1"));
     }
 }

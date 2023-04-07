@@ -20,6 +20,8 @@ public class SubTask {
 
     public boolean done;
 
+    public int place;
+
     /**
      * Empty constructor for object mappers
      */
@@ -32,19 +34,22 @@ public class SubTask {
      * Create a new SubTask instance
      * @param title title of a subtask
      * @param done done status of a subtask
+     * @param place place of a SubTask in a card
      */
-    public SubTask(String title, boolean done) {
+    public SubTask(String title, boolean done, int place) {
         this.title = title;
         this.done = done;
+        this.place = place;
     }
 
     /**
-     * Create a new SubTask instance, which has done status as false
+     * Create a new SubTask instance, which has done status as false and place as 0
      * @param title title of a subtask
      */
     public SubTask(String title) {
         this.title = title;
         this.done = false;
+        this.place = 0;
     }
 
     /**
@@ -64,6 +69,7 @@ public class SubTask {
                 .append(id, subTask.id)
                 .append(title, subTask.title)
                 .append(done, subTask.done)
+                .append(place, subTask.place)
                 .isEquals();
     }
 
@@ -77,6 +83,7 @@ public class SubTask {
                 .append(id)
                 .append(title)
                 .append(done)
+                .append(place)
                 .toHashCode();
     }
 
@@ -90,6 +97,7 @@ public class SubTask {
                 .append("id", id)
                 .append("title", title)
                 .append("done", done)
+                .append("place", place)
                 .toString();
     }
 }

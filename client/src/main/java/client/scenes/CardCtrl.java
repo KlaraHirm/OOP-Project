@@ -260,20 +260,11 @@ public class CardCtrl {
             Node aim = listElement.getChildren().get(indexCard);
             // Point testMouse = MouseInfo.getPointerInfo().getLocation();
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
-            if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
+            if (card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                listElement.getChildren().add(1, card);
+                listElement.getChildren().add(indexCard+1, card);
                 pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
                 break;
-            }
-            else if (aim instanceof VBox) {
-                if (card.localToScene(card.getBoundsInLocal())
-                        .intersects(aim.localToScene(aim.getBoundsInLocal())) || indexCard == size-1) {
-
-                    listElement.getChildren().add(indexCard+1, card);
-                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
-                    break;
-                }
             }
         }
     }

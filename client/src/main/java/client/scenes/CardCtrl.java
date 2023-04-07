@@ -170,7 +170,6 @@ public class CardCtrl {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
                         setListElement((VBox) list.lookup("#list_container"));
-                        long newListId = Long.parseLong(listElement.getId().split("_")[1]); //retrieves object id from element id
                         setListObject(boardObject.cardLists.get(i));
                         foundList = true;
                         break;

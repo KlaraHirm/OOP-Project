@@ -142,6 +142,15 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
+        //adding event listener to tags_list which calls method loadBoardContent only when new value is selected
+        tags_list.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // This method will only run when a new value is selected
+            if(newValue == null){
+                return;
+            }
+            System.out.println("tag was selected");
+        });
+
         //force only ints to be entered in ID_field
         ID_field.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
 

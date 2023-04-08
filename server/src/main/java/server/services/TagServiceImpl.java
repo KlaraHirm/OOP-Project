@@ -1,6 +1,7 @@
 package server.services;
 
 import commons.Board;
+import commons.Card;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,25 +52,6 @@ public class TagServiceImpl implements TagService {
     }
 
     /**
-     * Write Tag to server
-     * @param tag - Tag object to create/ write
-     * @return - object representation of successfully written Tag
-     */
-    @Override
-    public Tag addTag(Board board, Tag tag) {
-        if (tag.title == null)
-        {
-            return null;
-        }
-        if (board == null) {
-            return null;
-        }
-        //board.tags.add(tag);
-        boardRepo.save(board);
-        return tagRepo.save(tag);
-    }
-
-    /**
      * Update a Tag
      * @param changedTag - the Tag object to edit, with the corresponding ID
      * @return - the edited Tag
@@ -94,6 +76,25 @@ public class TagServiceImpl implements TagService {
         }
         Tag tag = tagRepo.findById(tagId).get();
         tagRepo.deleteById(tagId);
+        for (Board board : boardRepo.findAll()) {
+            if (board.tags.contains(tag)) {
+                board.tags.remove(tag);
+            }
+            boardRepo.save(board);
+        }
+
+        for (Board board : boardRepo.findAll()) {
+            if (board.tags.contains(tag)) {
+                board.tags.remove(tag);
+            }
+            boardRepo.save(board);
+        }
+        for (Card card : cardRepo.findAll()) {
+            if (card.tags.contains(tag)) {
+                card.tags.remove(tag);
+            }
+            cardRepo.save(card);
+        }
         return tag;
     }
 

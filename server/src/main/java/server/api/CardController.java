@@ -15,9 +15,6 @@ public class CardController {
     @Autowired
     CardServiceImpl cardService;
 
-    @Autowired
-    TagServiceImpl tagService;
-
     /**
      * Get info about a card
      * @param cardId the id of the card
@@ -80,9 +77,8 @@ public class CardController {
      */
     @PostMapping
     public ResponseEntity<Card> attachTag(@PathVariable("id") long cardId, @PathVariable("id") long tagId) {
-        Tag tag = tagService.getTag(tagId);
         Card card = cardService.getCard(cardId);
-        cardService.attachTag(cardId, tagId);
+        Tag tag = cardService.attachTag(cardId, tagId);
         if (tag == null) return ResponseEntity.notFound().build();
         if (card == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(card);

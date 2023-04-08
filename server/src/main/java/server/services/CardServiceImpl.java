@@ -92,8 +92,15 @@ public class CardServiceImpl implements CardService {
         return deleted;
     }
 
+    /**
+     * Attach an existing Tag to a Card
+     * @param cardId - the Card where to add the Tag
+     * @param tagId - the Tag to be added
+     * @return - the Card with added Tag
+     * Returns null if the card or tag do not exist
+     */
     @Override
-    public Card attachTag(long cardId, long tagId) {
+    public Tag attachTag(long cardId, long tagId) {
         if (tagId < 0) return null;
         if (!tagRepo.existsById(tagId)) return null;
         if (cardId < 0) return null;
@@ -102,20 +109,6 @@ public class CardServiceImpl implements CardService {
         Card card = cardRepo.findById(cardId).get();
         card.tags.add(tag);
         cardRepo.save(card);
-        return card;
-    }
-
-    @Override
-    public Tag deleteTagFromCards(long tagId) {
-        if (tagId < 0) return null;
-        if (!tagRepo.existsById(tagId)) return null;
-        Tag tag = tagRepo.findById(tagId).get();
-        for (int i = 0; i < cardRepo.findAll().size(); i++) {
-            if (cardRepo.findAll().get(i).tags.contains(tag)) {
-                cardRepo.findAll().get(i).tags.remove(tag);
-            }
-            cardRepo.save(cardRepo.findAll().get(i));
-        }
         return tag;
     }
 }

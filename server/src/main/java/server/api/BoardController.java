@@ -151,7 +151,7 @@ public class BoardController
     @PostMapping("/{id}")
     public ResponseEntity<Tag> addTag(@PathVariable("id") long boardId, @RequestBody Tag tag) {
         Board board = boardService.getBoard(boardId);
-        Tag retrieved = tagService.addTag(board, tag);
+        Tag retrieved = boardService.addTag(board, tag);
         if (retrieved == null)
         {
             return ResponseEntity.badRequest().build();

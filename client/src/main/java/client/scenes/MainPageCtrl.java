@@ -33,6 +33,8 @@ public class MainPageCtrl implements Initializable {
 
     private ObservableList<Board> data;
 
+    private ObservableList<Board> tags;
+
     @FXML
     private ComboBox<Board> boards_list;
 

@@ -150,7 +150,7 @@ public class MainPageCtrl implements Initializable {
             if(newValue == null){
                 return;
             }
-            System.out.println("tag was selected");
+            showEditTag(newValue, boards_list.getValue());
         });
 
         //force only ints to be entered in ID_field
@@ -440,8 +440,8 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
-    public void editTag(Tag tag) {
-
+    public void showEditTag(Tag tag, Board board) {
+        mainCtrl.showEditTag(tag, board);
     }
 
     /**

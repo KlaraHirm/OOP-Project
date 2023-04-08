@@ -3,6 +3,7 @@ package server.api;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import server.database.CardListRepository;
 import server.database.CardRepository;
 import server.services.CardListServiceImpl;
 import server.services.CardServiceImpl;
+import server.services.TagServiceImpl;
 
 import java.util.Optional;
 import java.util.Random;
@@ -22,6 +24,8 @@ public class CardController {
     @Autowired
     CardServiceImpl cardService;
 
+    @Autowired
+    TagServiceImpl tagService;
 
     /**
      * Get info about a card
@@ -73,5 +77,15 @@ public class CardController {
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
+    }
+
+    @PostMapping
+    public ResponseEntity<Card> attachTag(@PathVariable("id") long cardId, @PathVariable("id") long tagId) {
+        Tag tag = tagService.getTag(tagId);
+        Card card = cardService.getCard(cardId);
+        cardService.attachTag(cardId, tagId);
+        if (tag == null) return ResponseEntity.notFound().build();
+        if (card == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(card);
     }
 }

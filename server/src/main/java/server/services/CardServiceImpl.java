@@ -3,11 +3,13 @@ package server.services;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.database.TagRepository;
 import server.services.interfaces.CardService;
 
 @Service
@@ -21,6 +23,9 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private BoardRepository boardRepo;
+
+    @Autowired
+    private TagRepository tagRepo;
 
     public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo) {
 
@@ -84,5 +89,18 @@ public class CardServiceImpl implements CardService {
         cardRepo.deleteById(cardId);
 
         return deleted;
+    }
+
+    @Override
+    public Card attachTag(long cardId, long tagId) {
+        if (tagId < 0) return null;
+        if (!tagRepo.existsById(tagId)) return null;
+        if (cardId < 0) return null;
+        if (!cardRepo.existsById(cardId)) return null;
+        Tag tag = tagRepo.findById(tagId).get();
+        Card card = cardRepo.findById(cardId).get();
+        card.tags.add(tag);
+        cardRepo.save(card);
+        return card;
     }
 }

@@ -440,14 +440,7 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
-    /**
-     * method used to get list based on id
-     * @param listId id of list
-     * @return object of class CardList which had the same id as passed in listId
-     */
-    public CardList getList(long listId) {
-        return server.getList(listId);
-    }
+
 
     /**
      * loads the server connection management UI

@@ -34,15 +34,14 @@ public class Card
     public String description;
 
     /**
-     * Wether the card is checked/done
+     * Whether the card is checked/done
      */
     public boolean done;
 
     /**
-     * List of Tags in the CardList
+     * List of Tags in the Card
      */
-    @OneToMany(cascade = CascadeType.ALL)
-    @OrderBy("place")
+    @ManyToMany(cascade = CascadeType.ALL)
     public List<Tag> tags;
 
     /**
@@ -97,6 +96,7 @@ public class Card
                 .append(id, card.id)
                 .append(title, card.title)
                 .append(description, card.description)
+                .append(tags, card.tags)
                 .append(done, card.done)
                 .isEquals();
     }
@@ -113,6 +113,7 @@ public class Card
                 .append(title)
                 .append(description)
                 .append(done)
+                .append(tags)
                 .toHashCode();
     }
 

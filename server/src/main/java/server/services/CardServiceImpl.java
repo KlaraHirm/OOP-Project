@@ -43,7 +43,7 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card getCard(long cardId) {
-        if (!cardRepo.existsById(cardId)) return null;
+        if (cardId<0 || !cardRepo.existsById(cardId)) return null;
 
         return cardRepo.findById(cardId).get();
     }
@@ -74,8 +74,9 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public Card deleteCard(long boardId, long listId, long cardId) {
-        if(cardId < 0) return null;
         if (!cardRepo.existsById(cardId)) return null;
+        if (!listRepo.existsById(listId)) return null;
+        if (!boardRepo.existsById(boardId)) return null;
 
         CardList cardList = listRepo.findById(listId).get();
         Board board = boardRepo.findById(boardId).get();

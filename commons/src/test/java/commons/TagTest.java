@@ -13,7 +13,7 @@ class TagTest
     @BeforeEach
     public void setUp()
     {
-        tag = new Tag("Test Tag", 1);
+        tag = new Tag("Test Tag");
         tag.id = 1L;
     }
 
@@ -32,7 +32,7 @@ class TagTest
     @Test
     public void testEqualsHashcode()
     {
-        Tag tag2 = new Tag("Test Tag", 1);
+        Tag tag2 = new Tag("Test Tag");
         tag2.id = 1L;
         assertEquals(tag, tag2);
         assertEquals(tag.hashCode(), tag2.hashCode());
@@ -44,7 +44,7 @@ class TagTest
     @Test
     public void testNotEqualsID()
     {
-        Tag tag2 = new Tag("Test Tag", 1);
+        Tag tag2 = new Tag("Test Tag");
         tag2.id = 8L;
         assertNotEquals(tag, tag2);
         assertNotEquals(tag.hashCode(), tag2.hashCode());
@@ -56,7 +56,7 @@ class TagTest
     @Test
     public void testNotEqualsTitle()
     {
-        Tag tag2 = new Tag("Test Tag 2", 1);
+        Tag tag2 = new Tag("Test Tag 2");
         tag2.id = 1L;
         assertNotEquals(tag, tag2);
         assertNotEquals(tag.hashCode(), tag2.hashCode());
@@ -68,7 +68,7 @@ class TagTest
     @Test
     public void testEqualsDifferentPlace()
     {
-        Tag tag2 = new Tag("Test Tag", 3);
+        Tag tag2 = new Tag("Test Tag");
         tag2.id = 1L;
         assertEquals(tag, tag2);
         assertEquals(tag.hashCode(), tag2.hashCode());
@@ -83,6 +83,5 @@ class TagTest
         String actual = tag.toString();
         assertTrue(actual.contains("id=1"));
         assertTrue(actual.contains("title=Test Tag"));
-        assertTrue(actual.contains("place=1"));
     }
 }

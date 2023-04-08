@@ -440,7 +440,9 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
+    public void editTag(Tag tag) {
 
+    }
 
     /**
      * loads the server connection management UI

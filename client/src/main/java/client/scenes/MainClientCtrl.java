@@ -32,12 +32,16 @@ public class MainClientCtrl {
     private EditBoardCtrl editBoardCtrl;
     private Scene editBoard;
 
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
+
 
     public void initialize(Stage primaryStage,
                            Pair<MainPageCtrl, Parent> overview,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<EditListCtrl, Parent> editList,
                            Pair<EditBoardCtrl, Parent> editBoard,
+                           Pair<EditTagCtrl, Parent> editTag,
                            Pair<ServerConnectionCtrl, Parent> serverConnection
     ) throws IOException {
 
@@ -57,6 +61,9 @@ public class MainClientCtrl {
 
         this.editBoardCtrl = editBoard.getKey();
         this.editBoard = new Scene(editBoard.getValue());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
 
         showServer();
 

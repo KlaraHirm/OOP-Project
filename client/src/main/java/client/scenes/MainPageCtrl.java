@@ -414,6 +414,7 @@ public class MainPageCtrl implements Initializable {
             data = FXCollections.observableList(boards);
             boards_list.setItems(data);
         }
+        //TODO - same for tags after TagController is ready
     }
 
     /**

@@ -34,6 +34,25 @@ public class ServerUtils {
     }
 
     /**
+     * get board with ID
+     * @param id id of board to be returned
+     * @return board with board.id == id
+     */
+    public Board getBoard(long id)
+    {
+        if(!connected)
+            return null;
+        Response response = ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/board/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON).get();
+        if(response.getStatus() == 200)
+            return response.readEntity(Board.class);
+        else
+            return null;
+    }
+
+    /**
      * add new board to db
      * @param board object of class Board to be added
      * @return the same board, however with generated id (before that it was always 0)

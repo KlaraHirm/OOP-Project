@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.CardRepository;
 import server.database.TagRepository;
 import server.services.BoardServiceImpl;
+import server.services.CardServiceImpl;
 import server.services.TagServiceImpl;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class TagController {
 
     @Autowired
     TagServiceImpl tagService;
+
+    @Autowired
+    CardServiceImpl cardService;
 
     /**
      * Retrieve all Tags in the database
@@ -76,16 +80,17 @@ public class TagController {
 
     /**
      * Deletes a Tag with particular ID
-     * @param id - ID of the Tag to delete
+     * @param tagId - ID of the Tag to delete
      * @return - Response indicating success fo deletion
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Tag> deleteTagWithId(@PathVariable("id") long id)
+    public ResponseEntity<Tag> deleteTagWithId(@PathVariable("id") long tagId)
     {
-        Tag retrieved = tagService.deleteTagWithId(id);
+        Tag retrieved = tagService.deleteTagWithId(tagId);
         if (retrieved  == null) {
             return ResponseEntity.badRequest().build();
         }
+        cardService.deleteTagFromCards(tagId);
         return ResponseEntity.ok(retrieved);
     }
 }

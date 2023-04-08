@@ -103,4 +103,18 @@ public class CardServiceImpl implements CardService {
         cardRepo.save(card);
         return card;
     }
+
+    @Override
+    public Tag deleteTagFromCards(long tagId) {
+        if (tagId < 0) return null;
+        if (!tagRepo.existsById(tagId)) return null;
+        Tag tag = tagRepo.findById(tagId).get();
+        for (int i = 0; i < cardRepo.findAll().size(); i++) {
+            if (cardRepo.findAll().get(i).tags.contains(tag)) {
+                cardRepo.findAll().get(i).tags.remove(tag);
+            }
+            cardRepo.save(cardRepo.findAll().get(i));
+        }
+        return tag;
+    }
 }

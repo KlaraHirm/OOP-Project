@@ -79,6 +79,13 @@ public class CardController {
         return ResponseEntity.ok(ret);
     }
 
+    /**
+     * Attach an existing Tag to a Card
+     * @param cardId - the Card where to add the Tag
+     * @param tagId - the Tag to be added
+     * @return - the Card with added Tag
+     * Returns 404 if the card or tag do not exist
+     */
     @PostMapping
     public ResponseEntity<Card> attachTag(@PathVariable("id") long cardId, @PathVariable("id") long tagId) {
         Tag tag = tagService.getTag(tagId);

@@ -322,11 +322,13 @@ public class MainPageCtrl implements Initializable {
     {
         long boardID = Integer.parseInt(ID_field.getText());
         Board board = server.getBoard(boardID);
-        saveBoardId(board);
         refresh();
 
-        if(board!=null)
+        if(board!=null) {
+            saveBoardId(board);
             loadBoardContent(board);
+            boards_list.setValue(board);
+        }
         else reset();
     }
 

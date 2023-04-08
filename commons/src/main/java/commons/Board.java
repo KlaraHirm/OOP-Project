@@ -27,6 +27,12 @@ public class Board
     public List<CardList> cardLists;
 
     /**
+     * List of Tags on the board
+     */
+    @OneToMany(cascade = CascadeType.ALL)
+    public List<Tag> tags;
+
+    /**
      * Empty constructor for object mappers
      */
    @SuppressWarnings("unused")
@@ -41,6 +47,7 @@ public class Board
    public Board(String title){
        this.title = title;
        this.cardLists = new ArrayList<CardList>();
+       this.tags = new ArrayList<>();
    }
 
     /**
@@ -57,7 +64,12 @@ public class Board
 
         Board board = (Board) o;
 
-        return new EqualsBuilder().append(id, board.id).append(title, board.title).append(cardLists, board.cardLists).isEquals();
+        return new EqualsBuilder()
+                .append(id, board.id)
+                .append(title, board.title)
+                .append(cardLists, board.cardLists)
+                .append(tags, board.tags)
+                .isEquals();
     }
 
     /**
@@ -67,7 +79,12 @@ public class Board
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder(17, 37).append(id).append(title).append(cardLists).toHashCode();
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(title)
+                .append(cardLists)
+                .append(tags)
+                .toHashCode();
     }
 
     /**
@@ -81,6 +98,7 @@ public class Board
                 .append("id", id)
                 .append("title", title)
                 .append("cardLists", cardLists)
+                .append("tags", tags)
                 .toString();
     }
 }

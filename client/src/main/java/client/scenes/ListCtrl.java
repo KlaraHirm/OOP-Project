@@ -5,6 +5,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -18,10 +19,16 @@ public class ListCtrl {
     private VBox list;
 
     @FXML
+    private VBox list_container;
+
+    @FXML
     private Label list_title;
 
     @FXML
     private Button new_card;
+
+    @FXML
+    private ScrollPane scroll_pane;
 
     private Board board_object;
 
@@ -65,7 +72,25 @@ public class ListCtrl {
      * @throws IOException
      */
     public void newCard() throws IOException {
-        pageCtrl.newCard(board_object, list_object, list);
+        pageCtrl.newCard(board_object, list_object, list_container);
+    }
+
+    /*
+     * Returns the inner list container (where the cards go)
+     */
+    public VBox getListContainer() {
+        return list_container;
+    }
+
+    /*
+     * Returns the outer list container (under the board HBox)
+     */
+    public VBox getList() {
+        return list;
+    }
+
+    public void setScrollPaneId() {
+        scroll_pane.setId("scroll_pane_" + list_object.id);
     }
 
     /**
@@ -73,6 +98,13 @@ public class ListCtrl {
      */
     public void deleteList() {
         pageCtrl.deleteList(board_object, list_object, list);
+    }
+
+    /**
+     * sets id of element representing list to contain its object id
+     */
+    public void setListId() {
+        list.setId("list_" + list_object.id);
     }
 
     /**

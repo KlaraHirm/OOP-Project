@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -47,6 +46,25 @@ public class ServerUtils {
     }
 
     /**
+     * get board with ID
+     * @param id id of board to be returned
+     * @return board with board.id == id
+     */
+    public Board getBoard(long id)
+    {
+        if(!connected)
+            return null;
+        Response response = ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/board/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON).get();
+        if(response.getStatus() == 200)
+            return response.readEntity(Board.class);
+        else
+            return null;
+    }
+
+    /**
      * add new board to db
      * @param board object of class Board to be added
      * @return the same board, however with generated id (before that it was always 0)
@@ -83,6 +101,19 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
+    }
+
+    /**
+     * getter for list
+     * @param listId id of list which we want to get
+     * @return object of class CardList which has the same id as passed in listId
+     */
+    public CardList getList(long listId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/list/"+listId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<CardList>() {});
     }
 
     /**
@@ -127,6 +158,19 @@ public class ServerUtils {
     }
 
     /**
+     * getter for card
+     * @param cardId id of card which we want to get
+     * @return object of class Card which has the same id as passed in cardId
+     */
+    public Card getCard(long cardId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/card/"+cardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Card>() {});
+    }
+
+    /**
      * add newly created card to db
      * @param list object of class CardList where the card is
      * @param card newly create object of class Card which is to be added to the db
@@ -168,6 +212,39 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * edits position of card, used during drag and drop
+     * @param card card being dragged
+     * @param original list origin of drag
+     * @param target list target of drag
+     * @return updated target
+     */
+    public CardList editCardPosition(Card card, CardList original, CardList target, int cardPlace) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/list/reorder") //
+                .queryParam("original", original.id) //
+                .queryParam("target", target.id) //
+                .queryParam("cardId", card.id) //
+                .queryParam("cardPlace", cardPlace) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), CardList.class);
+    }
+
+    /**
+     * getter for cards in list
+     * @param listId id of list
+     * @return list of cards ordered by place
+     */
+    public List<Card> getCards(long listId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/list/" + listId + "/cards") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Card>>() {
+                });
     }
 
     /**

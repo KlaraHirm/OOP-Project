@@ -12,14 +12,14 @@ import java.util.List;
 public class CardList
 {
     /**
-     * ID of the cardList
+     * ID of the CardList
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
     /**
-     * Place within board, used to ensure list order is maintained within the database
+     * Place within Board, used to ensure list order is maintained within the database
      */
     public int place;
 

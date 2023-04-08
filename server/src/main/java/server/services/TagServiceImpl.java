@@ -30,15 +30,6 @@ public class TagServiceImpl implements TagService {
     }
 
     /**
-     * Retrieve all Tags in the database
-     * @return - list containing all Tags
-     */
-    @Override
-    public List<Tag> getAllTags() {
-        return tagRepo.findAll();
-    }
-
-    /**
      * Retrieve particular Tag using ID
      * @param tagId - ID of the Tag
      * @return - Tag object

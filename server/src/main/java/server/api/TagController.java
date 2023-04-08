@@ -20,15 +20,6 @@ public class TagController {
     CardServiceImpl cardService;
 
     /**
-     * Retrieve all Tags in the database
-     * @return - a json array containing all Tags
-     */
-    @GetMapping("")
-    public ResponseEntity<List<Tag>> getAll() {
-        return ResponseEntity.ok(tagService.getAllTags());
-    }
-
-    /**
      * Retrieve particular Tag using ID
      * @param id - ID of the Tag
      * @return - Json representation of the Tag object
@@ -70,7 +61,6 @@ public class TagController {
         if (retrieved  == null) {
             return ResponseEntity.badRequest().build();
         }
-        cardService.deleteTagFromCards(tagId);
         return ResponseEntity.ok(retrieved);
     }
 }

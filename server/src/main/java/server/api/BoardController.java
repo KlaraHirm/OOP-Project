@@ -162,4 +162,13 @@ public class BoardController
         }
         return ResponseEntity.ok(retrieved);
     }
+
+    /**
+     * Retrieve all Tags in a Board
+     * @return - a json array containing all Tags
+     */
+    @GetMapping("")
+    public ResponseEntity<List<Tag>> getAllTags(@PathVariable("id") long boardId) {
+        return ResponseEntity.ok(boardService.getAllTags(boardId));
+    }
 }

@@ -180,4 +180,14 @@ public class BoardServiceImpl implements BoardService {
         boardRepo.save(board);
         return tagRepo.save(tag);
     }
+
+    /**
+     * Retrieve all Tags in a Board
+     * @return - list containing all Tags
+     */
+    @Override
+    public List<Tag> getAllTags(long boardId) {
+        Board board = boardRepo.findById(boardId).get();
+        return board.tags;
+    }
 }

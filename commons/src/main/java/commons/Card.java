@@ -39,7 +39,7 @@ public class Card
     public boolean done;
 
     /**
-     * List of Tags in the CardList
+     * List of Tags in the Card
      */
     @ManyToMany(cascade = CascadeType.ALL)
     public List<Tag> tags;

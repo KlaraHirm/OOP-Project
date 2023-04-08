@@ -4,9 +4,6 @@ import commons.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.CardRepository;
-import server.database.TagRepository;
-import server.services.BoardServiceImpl;
 import server.services.CardServiceImpl;
 import server.services.TagServiceImpl;
 
@@ -43,23 +40,6 @@ public class TagController {
         if (retrieved == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(retrieved);
-    }
-
-    /**
-     * Write a Tag to server
-     * @param tag - Tag object to create/ write
-     * @return - json representation of successfully written Tag
-     * Gives 400 if the body is malformed
-     */
-    @PostMapping("")
-    public ResponseEntity<Tag> addTag(@RequestBody Tag tag) {
-        Tag retrieved = tagService.addTag(tag);
-        if (retrieved == null)
-        {
-            return ResponseEntity.badRequest().build();
-        }
-
         return ResponseEntity.ok(retrieved);
     }
 

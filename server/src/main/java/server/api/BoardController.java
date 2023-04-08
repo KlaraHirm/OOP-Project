@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import commons.*;
 import server.services.BoardServiceImpl;
+import server.services.TagServiceImpl;
 
 @RestController
 @RequestMapping("/api/board")
@@ -30,6 +31,9 @@ public class BoardController
 {
     @Autowired
     BoardServiceImpl boardService;
+
+    @Autowired
+    TagServiceImpl tagService;
 
     /**
      * Retrieve all boards in the database
@@ -136,5 +140,26 @@ public class BoardController
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(ret);
+    }
+
+    /**
+     * Write a Tag to the Board
+     * @param tag - Tag object to create/ write
+     * @return - json representation of successfully written Tag
+     * Gives 400 if the body is malformed
+     */
+    @PostMapping("/{id}")
+    public ResponseEntity<Tag> addTag(@PathVariable("id") long boardId, @RequestBody Tag tag) {
+        Board board = boardService.getBoard(boardId);
+        Tag retrieved = tagService.addTag(board, tag);
+        if (retrieved == null)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        if (board == null)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(retrieved);
     }
 }

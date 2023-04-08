@@ -6,10 +6,10 @@ import commons.CardList;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.database.TagRepository;
+import server.services.interfaces.database.BoardRepository;
+import server.services.interfaces.database.CardListRepository;
+import server.services.interfaces.database.CardRepository;
+import server.services.interfaces.database.TagRepository;
 import server.services.interfaces.CardService;
 
 @Service

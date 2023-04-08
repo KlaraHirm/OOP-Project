@@ -1,15 +1,14 @@
 package server.services;
 
 import commons.Board;
-import commons.CardList;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.CardRepository;
-import server.database.TagRepository;
+import server.services.interfaces.database.BoardRepository;
+import server.services.interfaces.database.CardRepository;
+import server.services.interfaces.database.TagRepository;
 import server.services.interfaces.TagService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +19,9 @@ public class TagServiceImpl implements TagService {
 
     @Autowired
     private CardRepository cardRepo;
+
+    @Autowired
+    private BoardRepository boardRepo;
 
     public TagServiceImpl(TagRepository tagRepo, CardRepository cardRepo) {
         this.tagRepo = tagRepo;
@@ -54,11 +56,16 @@ public class TagServiceImpl implements TagService {
      * @return - object representation of successfully written Tag
      */
     @Override
-    public Tag addTag(Tag tag) {
+    public Tag addTag(Board board, Tag tag) {
         if (tag.title == null)
         {
             return null;
         }
+        if (board == null) {
+            return null;
+        }
+        //board.tags.add(tag);
+        boardRepo.save(board);
         return tagRepo.save(tag);
     }
 

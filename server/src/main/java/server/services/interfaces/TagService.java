@@ -11,7 +11,7 @@ public interface TagService {
 
     Tag getTag(long tagId);
 
-    Tag addTag(Tag tag);
+    Tag addTag(Board board, Tag tag);
 
     Tag editTag(Tag tag);
 

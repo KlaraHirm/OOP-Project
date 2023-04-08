@@ -4,8 +4,8 @@ import commons.Board;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
+import server.services.interfaces.database.BoardRepository;
+import server.services.interfaces.database.CardListRepository;
 import server.services.interfaces.BoardService;
 
 import java.util.ArrayList;

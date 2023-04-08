@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package server.database;
+package server.services.interfaces.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

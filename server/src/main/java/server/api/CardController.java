@@ -1,21 +1,12 @@
 package server.api;
 
-import commons.Board;
 import commons.Card;
-import commons.CardList;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.CardListServiceImpl;
 import server.services.CardServiceImpl;
 import server.services.TagServiceImpl;
-
-import java.util.Optional;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/card")

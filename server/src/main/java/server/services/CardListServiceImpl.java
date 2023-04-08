@@ -5,9 +5,9 @@ import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
+import server.services.interfaces.database.BoardRepository;
+import server.services.interfaces.database.CardListRepository;
+import server.services.interfaces.database.CardRepository;
 import server.services.interfaces.CardListService;
 
 @Service

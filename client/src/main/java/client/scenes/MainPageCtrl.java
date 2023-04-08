@@ -22,7 +22,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import client.scenes.*;
 import javafx.util.converter.IntegerStringConverter;
 
 
@@ -35,6 +34,9 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private ComboBox<Board> boards_list;
+
+    @FXML
+    private ComboBox<Board> tags_list;
 
     @FXML
     private AnchorPane main_page;

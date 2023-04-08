@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ public class MainPageCtrl implements Initializable {
     private ComboBox<Board> boards_list;
 
     @FXML
-    private ComboBox<Board> tags_list;
+    private ComboBox<Tag> tags_list;
 
     @FXML
     private AnchorPane main_page;
@@ -97,6 +98,34 @@ public class MainPageCtrl implements Initializable {
                 long board_id = Long.parseLong(id_string.substring(1, id_string.length()-1));
                 return boards_list.getItems().stream().filter(b ->
                         b!=null && b.title.equals(title) && b.id == board_id).findFirst().orElse(null);
+            }
+        });
+
+        // convertor for tags_list (dropdown menu field with tag names)
+        tags_list.setConverter(new StringConverter<Tag>() {
+
+            /**
+             * toString method which converts elements in tags_list to String - this is shown in UI in ComboBox
+             * @param tag the object of type {@code T} to convert
+             * @return String representation of objects in tags_list
+             */
+            @Override
+            public String toString(Tag tag) {
+                return tag.title + " (" + tag.id + ")";
+            }
+
+            /**
+             * fromString method which converts String representation back to object in tags_list
+             * @param text the {@code String} to convert
+             * @return actual object of String representation
+             */
+            @Override
+            public Tag fromString(String text) {
+                String title = text.split(" ")[0];
+                String idString = text.split(" ")[1];
+                long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
+                return tags_list.getItems().stream().filter(t ->
+                        t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
             }
         });
 

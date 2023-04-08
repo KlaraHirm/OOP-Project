@@ -34,7 +34,7 @@ public class Card
     public String description;
 
     /**
-     * Wether the card is checked/done
+     * Whether the card is checked/done
      */
     public boolean done;
 
@@ -42,7 +42,6 @@ public class Card
      * List of Tags in the CardList
      */
     @ManyToMany(cascade = CascadeType.ALL)
-    @OrderBy("place")
     public List<Tag> tags;
 
     /**

@@ -25,11 +25,6 @@ public class Tag {
     public String title;
 
     /**
-     * Order of the Tag in the Card
-     */
-    public int place;
-
-    /**
      * Empty constructor for object mappers
      */
     @SuppressWarnings("unused")
@@ -40,11 +35,9 @@ public class Tag {
     /**
      * Creates a new Tag
      * @param title - Title of Tag
-     * @param place - order in the Card
      */
-    public Tag(String title, int place){
+    public Tag(String title){
         this.title = title;
-        this.place = place;
     }
 
     /**
@@ -86,7 +79,6 @@ public class Tag {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("title", title)
-                .append("place", place)
                 .toString();
     }
 }

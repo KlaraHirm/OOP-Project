@@ -64,7 +64,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 7L;
-        Tag tag = new Tag("Test Tag", 1);
+        Tag tag = new Tag("Test Tag");
         card2.tags.add(tag);
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
@@ -104,7 +104,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", false);
         card2.id = 7L;
-        Tag tag = new Tag("Test Tag", 1);
+        Tag tag = new Tag("Test Tag");
         card2.tags.add(tag);
         assertNotEquals(card, card2);
         assertNotEquals(card.tags, card2.tags);

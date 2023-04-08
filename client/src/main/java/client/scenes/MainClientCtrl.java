@@ -3,6 +3,7 @@ package client.scenes;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -134,5 +135,12 @@ public class MainClientCtrl {
         editBoardCtrl.setFields(board);
         primaryStage.setScene(editBoard);
         editBoardCtrl.setBoard(board);
+    }
+
+    public void showEditTag(Tag tag, Board board) {
+        primaryStage.setTitle("Edit Tag");
+        editTagCtrl.setFields(tag);
+        primaryStage.setScene(editTag);
+        editTagCtrl.setBoard(board);
     }
 }

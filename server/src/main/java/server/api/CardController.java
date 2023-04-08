@@ -35,7 +35,7 @@ public class CardController {
     ) {
         Card ret = cardService.getCard(cardId);
         if(ret==null){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(ret);
@@ -70,6 +70,7 @@ public class CardController {
     public ResponseEntity<Card> deleteCard(
             @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
     ) {
+        if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);

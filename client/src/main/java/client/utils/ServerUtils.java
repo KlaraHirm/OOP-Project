@@ -2,6 +2,7 @@ package client.utils;
 
 import client.socket.ClientSocket;
 import client.socket.StompSessionHandler;
+import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -14,6 +15,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Singleton;
 import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Service
+@Singleton
 public class ServerUtils {
 
     private static String serverURL = "http://localhost:8080/";
@@ -235,6 +238,8 @@ public class ServerUtils {
      * @param id
      */
     public void subscribe(long id) {
+        //stompSessionHandler=new StompSessionHandler(this);
+
         stompSessionHandler.subscribe(id);
     }
 }

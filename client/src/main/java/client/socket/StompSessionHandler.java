@@ -5,15 +5,18 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.application.Platform;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSession.Subscription;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+//@Service
 public class StompSessionHandler extends StompSessionHandlerAdapter {
 
     private ServerUtils serverUtils;
@@ -36,14 +39,18 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      * @param session the client STOMP session
      * @param headers the STOMP CONNECTED frame headers
      */
+    @Override
     public void afterConnected(StompSession session, StompHeaders headers) {
+        System.out.println("this is the afterConnected method running");
         serverUtils.passSession(session);
         serverUtils.passStompSessionHandler(this);
         this.session = session;
+        System.out.println("this is the afterConnected method still running");
     }
 
 
     public void subscribe(long id) {
+
         for (Subscription sub : subscriptionList) sub.unsubscribe();
         subscribeToEditBoard(id);
         subscribeToDeleteBoard(id);

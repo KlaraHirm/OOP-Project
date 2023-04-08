@@ -73,11 +73,11 @@ public class MainClientCtrl {
         this.editBoard = new Scene(editBoard.getValue());
 
         showServer();
-
         primaryStage.show();
-        overviewCtrl.refresh();
 
+        overviewCtrl.refresh();
         serverUtils.socketInit();
+
     }
 
     /**

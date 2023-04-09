@@ -18,6 +18,7 @@ class BoardTest
     {
         board = new Board("Test Board");
         board.cardLists = new ArrayList<>();
+        board.tags = new ArrayList<>();
         board.id = 7L;
     }
 
@@ -29,6 +30,7 @@ class BoardTest
     {
         assertEquals("Test Board", board.title);
         assertEquals(0, board.cardLists.size());
+        assertEquals(0, board.tags.size());
     }
 
     /**
@@ -39,6 +41,7 @@ class BoardTest
     {
         Board board2 = new Board("Test Board");
         board2.cardLists = new ArrayList<>();
+        board2.tags = new ArrayList<>();
         board2.id = 7L;
         assertEquals(board, board2);
         assertEquals(board.hashCode(), board2.hashCode());
@@ -52,6 +55,7 @@ class BoardTest
     {
         Board board2 = new Board("Test Board");
         board2.cardLists = new ArrayList<>();
+        board2.tags = new ArrayList<>();
         board2.id = 8L;
         assertNotEquals(board, board2);
         assertNotEquals(board.hashCode(), board2.hashCode());
@@ -65,6 +69,7 @@ class BoardTest
     {
         Board board2 = new Board("Test Board 2");
         board2.cardLists = new ArrayList<>();
+        board2.tags = new ArrayList<>();
         board2.id = 7L;
         assertNotEquals(board, board2);
         assertNotEquals(board.hashCode(), board2.hashCode());
@@ -78,6 +83,20 @@ class BoardTest
     {
         Board board2 = new Board("Test Board");
         board2.cardLists = new ArrayList<>(List.of(new CardList("Test List 1"), new CardList("Test List 2")));
+        board2.tags = new ArrayList<>();
+        board2.id = 7L;
+        assertNotEquals(board, board2);
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    /**
+     * Test that the Board Equals method returns false and the hashcodes differ when different Tag lists
+     */
+    @Test
+    public void testNotEqualsTags()
+    {
+        Board board2 = new Board("Test Board");
+        board2.tags = new ArrayList<>(List.of(new Tag("Test Tag 1"), new Tag("Test Tag 2")));
         board2.id = 7L;
         assertNotEquals(board, board2);
         assertNotEquals(board.hashCode(), board2.hashCode());
@@ -93,5 +112,6 @@ class BoardTest
         assertTrue(actual.contains("id=7"));
         assertTrue(actual.contains("title=Test Board"));
         assertTrue(actual.contains("cardLists=[]"));
+        assertTrue(actual.contains("tags=[]"));
     }
 }

@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
@@ -45,10 +46,9 @@ public class EditCardCtrl {
     private Board board;
 
     /**
-     * \
+     * Sets EditCardCtrl
      * @param server
      * @param mainCtrl
-     * Sets EditCardCtrl
      */
     @Inject
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {

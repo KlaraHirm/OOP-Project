@@ -61,6 +61,13 @@ public class BoardCtrl {
     }
 
     /**
+     * used as onAction to leave board
+     */
+    public void leaveBoard() {
+        pageCtrl.leaveBoard(board_object, board_container);
+    }
+
+    /**
      * used as onAction to add new list
      * @throws IOException
      */

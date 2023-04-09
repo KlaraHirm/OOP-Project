@@ -291,18 +291,12 @@ public class CardCtrl {
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                firstIndex = 1;
-            }
-            if (listElement.getChildren().get(indexCard) instanceof VBox) {
-                if (card.localToScene(card.getBoundsInLocal())
-                        .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                    if(firstIndex==-1){
-                        firstIndex = indexCard+1;
-                    }
-                    else {
-                        listElement.getChildren().add(indexCard, card);
-                        break;
-                    }
+                if(firstIndex==-1){
+                    firstIndex = indexCard;
+                }
+                else {
+                    listElement.getChildren().add(indexCard, card);
+                    break;
                 }
             }
         }

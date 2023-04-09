@@ -276,13 +276,10 @@ public class CardCtrl {
             if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
                 firstIndex = 1;
-//                listElement.getChildren().add(1, card);
-//                break;
             }
             if (listElement.getChildren().get(indexCard) instanceof VBox) {
                 if (card.localToScene(card.getBoundsInLocal())
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-//                    listElement.getChildren().add(indexCard, card);
                     if(firstIndex==-1){
                         firstIndex = indexCard+1;
                     }
@@ -290,7 +287,6 @@ public class CardCtrl {
                         listElement.getChildren().add(indexCard, card);
                         break;
                     }
-//                    break;
                 }
             }
         }

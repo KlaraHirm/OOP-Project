@@ -14,6 +14,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import org.checkerframework.checker.units.qual.A;
 
 public class CardCtrl {
 
@@ -49,6 +50,7 @@ public class CardCtrl {
 
     private double mouseAnchorX;
     private double mouseAnchorY;
+    private boolean dragStarted = false;
 
     /**
      * Setter for boardElement
@@ -142,20 +144,22 @@ public class CardCtrl {
      */
     public void makeDraggable() {
         card.setOnMousePressed(mouseEvent -> {
-            switch(mouseEvent.getClickCount()){
-                case 1:
-                    System.out.println("SINGLE CLICK");
-                    this.mousePressed();
-                    mouseAnchorX = mouseEvent.getSceneX();
-                    mouseAnchorY = mouseEvent.getSceneY();
-                    break;
-                case 2:
-                    System.out.println("DOUBLE CLICK");
-                    pageCtrl.showEditCard(boardObject, listObject, cardObject);
-                    break;
+            if (mouseEvent.getClickCount() == 2) {
+                System.out.println("DOUBLE CLICK");
+                pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                return;
             }
+
+            System.out.println("SINGLE CLICK");
+            this.mousePressed();
+            mouseAnchorX = mouseEvent.getSceneX();
+            mouseAnchorY = mouseEvent.getSceneY();
         });
         card.setOnMouseDragged(mouseEvent -> {
+            dragStarted = true;
+            if(listElement.lookup("#temp") != null){
+                listElement.getChildren().remove(listElement.lookup("#temp"));
+            }
             double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
             double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
             double newX = card.getLayoutX() + deltaX;
@@ -169,23 +173,23 @@ public class CardCtrl {
             this.mouseHighlightStart();
         });
         card.setOnMouseReleased(mouseEvent -> {
-            this.mouseHighlightEnd();
-            for (Node list : boardElement.getChildren()) {
-                if (list instanceof VBox) {
-                    if (card.getBoundsInParent()
-                            .intersects(list.getBoundsInParent())) {
-                        setListElement((VBox) list);
-                        break;
+                this.mouseHighlightEnd();
+                for (Node list : boardElement.getChildren()) {
+                    if (list instanceof VBox) {
+                        if (card.getBoundsInParent()
+                                .intersects(list.getBoundsInParent())) {
+                            setListElement((VBox) list);
+                            break;
+                        }
                     }
                 }
-            }
-            this.cardsIntersect();
-            if (!listElement.getChildren().contains(card)) {
-                listElement.getChildren().add(card);
-            }
-            mouseAnchorX = mouseEvent.getSceneX();
-            mouseAnchorY = mouseEvent.getSceneY();
-            card.setManaged(true);
+                this.cardsIntersect();
+                if (!listElement.getChildren().contains(card)) {
+                    listElement.getChildren().add(card);
+                }
+                mouseAnchorX = mouseEvent.getSceneX();
+                mouseAnchorY = mouseEvent.getSceneY();
+                card.setManaged(true);
         });
     }
 
@@ -196,9 +200,18 @@ public class CardCtrl {
         double x = card.getLayoutX();
         double y = card.getLayoutY();
 
+        int cardIdx = listElement.getChildren().indexOf(card);
         listElement.getChildren().remove(card);
-        boardElement.getChildren().add(card);
         card.setManaged(false);
+        AnchorPane ap = new AnchorPane();
+        ap.setPrefWidth(100);
+        ap.setPrefHeight(100);
+        ap.setManaged(true);
+        ap.setId("temp");
+        if(listElement.lookup("#temp") == null){
+            listElement.getChildren().add(cardIdx, ap);
+        }
+        boardElement.getChildren().add(card);
 
         AnchorPane.setBottomAnchor(card, null);
         AnchorPane.setTopAnchor(card, null);

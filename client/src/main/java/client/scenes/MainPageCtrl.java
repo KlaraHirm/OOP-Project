@@ -442,6 +442,13 @@ public class MainPageCtrl implements Initializable {
         mainCtrl.showServer();
     }
 
+    /**
+     * loads the admin page
+     */
+    public void showAdminPage() {
+        mainCtrl.showAdminPage();
+    }
+
 
     /**
      * removes the currently showing board from list selection and main ui

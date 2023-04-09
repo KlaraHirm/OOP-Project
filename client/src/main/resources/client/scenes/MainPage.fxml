@@ -9,13 +9,14 @@
    <children>
       <AnchorPane prefHeight="70.0" prefWidth="600.0" style="-fx-background-color: f8f9fa;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="connectionLabel" alignment="CENTER" layoutX="531.0" layoutY="48.0" prefHeight="18.0" prefWidth="163.0" text="Disconnected" AnchorPane.rightAnchor="13.0" />
-            <Label alignment="CENTER" layoutY="24.0" maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="600.0" text="Welcome to your digital workspace!" textFill="#2274a5" wrapText="true" AnchorPane.leftAnchor="0.0">
+            <Label fx:id="connectionLabel" alignment="CENTER" layoutX="531.0" layoutY="48.0" prefHeight="18.0" prefWidth="133.0" text="Disconnected" AnchorPane.rightAnchor="13.0" />
+            <Label alignment="CENTER" layoutY="24.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="436.0" text="Welcome to your digital workspace!" textFill="#2274a5" wrapText="true" AnchorPane.leftAnchor="0.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="disconnectButton" layoutX="519.0" layoutY="22.0" mnemonicParsing="false" onAction="#changeServerConnection" prefHeight="24.0" prefWidth="163.0" text="Disconnect" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="disconnectButton" layoutX="519.0" layoutY="22.0" mnemonicParsing="false" onAction="#changeServerConnection" prefHeight="26.0" prefWidth="133.0" text="Disconnect" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="adminPageButton" layoutX="440.0" layoutY="22.0" mnemonicParsing="false" onAction="#showAdminPage" prefHeight="26.0" prefWidth="104.0" text="Admin page" AnchorPane.rightAnchor="156.0" />
          </children>
       </AnchorPane>
       <ComboBox fx:id="boardsList" layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">

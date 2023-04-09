@@ -263,25 +263,19 @@ public class ServerUtils {
     }
 
     /**
-     * connect to server as an admin
-     * @param URL server url
+     * check if the admin password is correct
      * @param password The password for the admin page
-     * @return true if succesfully connected, false otherwise
+     * @return true if successfully checked, false otherwise
      */
-    public boolean connectAdmin(String URL, String password){
-        connected = false;
-        try {
-            serverURL = URL;
-            Response response = ClientBuilder.newClient(new ClientConfig())
-                    .target(URL)
+    public boolean checkPassword(String password){
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(serverURL)
                     .path("api/admin/check")
                     .queryParam("password", password) //
                     .request(APPLICATION_JSON)
                     .accept(APPLICATION_JSON)
                     .get();
-            connected = response.getStatus() == 200;
-        } catch (Exception e) {}
-        return connected;
+        return response.getStatus() == 200;
     }
 
     /**

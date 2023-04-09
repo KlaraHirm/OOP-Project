@@ -4,10 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Card
@@ -35,9 +34,15 @@ public class Card
     public String description;
 
     /**
-     * Wether the card is checked/done
+     * Whether the card is checked/done
      */
     public boolean done;
+
+    /**
+     * List of Tags in the Card
+     */
+    @ManyToMany(cascade = CascadeType.ALL)
+    public List<Tag> tags;
 
     /**
      * Empty constructor for object mappers
@@ -59,6 +64,7 @@ public class Card
         this.place = place;
         this.description = description;
         this.done = done;
+        this.tags = new ArrayList<>();
     }
 
     /**
@@ -90,6 +96,7 @@ public class Card
                 .append(id, card.id)
                 .append(title, card.title)
                 .append(description, card.description)
+                .append(tags, card.tags)
                 .append(done, card.done)
                 .isEquals();
     }
@@ -106,6 +113,7 @@ public class Card
                 .append(title)
                 .append(description)
                 .append(done)
+                .append(tags)
                 .toHashCode();
     }
 
@@ -121,6 +129,7 @@ public class Card
                 .append("title", title)
                 .append("place", place)
                 .append("description", description)
+                .append("tags", tags)
                 .append("done", done)
                 .toString();
     }

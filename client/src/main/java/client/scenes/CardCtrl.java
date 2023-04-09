@@ -147,7 +147,6 @@ public class CardCtrl {
      */
     public void makeDraggable() {
         card.setOnMousePressed(mouseEvent -> {
-<<<<<<< HEAD
             if (mouseEvent.getClickCount() == 2) {
                 System.out.println("DOUBLE CLICK");
                 pageCtrl.showEditCard(boardObject, listObject, cardObject);
@@ -155,9 +154,7 @@ public class CardCtrl {
             }
 
             System.out.println("SINGLE CLICK");
-=======
             setOriginalListObject(listObject);
->>>>>>> main
             this.mousePressed();
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
@@ -294,7 +291,6 @@ public class CardCtrl {
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-<<<<<<< HEAD
                 firstIndex = 1;
             }
             if (listElement.getChildren().get(indexCard) instanceof VBox) {
@@ -319,13 +315,6 @@ public class CardCtrl {
             }
         }
         boardElement.getChildren().remove(card);
-=======
-                listElement.getChildren().add(indexCard+1, card);
-                pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
-                break;
-            }
-        }
->>>>>>> main
     }
 
     /**

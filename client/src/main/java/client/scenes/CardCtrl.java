@@ -223,11 +223,21 @@ public class CardCtrl {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.WHITE,
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(list.lookup("#list_container") != null) {
+                        ((VBox) list.lookup("#list_container")).setBackground(new Background(
+                                new BackgroundFill(Color.WHITE,
+                                        CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
                     intersectionFound = true;
                 } else {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.web("#eff6fa"),
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(list.lookup("#list_container") != null) {
+                        ((VBox) list.lookup("#list_container")).setBackground(new Background(
+                                new BackgroundFill(Color.web("#eff6fa"),
+                                        CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
                 }
             }
         }
@@ -246,6 +256,11 @@ public class CardCtrl {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.web("#eff6fa"),
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(list.lookup("#list_container") != null) {
+                        ((VBox) list.lookup("#list_container")).setBackground(new Background(
+                                new BackgroundFill(Color.web("#eff6fa"),
+                                        CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
                 }
             }
         }

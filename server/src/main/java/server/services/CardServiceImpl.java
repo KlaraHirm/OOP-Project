@@ -12,6 +12,8 @@ import server.services.interfaces.database.CardRepository;
 import server.services.interfaces.database.TagRepository;
 import server.services.interfaces.CardService;
 
+import java.util.List;
+
 @Service
 public class CardServiceImpl implements CardService {
 
@@ -49,7 +51,7 @@ public class CardServiceImpl implements CardService {
     }
 
     /**
-     * Update a certain card
+     * Update a certain card + attach Tags
      * @param card the card object to edit, with the corresponding id
      * @return the edited card
      * Gives null if the card does not exist
@@ -58,9 +60,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public Card editCard(Card card) {
         if (card == null) return null;
-
         if (!cardRepo.existsById(card.id)) return null;
-
         return cardRepo.save(card);
     }
 
@@ -90,25 +90,5 @@ public class CardServiceImpl implements CardService {
         cardRepo.deleteById(cardId);
 
         return deleted;
-    }
-
-    /**
-     * Attach an existing Tag to a Card
-     * @param cardId - the Card where to add the Tag
-     * @param tagId - the Tag to be added
-     * @return - the Card with added Tag
-     * Returns null if the card or tag do not exist
-     */
-    @Override
-    public Tag attachTag(long cardId, long tagId) {
-        if (tagId < 0) return null;
-        if (!tagRepo.existsById(tagId)) return null;
-        if (cardId < 0) return null;
-        if (!cardRepo.existsById(cardId)) return null;
-        Tag tag = tagRepo.findById(tagId).get();
-        Card card = cardRepo.findById(cardId).get();
-        card.tags.add(tag);
-        cardRepo.save(card);
-        return tag;
     }
 }

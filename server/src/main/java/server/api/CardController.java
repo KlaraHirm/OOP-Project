@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import server.services.CardServiceImpl;
 import server.services.TagServiceImpl;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/card")
 public class CardController {
@@ -41,9 +43,7 @@ public class CardController {
      * Gives 400 if the body is malformed
      */
     @PutMapping("")
-    public ResponseEntity<Card>  editCard(
-            @RequestBody Card newCard
-    ) {
+    public ResponseEntity<Card> editCard(@RequestBody Card newCard) {
         if (newCard == null) return ResponseEntity.badRequest().build();
         Card ret = cardService.editCard(newCard);
         if (ret == null) return ResponseEntity.notFound().build();
@@ -66,21 +66,5 @@ public class CardController {
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
-    }
-
-    /**
-     * Attach an existing Tag to a Card
-     * @param cardId - the Card where to add the Tag
-     * @param tagId - the Tag to be added
-     * @return - the Card with added Tag
-     * Returns 404 if the card or tag do not exist
-     */
-    @PostMapping
-    public ResponseEntity<Card> attachTag(@PathVariable("id") long cardId, @PathVariable("id") long tagId) {
-        Card card = cardService.getCard(cardId);
-        Tag tag = cardService.attachTag(cardId, tagId);
-        if (tag == null) return ResponseEntity.notFound().build();
-        if (card == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(card);
     }
 }

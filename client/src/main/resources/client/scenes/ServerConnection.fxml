@@ -8,9 +8,9 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #f8f9fa; -fx-padding: 10; -fx-border-color: #CAE2F0; -fx-border-image-width: 10px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerConnectionCtrl">
    <children>
 
-      <TextField fx:id="server_address_field" layoutX="129.0" layoutY="38.0" style="-fx-background-color: #CAE2F0;" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="22.0" />
+      <TextField fx:id="serverAddressField" layoutX="129.0" layoutY="38.0" style="-fx-background-color: #CAE2F0;" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="22.0" />
       <Label layoutX="22.0" layoutY="42.0" text="Server Address:" textFill="#2274a5" wrapText="true" />
-      <Label fx:id="status_label" layoutX="173.0" layoutY="110.0" AnchorPane.rightAnchor="46.0" />
+      <Label fx:id="statusLabel" layoutX="173.0" layoutY="110.0" AnchorPane.rightAnchor="46.0" />
 
       <Button layoutX="168.0" layoutY="85.0" mnemonicParsing="false" onAction="#connectServer" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #CAE2F0; -fx-text-fill: #2274a5;" text="Connect" textAlignment="CENTER" AnchorPane.rightAnchor="32.0">
             <cursor>

@@ -30,12 +30,12 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="0.0" prefWidth="7.0">
                <children>
-                  <Button fx:id="delete_card" alignment="CENTER" mnemonicParsing="false" onAction="#deleteCard" style="-fx-background-color: transparent; -fx-border-color: a32222; -fx-border-radius: 50%;" text="x" textAlignment="CENTER" textFill="#a32222">
+                  <Button fx:id="deleteCard" alignment="CENTER" mnemonicParsing="false" onAction="#deleteCard" style="-fx-background-color: transparent; -fx-border-color: a32222; -fx-border-radius: 50%;" text="x" textAlignment="CENTER" textFill="#a32222">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="edit_card" alignment="CENTER" mnemonicParsing="false" onAction="#showEdit" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 30%;" text="⋮" textAlignment="CENTER" textFill="#2274a5">
+                  <Button fx:id="editCard" alignment="CENTER" mnemonicParsing="false" onAction="#showEdit" style="-fx-background-color: transparent; -fx-border-color: #2274A5; -fx-border-radius: 30%;" text="⋮" textAlignment="CENTER" textFill="#2274a5">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

@@ -50,7 +50,6 @@ public class CardCtrl {
 
     private double mouseAnchorX;
     private double mouseAnchorY;
-    private boolean dragStarted = false;
 
     /**
      * Setter for boardElement
@@ -156,10 +155,6 @@ public class CardCtrl {
             mouseAnchorY = mouseEvent.getSceneY();
         });
         card.setOnMouseDragged(mouseEvent -> {
-            dragStarted = true;
-            if(listElement.lookup("#temp") != null){
-                listElement.getChildren().remove(listElement.lookup("#temp"));
-            }
             double deltaX = mouseEvent.getSceneX() - mouseAnchorX;
             double deltaY = mouseEvent.getSceneY() - mouseAnchorY;
             double newX = card.getLayoutX() + deltaX;
@@ -200,17 +195,8 @@ public class CardCtrl {
         double x = card.getLayoutX();
         double y = card.getLayoutY();
 
-        int cardIdx = listElement.getChildren().indexOf(card);
         listElement.getChildren().remove(card);
         card.setManaged(false);
-        AnchorPane ap = new AnchorPane();
-        ap.setPrefWidth(100);
-        ap.setPrefHeight(100);
-        ap.setManaged(true);
-        ap.setId("temp");
-        if(listElement.lookup("#temp") == null){
-            listElement.getChildren().add(cardIdx, ap);
-        }
         boardElement.getChildren().add(card);
 
         AnchorPane.setBottomAnchor(card, null);

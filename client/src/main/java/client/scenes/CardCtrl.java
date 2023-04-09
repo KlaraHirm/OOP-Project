@@ -268,21 +268,38 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
+        int firstIndex = -1;
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
             // Point testMouse = MouseInfo.getPointerInfo().getLocation();
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (indexCard == 0 && card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                listElement.getChildren().add(1, card);
-                break;
+                firstIndex = 1;
+//                listElement.getChildren().add(1, card);
+//                break;
             }
             if (listElement.getChildren().get(indexCard) instanceof VBox) {
                 if (card.localToScene(card.getBoundsInLocal())
                         .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                    listElement.getChildren().add(indexCard, card);
-                    break;
+//                    listElement.getChildren().add(indexCard, card);
+                    if(firstIndex==-1){
+                        firstIndex = indexCard+1;
+                    }
+                    else {
+                        listElement.getChildren().add(indexCard, card);
+                        break;
+                    }
+//                    break;
                 }
+            }
+        }
+        if(!listElement.getChildren().contains(card)) {
+            if(firstIndex==-1) {
+                listElement.getChildren().add(card);
+            }
+            else {
+                listElement.getChildren().add(firstIndex, card);
             }
         }
         boardElement.getChildren().remove(card);

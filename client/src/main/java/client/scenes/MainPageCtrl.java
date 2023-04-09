@@ -445,6 +445,12 @@ public class MainPageCtrl implements Initializable {
         mainCtrl.showEditTag(tag, board);
     }
 
+    public void newTag() {
+        Tag tag = new Tag("Untitled");
+//        tag = server.addTag(board, tag);
+        refresh();
+    }
+
     /**
      * loads the server connection management UI
      */

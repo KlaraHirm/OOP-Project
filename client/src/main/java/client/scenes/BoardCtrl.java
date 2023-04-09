@@ -15,20 +15,20 @@ public class BoardCtrl {
     private HBox board;
 
     @FXML
-    private AnchorPane board_container;
+    private AnchorPane boardContainer;
 
     @FXML
-    private Label board_title;
+    private Label boardTitle;
 
     @FXML
-    private Button delete_board;
+    private Button deleteBoard;
 
     @FXML
-    private Button new_list;
+    private Button newList;
 
     private MainPageCtrl pageCtrl;
 
-    private Board board_object;
+    private Board boardObject;
 
     /**
      * Setter for MainPageCtrl pageCtrl
@@ -39,32 +39,32 @@ public class BoardCtrl {
     }
 
     /**
-     * Setter for Board board_object
-     * @param board_object object of class Board which this controller represents
+     * Setter for Board boardObject
+     * @param boardObject object of class Board which this controller represents
      */
-    public void setBoard_object(Board board_object) {
-        this.board_object = board_object;
+    public void setBoardObject(Board boardObject) {
+        this.boardObject = boardObject;
     }
 
     /**
      * set title which is shown in ui of board to its title with id in brackets
      */
     public void setTitle() {
-        board_title.setText(board_object.title + " (" + board_object.id + ")");
+        boardTitle.setText(boardObject.title + " (" + boardObject.id + ")");
     }
 
     /**
      * used as onAction to delete board
      */
     public void deleteBoard() {
-        pageCtrl.deleteBoard(board_object, board_container);
+        pageCtrl.deleteBoard(boardObject, boardContainer);
     }
 
     /**
      * used as onAction to leave board
      */
     public void leaveBoard() {
-        pageCtrl.leaveBoard(board_object, board_container);
+        pageCtrl.leaveBoard(boardObject, boardContainer);
     }
 
     /**
@@ -72,13 +72,13 @@ public class BoardCtrl {
      * @throws IOException
      */
     public void addNewList() throws IOException {
-        pageCtrl.newList(board_object, board);
+        pageCtrl.newList(boardObject, board);
     }
 
     /**
      * used as onAction to show the page to edit the board
      */
     public void showEdit() {
-        pageCtrl.showEditBoard(board_object);
+        pageCtrl.showEditBoard(boardObject);
     }
 }

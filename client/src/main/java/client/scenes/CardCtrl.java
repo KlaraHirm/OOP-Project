@@ -82,7 +82,7 @@ public class CardCtrl {
     }
 
     /**
-     * setter for original_lis_element which is used in drag and drop to represent the origin of drag
+     * setter for originalListElement which is used in drag and drop to represent the origin of drag
      * @param originalListObject object of class CardList
      */
     public void setOriginalListObject(CardList originalListObject) {
@@ -169,7 +169,7 @@ public class CardCtrl {
                 if (list instanceof VBox) {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
-                        setListElement((VBox) list.lookup("#list_container"));
+                        setListElement((VBox) list.lookup("#listContainer"));
                         setListObject(boardObject.cardLists.get(i));
                         foundList = true;
                         break;
@@ -205,7 +205,7 @@ public class CardCtrl {
         AnchorPane.setLeftAnchor(card, null);
         AnchorPane.setRightAnchor(card, null);
 
-        ScrollPane listScrollPane = (ScrollPane)boardElement.lookup("#scroll_pane_" + listObject.id);
+        ScrollPane listScrollPane = (ScrollPane)boardElement.lookup("#scrollPane_" + listObject.id);
         VBox listParent = (VBox)listScrollPane.getParent();
         card.setLayoutX(listParent.getLayoutX() + x);
         card.setLayoutY(listParent.getLayoutY() + y + listScrollPane.getLayoutY());

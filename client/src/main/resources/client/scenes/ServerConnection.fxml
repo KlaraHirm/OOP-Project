@@ -5,18 +5,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #f8f9fa; -fx-padding: 10; -fx-border-color: #CAE2F0; -fx-border-image-width: 10px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerConnectionCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="300.0" style="-fx-background-color: #f8f9fa; -fx-padding: 10; -fx-border-color: #CAE2F0; -fx-border-image-width: 10px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerConnectionCtrl">
    <children>
+      <Label fx:id="adminLabel" layoutX="212.0" layoutY="5.0" onMouseClicked="#toggleAdminPage" text="Admin login" textFill="#2274a5" underline="true" wrapText="true" AnchorPane.rightAnchor="22.0">
+         <cursor>
+            <Cursor fx:constant="CLOSED_HAND" />
+         </cursor>
+      </Label>
 
+      <Label fx:id="serverAddressLabel" layoutX="22.0" layoutY="42.0" text="Server Address:" textFill="#2274a5" wrapText="true" />
       <TextField fx:id="serverAddressField" layoutX="129.0" layoutY="38.0" style="-fx-background-color: #CAE2F0;" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="22.0" />
-      <Label layoutX="22.0" layoutY="42.0" text="Server Address:" textFill="#2274a5" wrapText="true" />
-      <Label fx:id="statusLabel" layoutX="173.0" layoutY="110.0" AnchorPane.rightAnchor="46.0" />
+      <Label fx:id="passwordLabel" layoutX="22.0" layoutY="76.0" text="Password:" textFill="#2274a5" visible="false" wrapText="true" />
+      <PasswordField fx:id="passwordField" layoutX="129.0" layoutY="72.0" style="-fx-background-color: #CAE2F0;" visible="false" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="22.0" />
 
-      <Button layoutX="168.0" layoutY="85.0" mnemonicParsing="false" onAction="#connectServer" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #CAE2F0; -fx-text-fill: #2274a5;" text="Connect" textAlignment="CENTER" AnchorPane.rightAnchor="32.0">
-            <cursor>
+      <Button layoutX="24.0" layoutY="115.0" mnemonicParsing="false" onAction="#connectServer" prefHeight="26.0" prefWidth="269.0" style="-fx-background-color: #CAE2F0; -fx-text-fill: #2274a5;" text="Connect" textAlignment="CENTER" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0">
+         <cursor>
             <Cursor fx:constant="HAND" />
-            </cursor>
+         </cursor>
       </Button>
+      <Label fx:id="statusLabel" contentDisplay="CENTER" layoutX="180.0" layoutY="147.0" prefHeight="18.0" prefWidth="186.0" textAlignment="CENTER" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" />
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

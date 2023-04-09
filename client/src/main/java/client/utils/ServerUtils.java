@@ -251,7 +251,34 @@ public class ServerUtils {
         connected = false;
         try {
             serverURL = URL;
-            Response response = ClientBuilder.newClient(new ClientConfig()).target(URL).path("api/board").request(APPLICATION_JSON).accept(APPLICATION_JSON).get();
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(URL)
+                    .path("api/board")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+            connected = response.getStatus() == 200;
+        } catch (Exception e) {}
+        return connected;
+    }
+
+    /**
+     * connect to server as an admin
+     * @param URL server url
+     * @param password The password for the admin page
+     * @return true if succesfully connected, false otherwise
+     */
+    public boolean connectAdmin(String URL, String password){
+        connected = false;
+        try {
+            serverURL = URL;
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(URL)
+                    .path("api/admin/check")
+                    .queryParam("password", password) //
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
             connected = response.getStatus() == 200;
         } catch (Exception e) {}
         return connected;

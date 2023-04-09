@@ -33,21 +33,8 @@ public class ServerConnectionCtrl {
     private TextField serverAddressField;
 
     @FXML
-    public Label serverAddressLabel;
-
-    @FXML
-    private TextField passwordField;
-
-    @FXML
-    private Label passwordLabel;
-
-    @FXML
-    private Label adminLabel;
-
-    @FXML
     private Label statusLabel;
 
-    private boolean adminPageShown = false;
 
     /**
      * constructor
@@ -66,28 +53,16 @@ public class ServerConnectionCtrl {
      */
     public void connectServer() {
         String serverAddress = serverAddressField.getText();
-        String password = passwordField.getText();
         statusLabel.setText("Connecting...");
-
-        if (adminPageShown) {
-            boolean success = server.connectAdmin(serverAddress, password);
-            statusLabel.setText(success ? "Connected!" : "Connection failed");
-            mainCtrl.resetOverview();
-            mainCtrl.refreshOverview();
-            if (success) {
-                System.out.println("Success");
-            }
-        } else {
-            boolean success = server.connect(serverAddress);
-            statusLabel.setText(success ? "Connected!" : "Connection failed");
-            mainCtrl.resetOverview();
-            mainCtrl.refreshOverview();
-            if (success) {
-                try {
-                    mainCtrl.showOverview(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        boolean success = server.connect(serverAddress);
+        statusLabel.setText(success ? "Connected!" : "Connection failed");
+        mainCtrl.resetOverview();
+        mainCtrl.refreshOverview();
+        if(success) {
+            try {
+                mainCtrl.showOverview(null);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         //will then go to main page onAction
@@ -98,15 +73,5 @@ public class ServerConnectionCtrl {
      */
     public void setUIValues() {
         serverAddressField.setText(server.getServerURL());
-    }
-
-    /**
-     * changes between admin page connect (with password) and user page connect
-     */
-    public void toggleAdminPage() {
-        adminPageShown = !adminPageShown;
-        passwordField.setVisible(adminPageShown);
-        passwordLabel.setVisible(adminPageShown);
-        adminLabel.setText(adminPageShown ? "User login" : "Admin login");
     }
 }

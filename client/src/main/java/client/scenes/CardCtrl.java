@@ -3,7 +3,6 @@ package client.scenes;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -11,14 +10,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-=======
 import javafx.scene.control.*;
->>>>>>> main
+
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import org.checkerframework.checker.units.qual.A;
 
 public class CardCtrl {
 

@@ -33,8 +33,6 @@ import java.util.Scanner;
 @RequestMapping("/api/admin")
 public class AdminController
 {
-    @Autowired
-    BoardServiceImpl boardService;
 
     /**
      * Checks if the password is correct

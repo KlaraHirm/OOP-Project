@@ -86,4 +86,8 @@ public class CardServiceImpl implements CardService {
 
         return deleted;
     }
+
+    public boolean cardExists(long cardId) {
+        return cardRepo.existsById(cardId) && cardId >= 0;
+    }
 }

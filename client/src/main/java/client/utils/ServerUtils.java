@@ -251,10 +251,31 @@ public class ServerUtils {
         connected = false;
         try {
             serverURL = URL;
-            Response response = ClientBuilder.newClient(new ClientConfig()).target(URL).path("api/board").request(APPLICATION_JSON).accept(APPLICATION_JSON).get();
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(URL)
+                    .path("api/board")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
             connected = response.getStatus() == 200;
         } catch (Exception e) {}
         return connected;
+    }
+
+    /**
+     * check if the admin password is correct
+     * @param password The password for the admin page
+     * @return true if successfully checked, false otherwise
+     */
+    public boolean checkPassword(String password){
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(serverURL)
+                    .path("api/admin/check")
+                    .queryParam("password", password) //
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+        return response.getStatus() == 200;
     }
 
     /**

@@ -32,13 +32,17 @@ public class MainClientCtrl {
     private EditBoardCtrl editBoardCtrl;
     private Scene editBoard;
 
+    private AdminCtrl adminCtrl;
+    private Scene admin;
+
 
     public void initialize(Stage primaryStage,
                            Pair<MainPageCtrl, Parent> overview,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<EditListCtrl, Parent> editList,
                            Pair<EditBoardCtrl, Parent> editBoard,
-                           Pair<ServerConnectionCtrl, Parent> serverConnection
+                           Pair<ServerConnectionCtrl, Parent> serverConnection,
+                           Pair<AdminCtrl, Parent> admin
     ) throws IOException {
 
         this.primaryStage = primaryStage;
@@ -57,6 +61,9 @@ public class MainClientCtrl {
 
         this.editBoardCtrl = editBoard.getKey();
         this.editBoard = new Scene(editBoard.getValue());
+
+        this.adminCtrl = admin.getKey();
+        this.admin = new Scene(admin.getValue());
 
         showServer();
 
@@ -104,6 +111,15 @@ public class MainClientCtrl {
         primaryStage.setScene(editCard);
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
+    }
+
+    /**
+     * Shows the admin page
+     */
+    public void showAdminPage() {
+        primaryStage.setTitle("Admin Page");
+        primaryStage.setScene(admin);
+        adminCtrl.loadContent();
     }
 
     /**

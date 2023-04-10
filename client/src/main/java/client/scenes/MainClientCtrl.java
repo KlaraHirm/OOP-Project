@@ -100,8 +100,8 @@ public class MainClientCtrl {
      */
     public void showEditCard(Card card, Board board) {
         primaryStage.setTitle("Edit Card");
-        editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
+        editCardCtrl.setFields(card);
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
     }

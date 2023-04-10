@@ -5,7 +5,6 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
-import commons.CardList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
@@ -73,10 +72,14 @@ public class EditCardCtrl implements Initializable {
         // start thread to check if task still exists
         Thread pollingThread = new Thread(() -> {
             while (cardExists) {
+
                 if (!checkCardExists()) {
                     Platform.runLater(() -> {
-                        // task has been deleted, return to overview
-                        // for example, call a method in your main application to switch views
+                        try {
+                            mainCtrl.showOverview(board);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
                     cardExists = false;
                 }
@@ -115,6 +118,12 @@ public class EditCardCtrl implements Initializable {
     }
 
     private boolean checkCardExists() {
+        System.out.println(card);
+        if(card==null){
+            return true;
+        }
+
+        System.out.println(server.cardExists(card.id));
         return server.cardExists(card.id);
     }
 

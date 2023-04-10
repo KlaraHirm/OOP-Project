@@ -75,4 +75,17 @@ public class CardController {
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
     }
+
+    @GetMapping("/exists/{id}")
+    public ResponseEntity<Boolean> cardExists(@PathVariable("id") long cardId) {
+        Card ret = cardService.getCard(cardId);
+        if(cardId<0){
+            ResponseEntity.badRequest().build();
+        }
+        if(ret==null){
+            return ResponseEntity.ok(false);
+        }
+
+        return ResponseEntity.ok(true);
+    }
 }

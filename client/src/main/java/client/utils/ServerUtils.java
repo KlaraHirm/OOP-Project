@@ -151,12 +151,11 @@ public class ServerUtils {
      * @return true if card exists, false otherwise
      */
     public boolean cardExists(long cardId) {
-        Response cardResponse =  ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/card/"+cardId) //
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/card/exists/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get();
-        return cardResponse.getEntity() != null;
+                .get(new GenericType<Boolean>() {});
     }
 
     /**

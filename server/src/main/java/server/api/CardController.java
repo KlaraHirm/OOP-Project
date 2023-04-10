@@ -75,23 +75,4 @@ public class CardController {
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
     }
-
-    /**
-     * Method used to check if card exists
-     * @param cardId id of a card
-     * @return true if card exists, false is it doesn't
-     * Return 400 is cardId<0
-     */
-    @GetMapping("/exists/{id}")
-    public ResponseEntity<Boolean> cardExists(@PathVariable("id") long cardId) {
-        Card ret = cardService.getCard(cardId);
-        if(cardId<0){
-            ResponseEntity.badRequest().build();
-        }
-        if(ret==null){
-            return ResponseEntity.ok(false);
-        }
-
-        return ResponseEntity.ok(true);
-    }
 }

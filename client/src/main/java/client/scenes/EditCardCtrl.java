@@ -25,7 +25,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-public class EditCardCtrl implements Initializable {
+public class EditCardCtrl {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
@@ -44,8 +44,6 @@ public class EditCardCtrl implements Initializable {
     @FXML
     private TextArea bodyField;
 
-    private boolean cardExists = true;
-
     private Card card;
 
     private Board board;
@@ -59,37 +57,6 @@ public class EditCardCtrl implements Initializable {
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-    }
-
-    /**
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // start thread to check if card still exists
-        Thread pollingThread = new Thread(() -> {
-            while (cardExists) {
-                if (!checkCardExists()) {
-                    Platform.runLater(() -> {
-                        try {
-                            mainCtrl.showOverview(board); // if card doesn't exist return to overview
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    cardExists = false;
-                }
-                try {
-                    Thread.sleep(5000); // polling interval of 5 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        pollingThread.start();
     }
 
     public void setCard(Card card) {
@@ -114,19 +81,6 @@ public class EditCardCtrl implements Initializable {
 
     public void cancel() throws IOException {
         mainCtrl.showOverview(board);
-    }
-
-    /**
-     * Used during long-polling to check if card still exists
-     * @return true if card exists, false otherwise
-     */
-    private boolean checkCardExists() {
-        System.out.println(card);
-        if(card==null){
-            return true;
-        }
-        System.out.println(server.cardExists(card.id));
-        return server.cardExists(card.id);
     }
 
 

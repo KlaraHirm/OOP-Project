@@ -146,19 +146,6 @@ public class ServerUtils {
     }
 
     /**
-     * used to check if card exists
-     * @param cardId id of card which we want to get
-     * @return true if card exists, false otherwise
-     */
-    public boolean cardExists(long cardId) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/card/exists/"+cardId) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<Boolean>() {});
-    }
-
-    /**
      * add newly created card to db
      * @param list object of class CardList where the card is
      * @param card newly create object of class Card which is to be added to the db

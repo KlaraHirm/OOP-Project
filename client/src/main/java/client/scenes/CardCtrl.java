@@ -296,16 +296,15 @@ public class CardCtrl {
                 }
                 else {
                     listElement.getChildren().add(indexCard, card);
+                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
                     break;
                 }
             }
         }
         if(!listElement.getChildren().contains(card)) {
-            if(firstIndex==-1) {
-                listElement.getChildren().add(card);
-            }
-            else {
+            if(firstIndex!=-1) {
                 listElement.getChildren().add(firstIndex, card);
+                pageCtrl.reorderCard(cardObject, originalListObject, listObject, firstIndex);
             }
         }
         boardElement.getChildren().remove(card);

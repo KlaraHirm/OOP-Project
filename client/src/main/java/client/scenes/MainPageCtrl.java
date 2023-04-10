@@ -29,7 +29,6 @@ import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import org.springframework.stereotype.Service;
 
-@Service
 public class MainPageCtrl implements Initializable {
 
     private final ServerUtils server;

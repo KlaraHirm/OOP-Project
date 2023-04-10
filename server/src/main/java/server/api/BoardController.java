@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
 import commons.*;
@@ -32,7 +32,7 @@ public class BoardController
     @Autowired
     BoardServiceImpl boardService;
     @Autowired
-    private SimpMessagingTemplate messageTemplate;
+    SimpMessageSendingOperations messageTemplate;
 
     String update = "updates";
 

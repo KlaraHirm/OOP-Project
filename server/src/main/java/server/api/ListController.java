@@ -3,7 +3,7 @@ import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardListServiceImpl;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ListController {
     @Autowired
     CardListServiceImpl listService;
     @Autowired
-    private SimpMessagingTemplate messageTemplate;
+    SimpMessageSendingOperations messageTemplate;
 
     String update = "updates";
 

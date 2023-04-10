@@ -3,7 +3,7 @@ package server.api;
 import commons.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardServiceImpl;
 
@@ -14,7 +14,7 @@ public class CardController {
     @Autowired
     CardServiceImpl cardService;
     @Autowired
-    private SimpMessagingTemplate messageTemplate;
+    SimpMessageSendingOperations messageTemplate;
 
 
     String update = "updates";

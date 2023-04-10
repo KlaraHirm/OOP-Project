@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import server.api.BoardController;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
+import server.services.AdminServiceImpl;
 import server.services.BoardServiceImpl;
 
 import java.io.FileWriter;
@@ -30,10 +31,15 @@ class AdminControllerTest
 
     private AdminController sut;
 
+    @Mock
+    private AdminServiceImpl service;
+
     @BeforeEach
     public void setup()
     {
+        service = new AdminServiceImpl();
         sut = new AdminController();
+        sut.adminService = service;
     }
 
     /**

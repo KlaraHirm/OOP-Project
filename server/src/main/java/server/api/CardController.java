@@ -26,6 +26,7 @@ public class CardController {
     @Autowired
     private SimpMessagingTemplate messageTemplate;
 
+    String update = "updates";
 
     /**
      * Get info about a card
@@ -59,7 +60,7 @@ public class CardController {
         Card ret = cardService.editCard(newCard);
         if (ret == null) return ResponseEntity.notFound().build();
 
-        messageTemplate.convertAndSend("/topic/cards", ret);
+        messageTemplate.convertAndSend("/topic/updates", update);
 
         return ResponseEntity.ok(ret);
     }
@@ -79,7 +80,7 @@ public class CardController {
         if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
-        messageTemplate.convertAndSend("/topic/cards", ret);
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 }

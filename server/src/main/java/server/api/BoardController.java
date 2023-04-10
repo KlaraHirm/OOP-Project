@@ -35,6 +35,7 @@ public class BoardController
     @Autowired
     private SimpMessagingTemplate messageTemplate;
 
+    String update = "updates";
 
     /**
      * Retrieve all boards in the database
@@ -87,7 +88,7 @@ public class BoardController
         if (changedBoard == null) return ResponseEntity.badRequest().build();
         Board ret = boardService.editBoard(changedBoard);
         if (ret==null) return ResponseEntity.notFound().build();
-        messageTemplate.convertAndSend("/topic/boards", ret);
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -103,7 +104,7 @@ public class BoardController
         if (ret  == null) {
             return ResponseEntity.badRequest().build();
         }
-        messageTemplate.convertAndSend("/topic/boards", ret);
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -123,7 +124,7 @@ public class BoardController
         if(ret==null) {
             return ResponseEntity.notFound().build();
         }
-        messageTemplate.convertAndSend("/topic/lists", ret);
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -143,7 +144,7 @@ public class BoardController
         if(ret==null){
             return ResponseEntity.badRequest().build();
         }
-        messageTemplate.convertAndSend("/topic/boards", ret);
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 }

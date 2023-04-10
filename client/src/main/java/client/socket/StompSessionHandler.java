@@ -13,6 +13,7 @@ import org.springframework.messaging.simp.stomp.StompSession.Subscription;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
     private StompSession session;
 
     private List<Subscription> subscriptionList;
-
+    @Inject
     private MainPageCtrl pageCtrl;
 
     /**
@@ -51,29 +52,22 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
         //System.out.println("this is the afterConnected method still running");
     }
 
-
+    /**
+     * a subscribe method for any updates
+     * @param id
+     */
+    @Inject
     public void subscribe(long id) {
 
         for (Subscription sub : subscriptionList) sub.unsubscribe();
-        subscribeToBoardUpdates(id);
-        subscribeToListUpdates(id);
-        subscribeToCardUpdates(id);
 
-    }
-
-    /**
-     * a subscribe method for any board updates
-     * @param id
-     */
-    public void subscribeToBoardUpdates(long id) {
-        Subscription boardUpdateSubscription = session.subscribe(
-                "/topic/boards",
+        Subscription updatesSubscription = session.subscribe(
+                "/topic/updates",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
-                        return Board.class;
+                        return String.class;
                     }
-
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
                         Platform.runLater( () -> {
@@ -85,52 +79,6 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
     }
 
 
-    /**
-     * a subscribe method for any list updates
-     * @param id
-     */
-    public void subscribeToListUpdates(long id) {
-        Subscription addListSubscription = session.subscribe(
-                "/topic/lists",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return CardList.class;
-                    }
-
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            pageCtrl.refresh();
-                        });
-                    }
-                }
-        );
-    }
-
-
-    /**
-     * a subscribe method for any card updates
-     * @param id
-     */
-    public void subscribeToCardUpdates(long id) {
-        Subscription addCardSubscription = session.subscribe(
-                "/topic/cards",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return Card.class;
-                    }
-
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            pageCtrl.refresh();
-                        });
-                    }
-                }
-        );
-    }
 
 
 }

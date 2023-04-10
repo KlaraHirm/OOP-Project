@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -7,7 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.catalina.Server;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 
@@ -34,6 +37,17 @@ public class MainClientCtrl {
 
     private AdminCtrl adminCtrl;
     private Scene admin;
+
+    private ServerUtils serverUtils;
+
+    /**
+     * constructor for MainClientCtrl for the dependency injection, never actually used
+     * @param serverUtils
+     */
+    @Inject
+    public MainClientCtrl(ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
 
 
     public void initialize(Stage primaryStage,
@@ -66,9 +80,9 @@ public class MainClientCtrl {
         this.admin = new Scene(admin.getValue());
 
         showServer();
-
         primaryStage.show();
         overviewCtrl.refresh();
+        serverUtils.socketInit();
 
     }
 

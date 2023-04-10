@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
 import commons.*;
@@ -30,6 +31,10 @@ public class BoardController
 {
     @Autowired
     BoardServiceImpl boardService;
+    @Autowired
+    SimpMessageSendingOperations messageTemplate;
+
+    String update = "updates";
 
     /**
      * Retrieve all boards in the database
@@ -82,6 +87,7 @@ public class BoardController
         if (changedBoard == null) return ResponseEntity.badRequest().build();
         Board ret = boardService.editBoard(changedBoard);
         if (ret==null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -97,6 +103,7 @@ public class BoardController
         if (ret  == null) {
             return ResponseEntity.badRequest().build();
         }
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -107,7 +114,9 @@ public class BoardController
      * @return json representation of written cardlist
      */
     @PostMapping("/{id}")
-    public ResponseEntity<CardList> addCardList(@RequestBody CardList cardList, @PathVariable("id") long id)
+    public ResponseEntity<CardList> addCardList
+    (@RequestBody CardList cardList,
+     @PathVariable("id") long id)
     {
         if (cardList == null || cardList.title == null) {
             return ResponseEntity.badRequest().build();
@@ -116,6 +125,7 @@ public class BoardController
         if(ret==null) {
             return ResponseEntity.notFound().build();
         }
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -127,7 +137,9 @@ public class BoardController
      * @return the updated board
      */
     @PutMapping(path = { "/{id}/reorder" })
-    public ResponseEntity<Board> reorderCardLists(@PathVariable("id") long boardId, @RequestParam long listId, @RequestParam int index)
+    public ResponseEntity<Board> reorderCardLists
+    (@PathVariable("id") long boardId,
+     @RequestParam long listId, @RequestParam int index)
     {
         if(boardId <= 0 || listId <= 0 || index < 0)
             return ResponseEntity.notFound().build();
@@ -135,6 +147,7 @@ public class BoardController
         if(ret==null){
             return ResponseEntity.badRequest().build();
         }
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 }

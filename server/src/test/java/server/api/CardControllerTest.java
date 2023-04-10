@@ -32,9 +32,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
+import server.api.util.SimpMessagingTemplateMock;
 import server.services.CardServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,12 +54,17 @@ public class CardControllerTest {
     private CardServiceImpl service;
     private CardController sut;
 
+    @Mock
+    private SimpMessageSendingOperations messageTemplate;
+
     @BeforeEach
     public void setup()
     {
+        messageTemplate = new SimpMessagingTemplateMock();
         service = new CardServiceImpl(cardRepo, listRepo, boardRepo);
         sut = new CardController();
         sut.cardService = service;
+        sut.messageTemplate = messageTemplate;
     }
 
     @Test

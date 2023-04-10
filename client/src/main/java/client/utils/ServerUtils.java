@@ -1,5 +1,7 @@
 package client.utils;
 
+import client.socket.ClientSocket;
+import client.socket.StompSessionHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -8,16 +10,24 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Service
+@Singleton
 public class ServerUtils {
 
     private static String serverURL = "http://localhost:8080/";
     private static boolean connected = false;
+
+    private StompSession session;
+    private StompSessionHandler stompSessionHandler;
 
     /**
      * get all existing boards in db
@@ -293,4 +303,41 @@ public class ServerUtils {
         return serverURL;
     }
 
+    /**
+     * start the socket thread
+     */
+    public void socketInit() {
+        ClientSocket clientSocket = new ClientSocket(this);
+        //create and start the thread for the socket
+        Thread thread = new Thread(clientSocket);
+        thread.start();
+    }
+
+    /**
+     * passes the session
+     * @param session
+     */
+    public void passSession(StompSession session) {
+        this.session = session;
+    }
+
+    /**
+     * passes the session handler
+     * @param handler
+     */
+    public void passStompSessionHandler(StompSessionHandler handler) {
+        this.stompSessionHandler = handler;
+    }
+
+    /**
+     * calls the subscribe method from the session handler
+     * @param id
+     */
+    public void subscribe(long id) {
+        try {
+          stompSessionHandler.subscribe();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+    }
 }

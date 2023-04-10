@@ -27,7 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
-
+import org.springframework.stereotype.Service;
 
 public class MainPageCtrl implements Initializable {
 
@@ -54,6 +54,7 @@ public class MainPageCtrl implements Initializable {
     private Button loadBoardButton;
 
     private Preferences preferences;
+    private Board activeBoard;
 
     @Inject
     public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
@@ -137,7 +138,18 @@ public class MainPageCtrl implements Initializable {
                 showCard(selectedBoard, list, card, listContainer, boardHbox);
             }
         }
+        activeBoard = selectedBoard;
     }
+
+    /**
+     * loads changes made to a board
+     * @throws IOException
+     */
+    public void loadChange() throws IOException {
+        Board updatedBoard = server.getBoard(activeBoard.id);
+        loadBoardContent(updatedBoard);
+    }
+
 
     /**
      * method which shows existing board
@@ -152,6 +164,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoardObject(board);
         boardCtrl.setTitle();
+        server.subscribe(board.id);
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
         return parent;
@@ -483,4 +496,6 @@ public class MainPageCtrl implements Initializable {
         joinedBoards.remove(Long.toString(board.id));
         preferences.put(server.getServerURL(), String.join(",", joinedBoards));
     }
+
+
 }

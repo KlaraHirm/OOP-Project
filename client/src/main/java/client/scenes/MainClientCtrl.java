@@ -82,7 +82,7 @@ public class MainClientCtrl {
         showServer();
         primaryStage.show();
         overviewCtrl.refresh();
-        serverUtils.socketInit();
+        serverUtils.socketInit(overviewCtrl);
 
     }
 

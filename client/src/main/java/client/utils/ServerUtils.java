@@ -1,5 +1,6 @@
 package client.utils;
 
+import client.scenes.MainPageCtrl;
 import client.socket.ClientSocket;
 import client.socket.StompSessionHandler;
 import commons.Board;
@@ -306,8 +307,8 @@ public class ServerUtils {
     /**
      * start the socket thread
      */
-    public void socketInit() {
-        ClientSocket clientSocket = new ClientSocket(this);
+    public void socketInit(MainPageCtrl pageCtrl) {
+        ClientSocket clientSocket = new ClientSocket(this, pageCtrl);
         //create and start the thread for the socket
         Thread thread = new Thread(clientSocket);
         thread.start();

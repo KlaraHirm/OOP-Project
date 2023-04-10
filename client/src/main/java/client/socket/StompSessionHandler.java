@@ -22,15 +22,17 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
     private StompSession session;
 
     private List<Subscription> subscriptionList;
-    @Inject
+
     private MainPageCtrl pageCtrl;
 
     /**
      * constructor for the stomp session handler
      * @param serverUtils
+     * @param pageCtrl
      */
-    public StompSessionHandler(ServerUtils serverUtils) {
+    public StompSessionHandler(ServerUtils serverUtils, MainPageCtrl pageCtrl) {
         this.serverUtils = serverUtils;
+        this.pageCtrl = pageCtrl;
         subscriptionList = new ArrayList<>();
     }
 

@@ -70,6 +70,24 @@ public class EditCardCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // start thread to check if task still exists
+        Thread pollingThread = new Thread(() -> {
+            while (cardExists) {
+                if (!checkCardExists()) {
+                    Platform.runLater(() -> {
+                        // task has been deleted, return to overview
+                        // for example, call a method in your main application to switch views
+                    });
+                    cardExists = false;
+                }
+                try {
+                    Thread.sleep(5000); // polling interval of 5 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        pollingThread.start();
     }
 
     public void setCard(Card card) {

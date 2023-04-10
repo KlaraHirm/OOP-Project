@@ -228,13 +228,16 @@ public class ServerUtils {
      * @return true if card was deleted
      */
     public Boolean pollCard(long cardId) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverURL)
-                .path("api/card/poll/" + cardId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<Boolean>() {
-                });
+        Response resp =  null;
+        while (resp == null || resp.getStatus() == 503) {
+            resp =  ClientBuilder.newClient(new ClientConfig())
+                    .target(serverURL)
+                    .path("api/card/poll/" + cardId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON) //
+                    .get();
+        }
+        return resp.readEntity(Boolean.class);
 
     }
 

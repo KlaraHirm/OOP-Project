@@ -69,18 +69,14 @@ public class EditCardCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        pollCard();
-    }
-
-    public void pollCard() {
         Timer timer = new Timer();
 
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 System.out.println(card);
-                while(card==null) {
-                    continue;
+                if (card==null) {
+                    return;
                 }
                 Boolean result = server.pollCard(card.id);
                 System.out.println(card);

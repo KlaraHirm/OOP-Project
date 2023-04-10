@@ -69,14 +69,13 @@ public class EditCardCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // start thread to check if task still exists
+        // start thread to check if card still exists
         Thread pollingThread = new Thread(() -> {
             while (cardExists) {
-
                 if (!checkCardExists()) {
                     Platform.runLater(() -> {
                         try {
-                            mainCtrl.showOverview(board);
+                            mainCtrl.showOverview(board); // if card doesn't exist return to overview
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -117,12 +116,15 @@ public class EditCardCtrl implements Initializable {
         mainCtrl.showOverview(board);
     }
 
+    /**
+     * Used during long-polling to check if card still exists
+     * @return true if card exists, false otherwise
+     */
     private boolean checkCardExists() {
         System.out.println(card);
         if(card==null){
             return true;
         }
-
         System.out.println(server.cardExists(card.id));
         return server.cardExists(card.id);
     }

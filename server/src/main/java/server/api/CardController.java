@@ -6,6 +6,7 @@ import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
@@ -14,6 +15,8 @@ import server.services.CardServiceImpl;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/card")
@@ -21,6 +24,8 @@ public class CardController {
 
     @Autowired
     CardServiceImpl cardService;
+
+    private ExecutorService cardPoll = Executors.newFixedThreadPool(5);
 
 
     /**
@@ -70,9 +75,39 @@ public class CardController {
     public ResponseEntity<Card> deleteCard(
             @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
     ) {
+        synchronized(this) {
+            notifyAll();
+        }
         if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
     }
+
+    @GetMapping("/poll/{id}")
+    public DeferredResult<Boolean> pollCard(@PathVariable("id") long cardId) {
+        DeferredResult<Boolean> deferredResult = new DeferredResult<>();
+        cardPoll.execute(() -> {
+            synchronized(this) {
+                while (testPolling(cardId)) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                deferredResult.setResult(true);
+            }
+        });
+        return deferredResult;
+    }
+
+    public boolean testPolling(long cardId) {
+        if (cardId < 0) {
+            return false;
+        }
+        Card ret = cardService.getCard(cardId);
+        return ret != null;
+    }
+
 }

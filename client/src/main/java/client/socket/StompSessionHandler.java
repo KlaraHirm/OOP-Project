@@ -46,13 +46,12 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
         serverUtils.passSession(session);
         serverUtils.passStompSessionHandler(this);
         this.session = session;
+        subscribe();
     }
 
     /**
      * a subscribe method for any updates
-     * @param id
      */
-    @Inject
     public void subscribe() {
 
         for (Subscription sub : subscriptionList) sub.unsubscribe();

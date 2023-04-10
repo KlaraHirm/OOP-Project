@@ -330,15 +330,4 @@ public class ServerUtils {
         this.stompSessionHandler = handler;
     }
 
-    /**
-     * calls the subscribe method from the session handler
-     * @param id
-     */
-    public void subscribe(long id) {
-        try {
-          stompSessionHandler.subscribe();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-    }
 }

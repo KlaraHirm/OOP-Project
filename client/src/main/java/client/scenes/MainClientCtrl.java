@@ -82,8 +82,6 @@ public class MainClientCtrl {
         showServer();
         primaryStage.show();
         overviewCtrl.refresh();
-        serverUtils.socketInit(overviewCtrl);
-
     }
 
     /**
@@ -105,6 +103,13 @@ public class MainClientCtrl {
         primaryStage.setTitle("Server Connection");
         primaryStage.setScene(serverCon);
         serverCtrl.setUIValues();
+    }
+
+    /**
+     * Init websocket connection
+     */
+    public void socketInit() {
+        serverUtils.socketInit(overviewCtrl);
     }
 
     /**

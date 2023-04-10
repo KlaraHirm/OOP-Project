@@ -15,8 +15,10 @@
  */
 package server.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.services.AdminServiceImpl;
 
 import java.io.IOException;
 import java.io.File;
@@ -27,6 +29,9 @@ import java.util.Scanner;
 public class AdminController
 {
 
+    @Autowired
+    AdminServiceImpl adminService;
+
     /**
      * Checks if the password is correct
      * @param password The password to check
@@ -35,9 +40,8 @@ public class AdminController
     @GetMapping("/check")
     public ResponseEntity checkPassword(
             @RequestParam("password") String password
-    ) throws IOException {
-        Scanner passwordFileScanner = new Scanner(new File("password.txt"));
-        if (passwordFileScanner.nextLine().equals(password)) {
+    ) {
+        if (adminService.checkPassword(password)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();

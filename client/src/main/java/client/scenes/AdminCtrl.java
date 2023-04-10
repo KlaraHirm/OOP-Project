@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -55,8 +54,13 @@ public class AdminCtrl {
         this.preferences = Preferences.userRoot();
     }
 
+    /**
+     * method which loads the admin page along with its content
+     */
     public void loadContent() {
-        connectionLabel.setText(server.isConnected() ? "Connected" : "Disconnected");
+        connectionLabel.setText(
+                server.isConnected() ? "Connected" : "Disconnected"
+        );
 
         if (passwordChecked) {
             List<Board> boards = server.getBoards();
@@ -71,6 +75,10 @@ public class AdminCtrl {
         }
     }
 
+    /**
+     * used for onAction as the load button
+     * Checks if the psasword in the password field is correct
+     */
     public void checkPassword() {
         String password = passwordField.getText();
         if (server.checkPassword(password)) {
@@ -143,7 +151,8 @@ public class AdminCtrl {
     }
 
     /**
-     * Removes the board id from the preferences store, so that it is hidden in the board list
+     * Removes the board id from the preferences store
+     * so that it is hidden in the board list
      * @param board the board to remove
      */
     private void removeBoardFromPreferences(Board board) {

@@ -1,22 +1,9 @@
 package client.scenes;
 
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-
-import java.io.IOException;
-import java.net.URL;
 
 public class AdminBoardCtrl {
 

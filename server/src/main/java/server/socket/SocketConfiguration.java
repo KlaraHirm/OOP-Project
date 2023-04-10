@@ -25,6 +25,5 @@ public class SocketConfiguration implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
         registry.addEndpoint("/hello");
-                //.addInterceptors(new HttpSessionHandshakeInterceptor());
     }
 }

@@ -41,11 +41,9 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      */
     @Override
     public void afterConnected(StompSession session, StompHeaders headers) {
-        //System.out.println("this is the afterConnected method running");
         serverUtils.passSession(session);
         serverUtils.passStompSessionHandler(this);
         this.session = session;
-        //System.out.println("this is the afterConnected method still running");
     }
 
     /**
@@ -53,7 +51,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      * @param id
      */
     @Inject
-    public void subscribe(long id) {
+    public void subscribe() {
 
         for (Subscription sub : subscriptionList) sub.unsubscribe();
 
@@ -72,7 +70,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
                                 pageCtrl.loadChange();
                             }
                             catch (IOException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
                             }
                         });
                     }

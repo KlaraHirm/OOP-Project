@@ -6,9 +6,11 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,9 +22,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.ResourceBundle;
 
-public class EditCardCtrl {
+public class EditCardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
@@ -41,6 +45,8 @@ public class EditCardCtrl {
     @FXML
     private TextArea bodyField;
 
+    private boolean cardExists = true;
+
     private Card card;
 
     private Board board;
@@ -54,6 +60,16 @@ public class EditCardCtrl {
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
     }
 
     public void setCard(Card card) {
@@ -80,7 +96,9 @@ public class EditCardCtrl {
         mainCtrl.showOverview(board);
     }
 
-
+    private boolean checkCardExists() {
+        return server.cardExists(card.id);
+    }
 
 
     /**
@@ -134,5 +152,4 @@ public class EditCardCtrl {
         //removes object from tagBox
         tagBox.getChildren().remove(n);
     }
-
 }

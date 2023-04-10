@@ -146,16 +146,17 @@ public class ServerUtils {
     }
 
     /**
-     * getter for card
+     * used to check if card exists
      * @param cardId id of card which we want to get
-     * @return object of class Card which has the same id as passed in cardId
+     * @return true if card exists, false otherwise
      */
-    public Card getCard(long cardId) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+    public boolean cardExists(long cardId) {
+        Response cardResponse =  ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/card/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<Card>() {});
+                .get();
+        return cardResponse.getEntity() != null;
     }
 
     /**

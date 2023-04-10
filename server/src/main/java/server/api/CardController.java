@@ -1,21 +1,11 @@
 package server.api;
 
-import commons.Board;
 import commons.Card;
-import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.CardListServiceImpl;
 import server.services.CardServiceImpl;
-
-import java.util.Optional;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/card")
@@ -25,6 +15,7 @@ public class CardController {
     CardServiceImpl cardService;
     @Autowired
     private SimpMessagingTemplate messageTemplate;
+
 
     String update = "updates";
 
@@ -59,9 +50,7 @@ public class CardController {
         if (newCard == null) return ResponseEntity.badRequest().build();
         Card ret = cardService.editCard(newCard);
         if (ret == null) return ResponseEntity.notFound().build();
-
         messageTemplate.convertAndSend("/topic/updates", update);
-
         return ResponseEntity.ok(ret);
     }
 
@@ -75,9 +64,12 @@ public class CardController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Card> deleteCard(
-            @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
+            @RequestParam("boardId") long boardId,
+            @RequestParam("listId") long listId,
+            @PathVariable("id") long cardId
     ) {
-        if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
+        if(cardId < 0 || listId < 0 || boardId < 0)
+            return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         messageTemplate.convertAndSend("/topic/updates", update);

@@ -2,7 +2,6 @@ package client.utils;
 
 import client.socket.ClientSocket;
 import client.socket.StompSessionHandler;
-import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -15,7 +14,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Singleton;
-import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 

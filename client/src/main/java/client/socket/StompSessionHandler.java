@@ -2,16 +2,11 @@ package client.socket;
 
 import client.scenes.MainPageCtrl;
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.application.Platform;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSession.Subscription;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -70,7 +65,8 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
                         return String.class;
                     }
                     @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
+                    public void handleFrame
+                            (StompHeaders headers, Object payload) {
                         Platform.runLater( () -> {
                             try {
                                 pageCtrl.loadChange();

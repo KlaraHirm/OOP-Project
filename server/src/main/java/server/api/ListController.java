@@ -1,19 +1,11 @@
 package server.api;
-
-import commons.Board;
 import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.BoardServiceImpl;
 import server.services.CardListServiceImpl;
-
 import java.util.List;
 
 @RestController

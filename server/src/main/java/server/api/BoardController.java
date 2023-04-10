@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -115,7 +114,9 @@ public class BoardController
      * @return json representation of written cardlist
      */
     @PostMapping("/{id}")
-    public ResponseEntity<CardList> addCardList(@RequestBody CardList cardList, @PathVariable("id") long id)
+    public ResponseEntity<CardList> addCardList
+    (@RequestBody CardList cardList,
+     @PathVariable("id") long id)
     {
         if (cardList == null || cardList.title == null) {
             return ResponseEntity.badRequest().build();
@@ -136,7 +137,9 @@ public class BoardController
      * @return the updated board
      */
     @PutMapping(path = { "/{id}/reorder" })
-    public ResponseEntity<Board> reorderCardLists(@PathVariable("id") long boardId, @RequestParam long listId, @RequestParam int index)
+    public ResponseEntity<Board> reorderCardLists
+    (@PathVariable("id") long boardId,
+     @RequestParam long listId, @RequestParam int index)
     {
         if(boardId <= 0 || listId <= 0 || index < 0)
             return ResponseEntity.notFound().build();

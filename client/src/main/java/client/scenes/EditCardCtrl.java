@@ -43,6 +43,8 @@ public class EditCardCtrl {
 
     private Card card;
 
+    private CardList list;
+
     private Board board;
 
     /**
@@ -60,6 +62,10 @@ public class EditCardCtrl {
         this.card = card;
     }
 
+    public void setList(CardList list) {
+        this.list = list;
+    }
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -67,6 +73,11 @@ public class EditCardCtrl {
     public void setFields(Card card) {
         titleField.setText(card.title);
         bodyField.setText(card.description);
+    }
+
+    public void deleteCard() throws IOException {
+        server.deleteCard(card, list, board);
+        mainCtrl.showOverview(board);
     }
 
     public void submit() throws IOException {

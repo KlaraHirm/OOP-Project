@@ -119,11 +119,12 @@ public class MainClientCtrl {
      * @param card card to edit
      * @param board that the card belongs to
      */
-    public void showEditCard(Card card, Board board) {
+    public void showEditCard(Card card, CardList list, Board board) {
         primaryStage.setTitle("Edit Card");
         editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
         editCardCtrl.setCard(card);
+        editCardCtrl.setList(list);
         editCardCtrl.setBoard(board);
     }
 

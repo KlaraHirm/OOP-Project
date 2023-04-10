@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EditCardCtrl {
 
@@ -53,6 +56,29 @@ public class EditCardCtrl {
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * Periodically check if the card is still available on the server.
+     */
+    private void startPolling() {
+        final long cardId = card.id;
+        final Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                server.pollCard(cardId).whenComplete((result, throwable) -> {
+                    if (throwable != null) {
+                        throwable.printStackTrace();
+                    } else if (result) {
+                        // Card has been deleted, so close the edit view and show a notification to the user.
+                        Platform.runLater(() -> {
+                            mainCtrl.showOverview(board);
+                        });
+                    }
+                });
+            }
+        }, 0, 5000);
     }
 
     public void setCard(Card card) {

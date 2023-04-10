@@ -14,7 +14,6 @@ import server.services.CardServiceImpl;
 
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
 @RequestMapping("/api/card")
@@ -72,22 +71,8 @@ public class CardController {
             @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
     ) {
         if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
-        // create a new atomic boolean to track if the task exists
-        AtomicBoolean taskExists = new AtomicBoolean(true);
-
-        // start a new thread to handle the long polling request
-        new Thread(new CardPoller(cardId, taskExists)).start();
-
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
-    }
-
-    @GetMapping("/poll/{id}")
-    public ResponseEntity<Boolean> pollCard(
-            @PathVariable("id") long cardId
-    ) {
-        boolean exists = cardService.cardExists(cardId);
-        return ResponseEntity.ok(exists);
     }
 }

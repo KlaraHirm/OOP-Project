@@ -22,7 +22,7 @@
       <Label layoutX="23.0" layoutY="93.0" text="Password:" />
       <Button fx:id="loadButton" layoutX="273.0" layoutY="89.0" mnemonicParsing="false" onAction="#checkPassword" text="Load" />
       <Label fx:id="passwordStatusLabel" alignment="CENTER" layoutX="101.0" layoutY="115.0" prefHeight="18.0" prefWidth="162.0" />
-      <ScrollPane layoutX="1.0" layoutY="133.0" prefHeight="351.0" prefWidth="658.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="140.0" fitToWidth="true">
+      <ScrollPane layoutX="1.0" layoutY="133.0" prefHeight="351.0" prefWidth="658.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="140.0" fitToWidth="true" fitToHeight="true">
          <content>
                <VBox fx:id="boardListContainer" prefHeight="358.0" prefWidth="674.0" style="-fx-background-color: #CAE2F0;" AnchorPane.rightAnchor="0.0" />
          </content>

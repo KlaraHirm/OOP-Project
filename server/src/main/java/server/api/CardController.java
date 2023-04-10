@@ -1,20 +1,12 @@
 package server.api;
 
-import commons.Board;
 import commons.Card;
-import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.CardListServiceImpl;
 import server.services.CardServiceImpl;
 
-import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -86,12 +78,17 @@ public class CardController {
         return ResponseEntity.ok(ret);
     }
 
+    /**
+     * Long Polling to detect if card was deleted
+     * @param cardId id of a card
+     * @return true if card was deleted
+     */
     @GetMapping("/poll/{id}")
     public DeferredResult<Boolean> pollCard(@PathVariable("id") long cardId) {
         DeferredResult<Boolean> deferredResult = new DeferredResult<>();
         cardPoll.execute(() -> {
             synchronized(lock) {
-                while (testPolling(cardId)) {
+                while (pollCardExist(cardId)) {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
@@ -104,7 +101,12 @@ public class CardController {
         return deferredResult;
     }
 
-    public boolean testPolling(long cardId) {
+    /**
+     * Method which checks if card exists
+     * @param cardId id of a card
+     * @return true if card exists, false otherwise
+     */
+    public boolean pollCardExist(long cardId) {
         if (cardId < 0) {
             return false;
         }

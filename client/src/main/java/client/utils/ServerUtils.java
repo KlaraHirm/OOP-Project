@@ -222,6 +222,11 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * start long polling for a card if it was deleted
+     * @param cardId id of a card
+     * @return true if card was deleted
+     */
     public Boolean pollCard(long cardId) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverURL)

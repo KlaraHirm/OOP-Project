@@ -3,6 +3,8 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -39,6 +41,8 @@ public class AdminCtrl {
 
     private Preferences preferences;
 
+    private ObservableList<Board> data;
+
     private boolean passwordChecked = false;
 
     /**
@@ -62,10 +66,18 @@ public class AdminCtrl {
                 server.isConnected() ? "Connected" : "Disconnected"
         );
 
+        refresh();
+    }
+
+    /**
+     * method which fetches the boards from the server and updates the page
+     */
+    public void refresh() {
         if (passwordChecked) {
             List<Board> boards = server.getBoards();
+            data = FXCollections.observableList(boards);
             boardListContainer.getChildren().clear();
-            for (Board board : boards) {
+            for (Board board : data) {
                 try {
                     showBoard(board);
                 } catch (IOException e) {

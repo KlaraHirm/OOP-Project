@@ -20,6 +20,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import commons.*;
@@ -31,22 +32,9 @@ public class BoardController
 {
     @Autowired
     BoardServiceImpl boardService;
-    private SimpMessageSendingOperations messageTemplate;
+    @Autowired
+    private SimpMessagingTemplate messageTemplate;
 
-    /**
-     * public controller required for testing
-     */
-    public BoardController() {
-
-    }
-
-    /**
-     * constructor required to set up messaging template for the board controller
-     * @param messageTemplate the messaging template to send updates over the socket
-     */
-    private BoardController(SimpMessageSendingOperations messageTemplate) {
-        this.messageTemplate=messageTemplate;
-    }
 
     /**
      * Retrieve all boards in the database
@@ -99,7 +87,7 @@ public class BoardController
         if (changedBoard == null) return ResponseEntity.badRequest().build();
         Board ret = boardService.editBoard(changedBoard);
         if (ret==null) return ResponseEntity.notFound().build();
-        messageTemplate.convertAndSend("/topic/boards/", ret);
+        messageTemplate.convertAndSend("/topic/boards", ret);
         return ResponseEntity.ok(ret);
     }
 
@@ -115,7 +103,7 @@ public class BoardController
         if (ret  == null) {
             return ResponseEntity.badRequest().build();
         }
-        messageTemplate.convertAndSend("/topic/boards/", ret);
+        messageTemplate.convertAndSend("/topic/boards", ret);
         return ResponseEntity.ok(ret);
     }
 
@@ -135,7 +123,7 @@ public class BoardController
         if(ret==null) {
             return ResponseEntity.notFound().build();
         }
-        messageTemplate.convertAndSend("/topic/lists/", ret);
+        messageTemplate.convertAndSend("/topic/lists", ret);
         return ResponseEntity.ok(ret);
     }
 
@@ -155,7 +143,7 @@ public class BoardController
         if(ret==null){
             return ResponseEntity.badRequest().build();
         }
-        messageTemplate.convertAndSend("/topic/boards/", ret);
+        messageTemplate.convertAndSend("/topic/boards", ret);
         return ResponseEntity.ok(ret);
     }
 }

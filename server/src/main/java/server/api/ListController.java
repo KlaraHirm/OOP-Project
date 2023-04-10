@@ -6,6 +6,7 @@ import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
@@ -21,22 +22,9 @@ public class ListController {
 
     @Autowired
     CardListServiceImpl listService;
-    private SimpMessageSendingOperations messageTemplate;
+    @Autowired
+    private SimpMessagingTemplate messageTemplate;
 
-    /**
-     * public controller needed for testing
-     */
-    public ListController() {
-
-    }
-
-    /**
-     * constructor required to set up messaging template for the list controller
-     * @param messageTemplate the messaging template to send updates over the socket
-     */
-    private ListController(SimpMessageSendingOperations messageTemplate) {
-        this.messageTemplate = messageTemplate;
-    }
 
     /**
      * Get a particular CardList using ID
@@ -65,7 +53,7 @@ public class ListController {
         if (card == null || card.title == null) return ResponseEntity.badRequest().build();
         Card ret = listService.addCard(card, id);
         if (ret == null) return ResponseEntity.notFound().build();
-        messageTemplate.convertAndSend("/topic/cards/", ret);
+        messageTemplate.convertAndSend("/topic/cards", ret);
         return ResponseEntity.ok(ret);
     }
 
@@ -81,7 +69,7 @@ public class ListController {
         if (cardListNew == null || cardListNew.title == null) return ResponseEntity.badRequest().build();
         CardList ret = listService.editList(cardListNew);
         if (ret == null) return ResponseEntity.notFound().build();
-        messageTemplate.convertAndSend("/topic/lists/", ret);
+        messageTemplate.convertAndSend("/topic/lists", ret);
         return ResponseEntity.ok(ret);
     }
 
@@ -96,7 +84,7 @@ public class ListController {
     public ResponseEntity<CardList> deleteList(@RequestParam("boardId") long boardId, @PathVariable("id") long id) {
         CardList ret = listService.deleteList(boardId, id);
         if (ret == null) return ResponseEntity.notFound().build();
-        messageTemplate.convertAndSend("/topic/lists/", ret);
+        messageTemplate.convertAndSend("/topic/lists", ret);
         return ResponseEntity.ok(ret);
     }
 
@@ -117,7 +105,7 @@ public class ListController {
         if (ret == null) {
             return  ResponseEntity.notFound().build();
         }
-        messageTemplate.convertAndSend("/topic/lists/", ret);
+        messageTemplate.convertAndSend("/topic/lists", ret);
         return ResponseEntity.ok(ret);
     }
 

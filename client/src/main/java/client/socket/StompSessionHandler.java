@@ -67,7 +67,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      */
     public void subscribeToBoardUpdates(long id) {
         Subscription boardUpdateSubscription = session.subscribe(
-                "/topic/boards/",
+                "/topic/boards",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
@@ -91,7 +91,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      */
     public void subscribeToListUpdates(long id) {
         Subscription addListSubscription = session.subscribe(
-                "/topic/lists/",
+                "/topic/lists",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
@@ -115,7 +115,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      */
     public void subscribeToCardUpdates(long id) {
         Subscription addCardSubscription = session.subscribe(
-                "/topic/cards/",
+                "/topic/cards",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {

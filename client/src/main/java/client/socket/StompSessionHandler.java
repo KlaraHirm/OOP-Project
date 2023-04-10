@@ -49,7 +49,6 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
         serverUtils.passSession(session);
         serverUtils.passStompSessionHandler(this);
         this.session = session;
-        //System.out.println("this is the afterConnected method still running");
     }
 
     /**

@@ -1,5 +1,6 @@
 package client.socket;
 
+import client.scenes.MainPageCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
@@ -25,6 +26,8 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
 
     private List<Subscription> subscriptionList;
 
+    private MainPageCtrl pageCtrl;
+
     /**
      * constructor for the stomp session handler
      * @param serverUtils
@@ -41,34 +44,30 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      */
     @Override
     public void afterConnected(StompSession session, StompHeaders headers) {
-        System.out.println("this is the afterConnected method running");
+        //System.out.println("this is the afterConnected method running");
         serverUtils.passSession(session);
         serverUtils.passStompSessionHandler(this);
         this.session = session;
-        System.out.println("this is the afterConnected method still running");
+        //System.out.println("this is the afterConnected method still running");
     }
 
 
     public void subscribe(long id) {
 
         for (Subscription sub : subscriptionList) sub.unsubscribe();
-        subscribeToEditBoard(id);
-        subscribeToDeleteBoard(id);
-        subscribeToAddList(id);
-        subscribeToEditList(id);
-        subscribeToDeleteList(id);
-        subscribeToAddCard(id);
-        subscribeToDeleteCard(id);
-        subscribeToEditCard(id);
+        subscribeToBoardUpdates(id);
+        subscribeToListUpdates(id);
+        subscribeToCardUpdates(id);
+
     }
 
     /**
-     * a subscribe method for editing a board
+     * a subscribe method for any board updates
      * @param id
      */
-    public void subscribeToEditBoard(long id) {
-        Subscription editBoardSubscription = session.subscribe(
-                "/topic/boards/" + Long.toString(id) + "/edit",
+    public void subscribeToBoardUpdates(long id) {
+        Subscription boardUpdateSubscription = session.subscribe(
+                "/topic/boards/",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
@@ -78,43 +77,21 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
                         Platform.runLater( () -> {
-                            System.out.println((Board) payload);
+                            pageCtrl.refresh();
                         });
                     }
                 }
         );
     }
 
-    /**
-     * a subscribe method for deleting a board
-     * @param id
-     */
-    public void subscribeToDeleteBoard(long id) {
-        Subscription deleteBoardSubscription = session.subscribe(
-                "/topic/boards/" + Long.toString(id) + "/delete",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return Board.class;
-                    }
-
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            System.out.println((Board) payload);
-                        });
-                    }
-                }
-        );
-    }
 
     /**
-     * a subscribe method for adding a list
+     * a subscribe method for any list updates
      * @param id
      */
-    public void subscribeToAddList(long id) {
+    public void subscribeToListUpdates(long id) {
         Subscription addListSubscription = session.subscribe(
-                "/topic/lists/" + Long.toString(id) + "/add",
+                "/topic/lists/",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
@@ -124,66 +101,21 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
                         Platform.runLater( () -> {
-                            System.out.println((CardList) payload);
+                            pageCtrl.refresh();
                         });
                     }
                 }
         );
     }
 
-    /**
-     * a subscribe method for editing a list
-     * @param id
-     */
-    public void subscribeToEditList(long id) {
-        Subscription addListSubscription = session.subscribe(
-                "/topic/lists/" + Long.toString(id) + "/edit",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return CardList.class;
-                    }
-
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            System.out.println((CardList) payload);
-                        });
-                    }
-                }
-        );
-    }
 
     /**
-     * a subscribe method for deleting a list
+     * a subscribe method for any card updates
      * @param id
      */
-    public void subscribeToDeleteList(long id) {
-        Subscription addListSubscription = session.subscribe(
-                "/topic/lists/" + Long.toString(id) + "/delete",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return CardList.class;
-                    }
-
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            System.out.println((CardList) payload);
-                        });
-                    }
-                }
-        );
-}
-
-    /**
-     * a subscribe method for adding a card
-     * @param id
-     */
-    public void subscribeToAddCard(long id) {
+    public void subscribeToCardUpdates(long id) {
         Subscription addCardSubscription = session.subscribe(
-                "/topic/cards/" + Long.toString(id) + "/add",
+                "/topic/cards/",
                 new StompSessionHandlerAdapter() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
@@ -193,56 +125,12 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
                         Platform.runLater( () -> {
-                            System.out.println((Card) payload);
+                            pageCtrl.refresh();
                         });
                     }
                 }
         );
     }
 
-    /**
-     * a subscribe method for deleting a card
-     * @param id
-     */
-    public void subscribeToDeleteCard(long id) {
-        Subscription deleteCardSubscription = session.subscribe(
-                "/topic/cards/" + Long.toString(id) + "/delete",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return Card.class;
-                    }
 
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            System.out.println((Card) payload);
-                        });
-                    }
-                }
-        );
-    }
-
-    /**
-     * a subscribe method for editing a card
-     * @param id
-     */
-    public void subscribeToEditCard(long id) {
-        Subscription editCardSubscription = session.subscribe(
-                "/topic/cards/" + Long.toString(id) + "/edit",
-                new StompSessionHandlerAdapter() {
-                    @Override
-                    public Type getPayloadType(StompHeaders headers) {
-                        return Card.class;
-                    }
-
-                    @Override
-                    public void handleFrame(StompHeaders headers, Object payload) {
-                        Platform.runLater( () -> {
-                            System.out.println((Card) payload);
-                        });
-                    }
-                }
-        );
-    }
 }

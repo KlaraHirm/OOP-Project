@@ -5,6 +5,7 @@ import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
@@ -21,7 +22,18 @@ public class CardController {
 
     @Autowired
     CardServiceImpl cardService;
+    private SimpMessageSendingOperations messageTemplate;
 
+    public CardController() {
+
+    }
+    /**
+     * constructor required to set up messaging template
+     * @param messageTemplate messaging template to enable updates over the socket
+     */
+    private CardController(SimpMessageSendingOperations messageTemplate) {
+        this.messageTemplate = messageTemplate;
+    }
 
     /**
      * Get info about a card
@@ -34,10 +46,9 @@ public class CardController {
             @PathVariable("id") long cardId
     ) {
         Card ret = cardService.getCard(cardId);
-        if(ret==null){
+        if(ret==null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(ret);
     }
 
@@ -55,6 +66,9 @@ public class CardController {
         if (newCard == null) return ResponseEntity.badRequest().build();
         Card ret = cardService.editCard(newCard);
         if (ret == null) return ResponseEntity.notFound().build();
+
+        messageTemplate.convertAndSend("/topic/cards/", ret);
+
         return ResponseEntity.ok(ret);
     }
 
@@ -73,6 +87,7 @@ public class CardController {
         if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/cards/", ret);
         return ResponseEntity.ok(ret);
     }
 }

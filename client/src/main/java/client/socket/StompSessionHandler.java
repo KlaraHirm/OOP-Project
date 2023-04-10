@@ -56,7 +56,7 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
      * @param id
      */
     @Inject
-    public void subscribe(long id) {
+    public void subscribe() {
 
         for (Subscription sub : subscriptionList) sub.unsubscribe();
 

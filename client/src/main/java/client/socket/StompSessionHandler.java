@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,12 @@ public class StompSessionHandler extends StompSessionHandlerAdapter {
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
                         Platform.runLater( () -> {
-                            pageCtrl.refresh();
+                            try {
+                                pageCtrl.loadChange();
+                            }
+                            catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         });
                     }
                 }

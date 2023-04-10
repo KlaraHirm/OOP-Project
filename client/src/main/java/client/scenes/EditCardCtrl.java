@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,11 +21,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EditCardCtrl {
+public class EditCardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
@@ -57,6 +60,45 @@ public class EditCardCtrl {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+
+    /**
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        pollCard();
+    }
+
+    public void pollCard() {
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println(card);
+                while(card==null) {
+                    continue;
+                }
+                Boolean result = server.pollCard(card.id);
+                System.out.println(card);
+                System.out.println(result);
+                if (result) {
+                    timer.cancel();
+                    Platform.runLater(() -> {
+                        try {
+                            mainCtrl.showOverview(board);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+            }
+        }, 0, 1000); // Poll every second
+    }
+
 
     public void setCard(Card card) {
         this.card = card;
@@ -134,4 +176,5 @@ public class EditCardCtrl {
         //removes object from tagBox
         tagBox.getChildren().remove(n);
     }
+
 }

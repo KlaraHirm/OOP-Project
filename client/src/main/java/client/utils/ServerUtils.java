@@ -222,6 +222,22 @@ public class ServerUtils {
                 });
     }
 
+    public Boolean pollCard(long cardId) {
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                .target(serverURL)
+                .path("api/card/poll/" + cardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON) //
+                .get();
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            return response.readEntity(Boolean.class);
+        } else {
+            // handle error
+            return false;
+        }
+    }
+
     /**
      * get whether the client is connected to server
      */

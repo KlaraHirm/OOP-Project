@@ -27,6 +27,8 @@ public class CardController {
 
     private ExecutorService cardPoll = Executors.newFixedThreadPool(5);
 
+    private final Object lock = new Object();
+
 
     /**
      * Get info about a card
@@ -75,12 +77,12 @@ public class CardController {
     public ResponseEntity<Card> deleteCard(
             @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
     ) {
-        synchronized(this) {
-            notifyAll();
-        }
         if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
+        synchronized(lock) {
+            lock.notifyAll();
+        }
         return ResponseEntity.ok(ret);
     }
 
@@ -88,10 +90,10 @@ public class CardController {
     public DeferredResult<Boolean> pollCard(@PathVariable("id") long cardId) {
         DeferredResult<Boolean> deferredResult = new DeferredResult<>();
         cardPoll.execute(() -> {
-            synchronized(this) {
+            synchronized(lock) {
                 while (testPolling(cardId)) {
                     try {
-                        wait();
+                        lock.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }

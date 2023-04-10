@@ -336,8 +336,10 @@ public class ServerUtils {
      * @param id
      */
     public void subscribe(long id) {
-        //stompSessionHandler=new StompSessionHandler(this);
-
-        stompSessionHandler.subscribe(id);
+        try {
+          stompSessionHandler.subscribe();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
     }
 }

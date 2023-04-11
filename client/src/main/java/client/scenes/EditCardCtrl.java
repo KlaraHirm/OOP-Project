@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,13 +21,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class EditCardCtrl implements Initializable {
+
+public class EditCardCtrl {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
@@ -53,6 +49,8 @@ public class EditCardCtrl implements Initializable {
 
     private Board board;
 
+    private Thread pollThread = null;
+
     /**
      * Sets EditCardCtrl
      * @param server
@@ -65,27 +63,25 @@ public class EditCardCtrl implements Initializable {
     }
 
     /**
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
+     * Starts the long polling to check if the card is deleted
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Timer timer = new Timer();
+    public void poll(Long cardId) {
+        System.out.println("initializing");
+        if (pollThread != null) pollThread.interrupt();
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println(card);
-                if (card==null) {
-                    return;
+        pollThread = new Thread(() -> {
+            while (true) {
+                if (card == null) continue;
+                System.out.println("Polling");
+                Boolean result = false;
+                try {
+                    result = server.pollCard(cardId);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                Boolean result = server.pollCard(card.id);
-                System.out.println(card);
-                System.out.println(result);
+
                 if (result) {
-                    timer.cancel();
+                    System.out.println("Result");
                     Platform.runLater(() -> {
                         try {
                             mainCtrl.showOverview(board);
@@ -93,14 +89,17 @@ public class EditCardCtrl implements Initializable {
                             throw new RuntimeException(e);
                         }
                     });
+                    break;
                 }
             }
-        }, 0, 1000); // Poll every second
+        });
+        pollThread.start();
     }
 
 
     public void setCard(Card card) {
         this.card = card;
+        poll(card.id);
     }
 
     public void setList(CardList list) {

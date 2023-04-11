@@ -33,6 +33,17 @@ This application provides an easy and efficient way for users to manage their ta
 
 ## How to run it
 
+You should run both the server and the client to test the app. It is possible to run them on different computers.
+
+- To run the server :
+Execute the "bootRun" Gradle task, via IntelliJ or using "./gradlew bootRun"
+
+- To run the client :
+Execute the "run" Gradle task, via IntelliJ or using `./gradlew run`
+
 ## How to contribute to it
 
-## Copyright / License (opt.)
+We use IntelliJ IDEA to work on the code.
+Make sure to install the Checkstyle plugin, and use the configuration found in `checkstyle.xml`.
+
+To contribute new code, open a merge request.

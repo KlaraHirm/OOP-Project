@@ -95,7 +95,6 @@ public class CardController {
      */
     @GetMapping("/poll/{id}")
     public DeferredResult<Boolean> pollCard(@PathVariable("id") long cardId) {
-        Timer timer = new Timer();
         DeferredResult<Boolean> deferredResult = new DeferredResult<>();
         cardPoll.execute(() -> {
             synchronized(lock) {
@@ -107,11 +106,6 @@ public class CardController {
                     }
                 }
                 deferredResult.setResult(true);
-                try {
-                    timer.wait(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
             }
         });
         return deferredResult;

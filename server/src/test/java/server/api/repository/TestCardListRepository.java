@@ -27,7 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
 import commons.CardList;
-import server.services.interfaces.database.CardListRepository;
+import server.database.CardListRepository;
 
 public class TestCardListRepository implements CardListRepository {
 

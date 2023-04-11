@@ -26,7 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
-import server.services.interfaces.database.TagRepository;
+import server.database.TagRepository;
 
 public class TestTagRepository implements TagRepository {
 

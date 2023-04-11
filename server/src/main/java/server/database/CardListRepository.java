@@ -1,4 +1,4 @@
-package server.services.interfaces.database;
+package server.database;
 
 import commons.CardList;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -27,7 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
 import commons.Board;
-import server.services.interfaces.database.BoardRepository;
+import server.database.BoardRepository;
 
 public class TestBoardRepository implements BoardRepository {
 

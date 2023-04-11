@@ -178,7 +178,8 @@ public class BoardServiceImpl implements BoardService {
         }
         board.tags.add(tag);
         boardRepo.save(board);
-        return tagRepo.save(tag);
+        tag = tagRepo.save(tag);
+        return tag;
     }
 
     /**

@@ -158,7 +158,7 @@ public class MainPageCtrl implements Initializable {
             if(newValue == null){
                 return;
             }
-            showEditTag(newValue, boardsList.getValue());
+            showEditTag(newValue, activeBoard);
         });
 
         //force only ints to be entered in ID_field

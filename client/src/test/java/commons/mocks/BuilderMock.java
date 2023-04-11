@@ -10,7 +10,7 @@ public class BuilderMock implements Invocation.Builder {
     public MediaType[] accept;
 
     public String method;
-    private Entity<?> entity;
+    public Entity<?> entity = null;
 
     @Override
     public Invocation build(String method) {
@@ -141,30 +141,35 @@ public class BuilderMock implements Invocation.Builder {
     @Override
     public <T> T put(Entity<?> entity, Class<T> responseType) {
         method = "PUT";
+        this.entity = entity;
         return null;
     }
 
     @Override
     public <T> T put(Entity<?> entity, GenericType<T> responseType) {
         method = "PUT";
+        this.entity = entity;
         return null;
     }
 
     @Override
     public Response post(Entity<?> entity) {
         method = "POST";
+        this.entity = entity;
         return Response.ok().build();
     }
 
     @Override
     public <T> T post(Entity<?> entity, Class<T> responseType) {
         method = "POST";
+        this.entity = entity;
         return null;
     }
 
     @Override
     public <T> T post(Entity<?> entity, GenericType<T> responseType) {
         method = "POST";
+        this.entity = entity;
         return null;
     }
 

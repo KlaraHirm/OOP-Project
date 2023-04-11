@@ -12,8 +12,7 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class ServerUtilsTest {
@@ -29,6 +28,8 @@ public class ServerUtilsTest {
 
     public ServerUtils serverUtils;
 
+    private String serverURL = "http://domain.test:12";
+
     @BeforeEach
     public void setUp()
     {
@@ -39,7 +40,7 @@ public class ServerUtilsTest {
         serverUtils = new ServerUtils();
         serverUtils.client = client;
 
-        serverUtils.serverURL = "http://domain.test:12";
+        serverUtils.serverURL = serverURL;
         serverUtils.connected = true;
     }
 
@@ -49,7 +50,7 @@ public class ServerUtilsTest {
     @Test
     void testGetBoards() {
         serverUtils.getBoards();
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/board", webTargetMock.path);
         assertEquals("GET", builderMock.method);
         assertNull(builderMock.entity);
@@ -59,7 +60,7 @@ public class ServerUtilsTest {
     @Test
     void testGetBoard() {
         serverUtils.getBoard(1);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/board/1", webTargetMock.path);
         assertEquals("GET", builderMock.method);
         assertNull(builderMock.entity);
@@ -70,7 +71,7 @@ public class ServerUtilsTest {
     void testAddBoard() {
         Board board = new Board("title");
         serverUtils.addBoard(board);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/board", webTargetMock.path);
         assertEquals("POST", builderMock.method);
         assertEquals(board, builderMock.entity.getEntity());
@@ -81,7 +82,7 @@ public class ServerUtilsTest {
     void testEditBoard() {
         Board board = new Board("title");
         serverUtils.editBoard(board);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/board", webTargetMock.path);
         assertEquals("PUT", builderMock.method);
         assertEquals(board, builderMock.entity.getEntity());
@@ -93,7 +94,7 @@ public class ServerUtilsTest {
         Board board = new Board("title");
         board.id = 1;
         serverUtils.deleteBoard(board);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/board/1", webTargetMock.path);
         assertEquals("DELETE", builderMock.method);
         assertNull(builderMock.entity);
@@ -103,7 +104,7 @@ public class ServerUtilsTest {
     @Test
     void testGetList() {
         serverUtils.getList(1);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/list/1", webTargetMock.path);
         assertEquals("GET", builderMock.method);
         assertNull(builderMock.entity);
@@ -116,7 +117,7 @@ public class ServerUtilsTest {
         board.id = 1;
         CardList list = new CardList("title");
         serverUtils.addList(board, list);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/board/1", webTargetMock.path);
         assertEquals("POST", builderMock.method);
         assertEquals(list, builderMock.entity.getEntity());
@@ -127,7 +128,7 @@ public class ServerUtilsTest {
     void testEditList() {
         CardList list = new CardList("title");
         serverUtils.editList(list);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/list", webTargetMock.path);
         assertEquals("PUT", builderMock.method);
         assertEquals(list, builderMock.entity.getEntity());
@@ -141,7 +142,7 @@ public class ServerUtilsTest {
         CardList list = new CardList("title");
         list.id = 2;
         serverUtils.deleteList(board, list);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/list/2", webTargetMock.path);
         assertEquals("DELETE", builderMock.method);
         assertNull(builderMock.entity);
@@ -152,8 +153,18 @@ public class ServerUtilsTest {
     @Test
     void testGetCard() {
         serverUtils.getCard(1);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/card/1", webTargetMock.path);
+        assertEquals("GET", builderMock.method);
+        assertNull(builderMock.entity);
+        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
+    }
+
+    @Test
+    void testGetCards() {
+        serverUtils.getCards(1);
+        assertEquals(serverURL, client.url);
+        assertEquals("api/list/1/cards", webTargetMock.path);
         assertEquals("GET", builderMock.method);
         assertNull(builderMock.entity);
         assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
@@ -166,7 +177,7 @@ public class ServerUtilsTest {
         Card card = new Card("title");
         card.id = 3;
         serverUtils.addCard(list, card);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/list/2", webTargetMock.path);
         assertEquals("POST", builderMock.method);
         assertEquals(card, builderMock.entity.getEntity());
@@ -177,11 +188,24 @@ public class ServerUtilsTest {
     void testEditCard() {
         Card card = new Card("title");
         serverUtils.editCard(card);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/card", webTargetMock.path);
         assertEquals("PUT", builderMock.method);
         assertEquals(card, builderMock.entity.getEntity());
         assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
+    }
+
+    @Test
+    void testEditCardPosition() {
+        Card card = new Card("title");
+        CardList original = new CardList("original");
+        CardList target = new CardList("target");
+        serverUtils.editCardPosition(card, original, target, 2);
+        assertEquals(serverURL, client.url);
+        assertEquals("api/list/reorder", webTargetMock.path);
+        assertEquals("PUT", builderMock.method);
+        assertEquals(card, builderMock.entity.getEntity());
+        assertEquals(Arrays.asList("original", "target", "cardId", "cardPlace"), webTargetMock.queryParamKeys);
     }
 
     @Test
@@ -193,24 +217,55 @@ public class ServerUtilsTest {
         Card card = new Card("title");
         card.id = 3;
         serverUtils.deleteCard(card, list, board);
-        assertEquals("http://domain.test:12", client.url);
+        assertEquals(serverURL, client.url);
         assertEquals("api/card/3", webTargetMock.path);
         assertEquals("DELETE", builderMock.method);
         assertNull(builderMock.entity);
         assertEquals(Arrays.asList("boardId", "listId"), webTargetMock.queryParamKeys);
-        // assertEquals(Arrays.asList(), webTargetMock.queryParamValues);
     }
 
     @Test
     void testConnect() {
         serverUtils.connected = false;
 
-        serverUtils.connect("http://domain.test:1234");
-        assertEquals("http://domain.test:12", client.url);
-        assertEquals("api/card/3", webTargetMock.path);
-        assertEquals("DELETE", builderMock.method);
+        serverUtils.connect("http://domain2.test:1234");
+        assertEquals("http://domain2.test:1234", client.url);
+        assertTrue(serverUtils.isConnected());
+    }
+
+    @Test
+    void testDisconnect() {
+        serverUtils.disconnect();
+        assertFalse(serverUtils.isConnected());
+    }
+
+    @Test
+    void testCheckPassword() {
+        serverUtils.checkPassword("password");
+        assertEquals(serverURL, client.url);
+        assertEquals("api/admin/check", webTargetMock.path);
+        assertEquals("GET", builderMock.method);
         assertNull(builderMock.entity);
-        assertEquals(Arrays.asList("boardId", "listId"), webTargetMock.queryParamKeys);
+        assertEquals(Arrays.asList("password"), webTargetMock.queryParamKeys);
+    }
+
+    @Test
+    void testGetServerURL() {
+        assertEquals(serverUtils.getServerURL(), serverURL);
+    }
+
+    @Test
+    void testGetBoardNotConnected() {
+        serverUtils.connected = false;
+        assertNull(serverUtils.getBoard(3));
+        assertNull(client.url);
+    }
+
+    @Test
+    void testGetBoardsNotConnected() {
+        serverUtils.connected = false;
+        assertEquals(new ArrayList<Board>(), serverUtils.getBoards());
+        assertNull(client.url);
     }
 
 }

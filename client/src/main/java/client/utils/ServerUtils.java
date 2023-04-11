@@ -49,14 +49,10 @@ public class ServerUtils {
     {
         if(!connected)
             return null;
-        Response response = client //
+        return client //
                 .target(serverURL).path("api/board/"+id) //
                 .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON).get();
-        if(response.getStatus() == 200)
-            return response.readEntity(Board.class);
-        else
-            return null;
+                .accept(APPLICATION_JSON).get(Board.class);
     }
 
     /**

@@ -15,10 +15,6 @@ import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
 import server.api.util.SimpMessagingTemplateMock;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.BoardServiceImpl;
 import server.services.CardListServiceImpl;
 
 import java.util.*;

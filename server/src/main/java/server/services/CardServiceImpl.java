@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.database.TagRepository;
 import server.services.interfaces.CardService;
 
 @Service
@@ -21,6 +22,9 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private BoardRepository boardRepo;
+
+    @Autowired
+    private TagRepository tagRepo;
 
     public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo) {
 
@@ -44,7 +48,7 @@ public class CardServiceImpl implements CardService {
     }
 
     /**
-     * Update a certain card
+     * Update a certain card + attach Tags
      * @param card the card object to edit, with the corresponding id
      * @return the edited card
      * Gives null if the card does not exist
@@ -53,9 +57,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public Card editCard(Card card) {
         if (card == null) return null;
-
         if (!cardRepo.existsById(card.id)) return null;
-
         return cardRepo.save(card);
     }
 

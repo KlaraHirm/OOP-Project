@@ -17,6 +17,10 @@ public class Board
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
+
+    /**
+     * Title of Board
+     */
     public String title;
 
     /**

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.services.CardServiceImpl;
-
-import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,7 +24,6 @@ public class CardController {
     private final Object lock = new Object();
 
     String update = "updates";
-
 
     /**
      * Get info about a card
@@ -53,9 +50,7 @@ public class CardController {
      * Gives 400 if the body is malformed
      */
     @PutMapping("")
-    public ResponseEntity<Card>  editCard(
-            @RequestBody Card newCard
-    ) {
+    public ResponseEntity<Card> editCard(@RequestBody Card newCard) {
         if (newCard == null) return ResponseEntity.badRequest().build();
         Card ret = cardService.editCard(newCard);
         if (ret == null) return ResponseEntity.notFound().build();

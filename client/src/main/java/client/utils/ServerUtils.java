@@ -1,5 +1,8 @@
 package client.utils;
 
+import client.scenes.MainPageCtrl;
+import client.socket.ClientSocket;
+import client.socket.StompSessionHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -8,16 +11,24 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Service
+@Singleton
 public class ServerUtils {
 
     private static String serverURL = "http://localhost:8080/";
     private static boolean connected = false;
+
+    private StompSession session;
+    private StompSessionHandler stompSessionHandler;
 
     /**
      * get all existing boards in db
@@ -257,10 +268,31 @@ public class ServerUtils {
         connected = false;
         try {
             serverURL = URL;
-            Response response = ClientBuilder.newClient(new ClientConfig()).target(URL).path("api/board").request(APPLICATION_JSON).accept(APPLICATION_JSON).get();
+            Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(URL)
+                    .path("api/board")
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
             connected = response.getStatus() == 200;
         } catch (Exception e) {}
         return connected;
+    }
+
+    /**
+     * check if the admin password is correct
+     * @param password The password for the admin page
+     * @return true if successfully checked, false otherwise
+     */
+    public boolean checkPassword(String password){
+        Response response = ClientBuilder.newClient(new ClientConfig())
+                    .target(serverURL)
+                    .path("api/admin/check")
+                    .queryParam("password", password) //
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .get();
+        return response.getStatus() == 200;
     }
 
     /**
@@ -276,6 +308,32 @@ public class ServerUtils {
      */
     public String getServerURL(){
         return serverURL;
+    }
+
+    /**
+     * start the socket thread
+     */
+    public void socketInit(MainPageCtrl pageCtrl) {
+        ClientSocket clientSocket = new ClientSocket(this, pageCtrl);
+        //create and start the thread for the socket
+        Thread thread = new Thread(clientSocket);
+        thread.start();
+    }
+
+    /**
+     * passes the session
+     * @param session
+     */
+    public void passSession(StompSession session) {
+        this.session = session;
+    }
+
+    /**
+     * passes the session handler
+     * @param handler
+     */
+    public void passStompSessionHandler(StompSessionHandler handler) {
+        this.stompSessionHandler = handler;
     }
 
 }

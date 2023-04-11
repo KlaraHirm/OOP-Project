@@ -6,7 +6,11 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.*;
+
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -145,6 +149,13 @@ public class CardCtrl {
      */
     public void makeDraggable() {
         card.setOnMousePressed(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2) {
+                System.out.println("DOUBLE CLICK");
+                pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                return;
+            }
+
+            System.out.println("SINGLE CLICK");
             setOriginalListObject(listObject);
             this.mousePressed();
             mouseAnchorX = mouseEvent.getSceneX();
@@ -164,6 +175,7 @@ public class CardCtrl {
             this.mouseHighlightStart();
         });
         card.setOnMouseReleased(mouseEvent -> {
+
             this.mouseHighlightEnd();
             boolean foundList = false;
             for (int i = 0; i < boardElement.getChildren().size(); i++) {
@@ -199,8 +211,8 @@ public class CardCtrl {
         double x = card.getLayoutX();
         double y = card.getLayoutY();
         listElement.getChildren().remove(card);
-        boardElement.getChildren().add(card);
         card.setManaged(false);
+        boardElement.getChildren().add(card);
 
         AnchorPane.setBottomAnchor(card, null);
         AnchorPane.setTopAnchor(card, null);
@@ -274,17 +286,30 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
+        int firstIndex = -1;
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
             // Point testMouse = MouseInfo.getPointerInfo().getLocation();
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                listElement.getChildren().add(indexCard+1, card);
-                pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
-                break;
+                if(firstIndex==-1){
+                    firstIndex = indexCard;
+                }
+                else {
+                    listElement.getChildren().add(indexCard, card);
+                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
+                    break;
+                }
             }
         }
+        if(!listElement.getChildren().contains(card)) {
+            if(firstIndex!=-1) {
+                listElement.getChildren().add(firstIndex, card);
+                pageCtrl.reorderCard(cardObject, originalListObject, listObject, firstIndex);
+            }
+        }
+        boardElement.getChildren().remove(card);
     }
 
     /**

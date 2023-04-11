@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
+import commons.CardList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
@@ -47,6 +48,8 @@ public class EditCardCtrl implements Initializable {
     private TextArea bodyField;
 
     private Card card;
+
+    private CardList list;
 
     private Board board;
 
@@ -100,6 +103,10 @@ public class EditCardCtrl implements Initializable {
         this.card = card;
     }
 
+    public void setList(CardList list) {
+        this.list = list;
+    }
+
     public void setBoard(Board board) {
         this.board = board;
     }
@@ -107,6 +114,11 @@ public class EditCardCtrl implements Initializable {
     public void setFields(Card card) {
         titleField.setText(card.title);
         bodyField.setText(card.description);
+    }
+
+    public void deleteCard() throws IOException {
+        server.deleteCard(card, list, board);
+        mainCtrl.showOverview(board);
     }
 
     public void submit() throws IOException {

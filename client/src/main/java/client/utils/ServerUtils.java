@@ -1,5 +1,8 @@
 package client.utils;
 
+import client.scenes.MainPageCtrl;
+import client.socket.ClientSocket;
+import client.socket.StompSessionHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -9,12 +12,17 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Service
+@Singleton
 public class ServerUtils {
 
     public Client client;
@@ -25,6 +33,9 @@ public class ServerUtils {
     public ServerUtils() {
         client = ClientBuilder.newClient(new ClientConfig());
     }
+
+    private StompSession session;
+    private StompSessionHandler stompSessionHandler;
 
     /**
      * get all existing boards in db
@@ -239,6 +250,25 @@ public class ServerUtils {
     }
 
     /**
+     * start long polling for a card if it was deleted
+     * @param cardId id of a card
+     * @return true if card was deleted
+     */
+    public Boolean pollCard(long cardId) {
+        Response resp =  null;
+        while (resp == null || resp.getStatus() == 503) {
+            resp =  ClientBuilder.newClient(new ClientConfig())
+                    .target(serverURL)
+                    .path("api/card/poll/" + cardId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON) //
+                    .get();
+        }
+        return resp.readEntity(Boolean.class);
+
+    }
+
+    /**
      * get whether the client is connected to server
      */
     public boolean isConnected(){
@@ -294,6 +324,32 @@ public class ServerUtils {
      */
     public String getServerURL(){
         return serverURL;
+    }
+
+    /**
+     * start the socket thread
+     */
+    public void socketInit(MainPageCtrl pageCtrl) {
+        ClientSocket clientSocket = new ClientSocket(this, pageCtrl);
+        //create and start the thread for the socket
+        Thread thread = new Thread(clientSocket);
+        thread.start();
+    }
+
+    /**
+     * passes the session
+     * @param session
+     */
+    public void passSession(StompSession session) {
+        this.session = session;
+    }
+
+    /**
+     * passes the session handler
+     * @param handler
+     */
+    public void passStompSessionHandler(StompSessionHandler handler) {
+        this.stompSessionHandler = handler;
     }
 
 }

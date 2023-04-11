@@ -53,6 +53,8 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private Button loadBoardButton;
 
+    private Board activeBoard;
+
     @Inject
     public MainPageCtrl(ServerUtils server, PreferenceUtils preferences, MainClientCtrl mainCtrl) {
         this.server = server;
@@ -135,7 +137,18 @@ public class MainPageCtrl implements Initializable {
                 showCard(selectedBoard, list, card, listContainer, boardHbox);
             }
         }
+        activeBoard = selectedBoard;
     }
+
+    /**
+     * loads changes made to a board
+     * @throws IOException
+     */
+    public void loadChange() throws IOException {
+        Board updatedBoard = server.getBoard(activeBoard.id);
+        loadBoardContent(updatedBoard);
+    }
+
 
     /**
      * method which shows existing board
@@ -378,7 +391,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be edited
      */
     public void showEditCard(Board board, CardList list, Card card) {
-        mainCtrl.showEditCard(card, board);
+        mainCtrl.showEditCard(card, list, board);
     }
 
     /**

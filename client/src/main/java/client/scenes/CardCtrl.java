@@ -14,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+
 public class CardCtrl {
 
     @FXML
@@ -138,7 +140,7 @@ public class CardCtrl {
     /**
      * Use as onAction to go to edit Scene
      */
-    public void showEdit() {
+    public void showEdit() throws IOException {
         pageCtrl.showEditCard(boardObject, listObject, cardObject);
     }
 

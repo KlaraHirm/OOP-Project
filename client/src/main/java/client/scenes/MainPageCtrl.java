@@ -3,11 +3,10 @@ package client.scenes;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
+import client.utils.PreferenceUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -32,6 +31,7 @@ import javafx.util.converter.IntegerStringConverter;
 public class MainPageCtrl implements Initializable {
 
     private final ServerUtils server;
+    private final PreferenceUtils preferences;
     private final MainClientCtrl mainCtrl;
 
     private ObservableList<Board> data;
@@ -53,13 +53,11 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private Button loadBoardButton;
 
-    private Preferences preferences;
-
     @Inject
-    public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
+    public MainPageCtrl(ServerUtils server, PreferenceUtils preferences, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.preferences = Preferences.userRoot();
+        this.preferences = preferences;
     }
 
     /**
@@ -168,7 +166,7 @@ public class MainPageCtrl implements Initializable {
         }
         Board board = new Board("Untitled");
         board = server.addBoard(board);
-        saveBoardId(board);
+        preferences.saveBoardId(server.getServerURL(), board);
         hideBoard(mainPage.lookup("#boardContainer"));
         showBoard(board);
         refresh();
@@ -201,7 +199,9 @@ public class MainPageCtrl implements Initializable {
      */
     public void deleteBoard(Board board, AnchorPane boardContainer) {
         server.deleteBoard(board);
-        removeBoardId(board);
+        boardsList.getSelectionModel().clearSelection();
+        boardsList.getItems().remove(board);
+        preferences.removeBoardId(server.getServerURL(), board);
         refresh();
         hideBoard(boardContainer);
     }
@@ -212,7 +212,9 @@ public class MainPageCtrl implements Initializable {
      * @param boardContainer the board element
      */
     public void leaveBoard(Board board, AnchorPane boardContainer) {
-        removeBoardId(board);
+        boardsList.getSelectionModel().clearSelection();
+        boardsList.getItems().remove(board);
+        preferences.removeBoardId(server.getServerURL(), board);
         refresh();
         hideBoard(boardContainer);
     }
@@ -324,7 +326,7 @@ public class MainPageCtrl implements Initializable {
         refresh();
 
         if(board!=null) {
-            saveBoardId(board);
+            preferences.saveBoardId(server.getServerURL(), board);
             loadBoardContent(board);
             boardsList.setValue(board);
         }
@@ -386,9 +388,7 @@ public class MainPageCtrl implements Initializable {
         var boards = server.getBoards();
         connectionLabel.setText(server.isConnected() ? "Connected" : "Disconnected");
 
-        List<String> joinedBoardIDs = Arrays.asList(
-                preferences.get(server.getServerURL(), "").split(",")
-        );
+        List<String> joinedBoardIDs = preferences.getJoinedBoardIds(server.getServerURL());
         List<Board> joinedBoards = new ArrayList<>();
         for (Board b : boards) {
             if (joinedBoardIDs.contains(Long.toString(b.id))) joinedBoards.add(b);
@@ -457,30 +457,5 @@ public class MainPageCtrl implements Initializable {
         hideBoard(mainPage.lookup("#boardContainer"));
         boardsList.getSelectionModel().clearSelection();
         IDField.setText("");
-    }
-
-
-    /**
-     * Saves the board id to the preferences store, so that it appears in the board list
-     */
-    private void saveBoardId(Board board) {
-        String joinedBoardIDs = preferences.get(server.getServerURL(), "");
-        if (!joinedBoardIDs.isBlank()) joinedBoardIDs += ",";
-        joinedBoardIDs += board.id;
-        preferences.put(server.getServerURL(), joinedBoardIDs);
-    }
-
-    /**
-     * Removes the board id from the preferences store, so that it is hidden in the board list
-     */
-    private void removeBoardId(Board board) {
-        boardsList.getSelectionModel().clearSelection();
-        boardsList.getItems().remove(board);
-
-        List<String> joinedBoards = new ArrayList<>(Arrays.asList(
-                preferences.get(server.getServerURL(), "").split(",")
-        ));
-        joinedBoards.remove(Long.toString(board.id));
-        preferences.put(server.getServerURL(), String.join(",", joinedBoards));
     }
 }

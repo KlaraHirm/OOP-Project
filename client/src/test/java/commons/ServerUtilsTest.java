@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import commons.mocks.BuilderMock;
 import commons.mocks.ClientMock;
 import commons.mocks.WebTargetMock;
-import jakarta.ws.rs.client.Client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 public class ServerUtilsTest {
 

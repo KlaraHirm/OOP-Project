@@ -178,5 +178,6 @@ public class MainClientCtrl {
         editTagCtrl.setFields(tag);
         primaryStage.setScene(editTag);
         editTagCtrl.setBoard(board);
+        editTagCtrl.setTag(tag);
     }
 }

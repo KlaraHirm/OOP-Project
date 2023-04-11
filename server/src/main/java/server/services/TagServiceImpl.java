@@ -65,7 +65,6 @@ public class TagServiceImpl implements TagService {
             return null;
         }
         Tag tag = tagRepo.findById(tagId).get();
-        tagRepo.deleteById(tagId);
         for (Board board : boardRepo.findAll()) {
             board.tags.remove(tag);
             boardRepo.save(board);
@@ -75,6 +74,7 @@ public class TagServiceImpl implements TagService {
             card.tags.remove(tag);
             cardRepo.save(card);
         }
+        tagRepo.deleteById(tagId);
         return tag;
     }
 

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -8,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.catalina.Server;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 
@@ -35,6 +38,19 @@ public class MainClientCtrl {
 
     private EditTagCtrl editTagCtrl;
     private Scene editTag;
+    private AdminCtrl adminCtrl;
+    private Scene admin;
+
+    private ServerUtils serverUtils;
+
+    /**
+     * constructor for MainClientCtrl for the dependency injection, never actually used
+     * @param serverUtils
+     */
+    @Inject
+    public MainClientCtrl(ServerUtils serverUtils) {
+        this.serverUtils = serverUtils;
+    }
 
 
     public void initialize(Stage primaryStage,
@@ -43,7 +59,8 @@ public class MainClientCtrl {
                            Pair<EditListCtrl, Parent> editList,
                            Pair<EditBoardCtrl, Parent> editBoard,
                            Pair<EditTagCtrl, Parent> editTag,
-                           Pair<ServerConnectionCtrl, Parent> serverConnection
+                           Pair<ServerConnectionCtrl, Parent> serverConnection,
+                           Pair<AdminCtrl, Parent> admin
     ) throws IOException {
 
         this.primaryStage = primaryStage;
@@ -67,10 +84,12 @@ public class MainClientCtrl {
         this.editTag = new Scene(editTag.getValue());
 
         showServer();
+        this.adminCtrl = admin.getKey();
+        this.admin = new Scene(admin.getValue());
 
+        showServer();
         primaryStage.show();
         overviewCtrl.refresh();
-
     }
 
     /**
@@ -95,6 +114,13 @@ public class MainClientCtrl {
     }
 
     /**
+     * Init websocket connection
+     */
+    public void socketInit() {
+        serverUtils.socketInit(overviewCtrl);
+    }
+
+    /**
      * Refresh main page
      */
     public void refreshOverview() {
@@ -106,12 +132,22 @@ public class MainClientCtrl {
      * @param card card to edit
      * @param board that the card belongs to
      */
-    public void showEditCard(Card card, Board board) {
+    public void showEditCard(Card card, CardList list, Board board) {
         primaryStage.setTitle("Edit Card");
-        editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
+        editCardCtrl.setFields(card);
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
+        editCardCtrl.setList(list);
+    }
+
+    /**
+     * Shows the admin page
+     */
+    public void showAdminPage() {
+        primaryStage.setTitle("Admin Page");
+        primaryStage.setScene(admin);
+        adminCtrl.loadContent();
     }
 
     /**

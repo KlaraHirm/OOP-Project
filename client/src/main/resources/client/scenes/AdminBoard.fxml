@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="adminBoard" alignment="CENTER" style="-fx-border-color: #2274A5; -fx-background-color: #eff6fa;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminBoardCtrl">
+    <children>
+        <HBox alignment="CENTER" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <children>
+                  <Label fx:id="title" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" style="-fx-background-color: transparent;" textAlignment="CENTER" textFill="#2274a5" wrapText="true">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button minWidth="47.0" mnemonicParsing="false" onAction="#viewBoard" text="View" textFill="#2274a5">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button minWidth="58.0" mnemonicParsing="false" onAction="#deleteBoard" text="Delete" textFill="#a32222">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            </children>
+        </HBox>
+    </children>
+</VBox>

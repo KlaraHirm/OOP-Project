@@ -2,8 +2,11 @@ package client.scenes;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import client.utils.PreferenceUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -29,6 +32,7 @@ import javafx.util.converter.IntegerStringConverter;
 public class MainPageCtrl implements Initializable {
 
     private final ServerUtils server;
+    private final PreferenceUtils preferences;
     private final MainClientCtrl mainCtrl;
 
     private ObservableList<Board> data;
@@ -36,35 +40,38 @@ public class MainPageCtrl implements Initializable {
     private ObservableList<Board> tags;
 
     @FXML
-    private ComboBox<Board> boards_list;
+    private ComboBox<Board> boardsList;
 
     @FXML
-    private ComboBox<Tag> tags_list;
+
+    private ComboBox<Tag> tagsList;
 
     @FXML
-    private AnchorPane main_page;
-    @FXML
-    private Button disconnect_button;
+    private AnchorPane mainPage;
 
     @FXML
-    private Label connection_label;
+    private Button disconnectButton;
 
     @FXML
-    private TextField ID_field;
+    private Label connectionLabel;
 
     @FXML
-    private Button Load_board_button;
+    private TextField IDField;
 
+    @FXML
+    private Button loadBoardButton;
 
+    private Board activeBoard;
 
     @Inject
-    public MainPageCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
+    public MainPageCtrl(ServerUtils server, PreferenceUtils preferences, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.preferences = preferences;
     }
 
     /**
-     * Initialize method which is called after constructor, setts properties of ComboBox boards_list
+     * Initialize method which is called after constructor, setts properties of ComboBox boardsList
      * @param location
      * The location used to resolve relative paths for the root object, or
      * {@code null} if the location is not known.
@@ -75,13 +82,13 @@ public class MainPageCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // convertor for board_list (dropdown menu field with board names)
-        boards_list.setConverter(new StringConverter<Board>() {
+        // convertor for boardsList (dropdown menu field with board names)
+        boardsList.setConverter(new StringConverter<Board>() {
 
             /**
-             * toString method which converts elements in boards_list to String - this is shown in UI in ComboBox
+             * toString method which converts elements in boardsList to String - this is shown in UI in ComboBox
              * @param board the object of type {@code T} to convert
-             * @return String representation of objects in boards_list
+             * @return String representation of objects in boardsList
              */
             @Override
             public String toString(Board board) {
@@ -89,22 +96,22 @@ public class MainPageCtrl implements Initializable {
             }
 
             /**
-             * fromString method which converts String representation back to object in boards_list
+             * fromString method which converts String representation back to object in boardsList
              * @param text the {@code String} to convert
              * @return actual object of String representation
              */
             @Override
             public Board fromString(String text) {
                 String title = text.split(" ")[0];
-                String id_string = text.split(" ")[1];
-                long board_id = Long.parseLong(id_string.substring(1, id_string.length()-1));
-                return boards_list.getItems().stream().filter(b ->
-                        b!=null && b.title.equals(title) && b.id == board_id).findFirst().orElse(null);
+                String idString = text.split(" ")[1];
+                long boardId = Long.parseLong(idString.substring(1, idString.length()-1));
+                return boardsList.getItems().stream().filter(b ->
+                        b!=null && b.title.equals(title) && b.id == boardId).findFirst().orElse(null);
             }
         });
 
         // convertor for tags_list (dropdown menu field with tag names)
-        tags_list.setConverter(new StringConverter<Tag>() {
+        tagsList.setConverter(new StringConverter<Tag>() {
 
             /**
              * toString method which converts elements in tags_list to String - this is shown in UI in ComboBox
@@ -126,15 +133,15 @@ public class MainPageCtrl implements Initializable {
                 String title = text.split(" ")[0];
                 String idString = text.split(" ")[1];
                 long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
-                return tags_list.getItems().stream().filter(t ->
+                return tagsList.getItems().stream().filter(t ->
                         t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
             }
         });
 
         //adding event listener to boards_list which calls method loadBoardContent only when new value is selected
-        boards_list.valueProperty().addListener((observable, oldValue, newValue) -> {
+        boardsList.valueProperty().addListener((observable, oldValue, newValue) -> {
             // This method will only run when a new value is selected
-            if(newValue == null){
+            if(newValue == null || oldValue == newValue){
                 return;
             }
             try {
@@ -145,16 +152,16 @@ public class MainPageCtrl implements Initializable {
         });
 
         //adding event listener to tags_list which calls method loadBoardContent only when new value is selected
-        tags_list.valueProperty().addListener((observable, oldValue, newValue) -> {
+        tagsList.valueProperty().addListener((observable, oldValue, newValue) -> {
             // This method will only run when a new value is selected
             if(newValue == null){
                 return;
             }
-            showEditTag(newValue, boards_list.getValue());
+            showEditTag(newValue, boardsList.getValue());
         });
 
         //force only ints to be entered in ID_field
-        ID_field.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+        IDField.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
 
         refresh();
     }
@@ -166,16 +173,27 @@ public class MainPageCtrl implements Initializable {
      */
     public void loadBoardContent(Board selectedBoard) throws IOException {
         refresh();
-        hideBoard(main_page.lookup("#board_container"));
-        AnchorPane board_container = (AnchorPane) showBoard(selectedBoard);
-        HBox boardHbox = (HBox) board_container.lookup("#board");
+        hideBoard(mainPage.lookup("#boardContainer"));
+        AnchorPane boardContainer = (AnchorPane) showBoard(selectedBoard);
+        HBox boardHbox = (HBox) boardContainer.lookup("#board");
         for(CardList list:selectedBoard.cardLists){
             VBox listContainer = (VBox) showList(selectedBoard, list, boardHbox);
             for(Card card :server.getCards(list.id)){
                 showCard(selectedBoard, list, card, listContainer, boardHbox);
             }
         }
+        activeBoard = selectedBoard;
     }
+
+    /**
+     * loads changes made to a board
+     * @throws IOException
+     */
+    public void loadChange() throws IOException {
+        Board updatedBoard = server.getBoard(activeBoard.id);
+        loadBoardContent(updatedBoard);
+    }
+
 
     /**
      * method which shows existing board
@@ -188,10 +206,10 @@ public class MainPageCtrl implements Initializable {
         Parent parent =  loader.load();
         BoardCtrl boardCtrl = loader.getController();
         boardCtrl.setPageCtrl(this);
-        boardCtrl.setBoard_object(board);
+        boardCtrl.setBoardObject(board);
         boardCtrl.setTitle();
-        main_page.getChildren().addAll(parent);
-        ID_field.setText(Long.toString(board.id));
+        mainPage.getChildren().addAll(parent);
+        IDField.setText(Long.toString(board.id));
         return parent;
     }
 
@@ -206,10 +224,11 @@ public class MainPageCtrl implements Initializable {
         }
         Board board = new Board("Untitled");
         board = server.addBoard(board);
-        hideBoard(main_page.lookup("#board_container"));
+        preferences.saveBoardId(server.getServerURL(), board);
+        hideBoard(mainPage.lookup("#boardContainer"));
         showBoard(board);
         refresh();
-        boards_list.setValue(board);
+        boardsList.setValue(board);
     }
 
     /**
@@ -220,7 +239,7 @@ public class MainPageCtrl implements Initializable {
         if(n==null){
             return;
         }
-        main_page.getChildren().remove(n);
+        mainPage.getChildren().remove(n);
     }
 
     /**
@@ -236,12 +255,26 @@ public class MainPageCtrl implements Initializable {
      * deletes board currently shown from server and client
      * @param board board to be deleted
      */
-    public void deleteBoard(Board board, AnchorPane board_container) {
-        boards_list.getSelectionModel().clearSelection();
-        boards_list.getItems().remove(board);
+    public void deleteBoard(Board board, AnchorPane boardContainer) {
         server.deleteBoard(board);
+        boardsList.getSelectionModel().clearSelection();
+        boardsList.getItems().remove(board);
+        preferences.removeBoardId(server.getServerURL(), board);
         refresh();
-        hideBoard(board_container);
+        hideBoard(boardContainer);
+    }
+
+    /**
+     * hides a board from the board list
+     * @param board board to be hidden
+     * @param boardContainer the board element
+     */
+    public void leaveBoard(Board board, AnchorPane boardContainer) {
+        boardsList.getSelectionModel().clearSelection();
+        boardsList.getItems().remove(board);
+        preferences.removeBoardId(server.getServerURL(), board);
+        refresh();
+        hideBoard(boardContainer);
     }
 
     /**
@@ -257,8 +290,8 @@ public class MainPageCtrl implements Initializable {
         Parent parent =  loader.load();
         ListCtrl listCtrl = loader.getController();
         listCtrl.setPageCtrl(this);
-        listCtrl.setList_object(list);
-        listCtrl.setBoard_object(board);
+        listCtrl.setListObject(list);
+        listCtrl.setBoardObject(board);
         listCtrl.setTitle();
         listCtrl.setScrollPaneId();
         listCtrl.setListId();
@@ -304,12 +337,12 @@ public class MainPageCtrl implements Initializable {
      * deletes list specified in parameters
      * @param board object of class Board where list is
      * @param list object of class CardList which is to be deleted
-     * @param list_container the element corresponding to the list container (this should be the element
+     * @param listContainer the element corresponding to the list container (this should be the element
      *                       which has the cards as direct children)
      */
-    public void deleteList(Board board, CardList list, VBox list_container) {
+    public void deleteList(Board board, CardList list, VBox listContainer) {
         server.deleteList(board, list);
-        hideList(list_container, ((HBox)list_container.getParent()));
+        hideList(listContainer, ((HBox)listContainer.getParent()));
         refresh();
     }
 
@@ -318,12 +351,12 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
      * @param card object of class Card which is to be shown
-     * @param list_element the element corresponding to the list container (this should be the element
+     * @param listElement the element corresponding to the list container (this should be the element
      *      which has the cards as direct children)
-     * @param board_element the element corresponding to the board container
+     * @param boardElement the element corresponding to the board container
      * @throws IOException
      */
-    public void showCard(Board board, CardList list, Card card, VBox list_element, HBox board_element) throws IOException {
+    public void showCard(Board board, CardList list, Card card, VBox listElement, HBox boardElement) throws IOException {
         URL location = getClass().getResource("Card.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent parent =  loader.load();
@@ -333,24 +366,28 @@ public class MainPageCtrl implements Initializable {
         cardCtrl.setListObject(list);
         cardCtrl.setBoardObject(board);
         cardCtrl.setFields();
-        list_element.getChildren().addAll(parent);
+        listElement.getChildren().addAll(parent);
         VBox.setMargin(parent, new Insets(5, 5, 5, 5));
-        cardCtrl.setBoardElement(board_element);
-        cardCtrl.setListElement(list_element);
+        cardCtrl.setBoardElement(boardElement);
+        cardCtrl.setListElement(listElement);
         cardCtrl.makeDraggable();
         cardCtrl.setCardId();
     }
 
     /**
-     * onAction method which show the board with id currently in id_field
+     * onAction method which show the board with id currently in IDField
      */
     public void showBoard() throws IOException
     {
-        long boardID = Integer.parseInt(ID_field.getText());
+        long boardID = Integer.parseInt(IDField.getText());
         Board board = server.getBoard(boardID);
+        refresh();
 
-        if(board!=null)
+        if(board!=null) {
+            preferences.saveBoardId(server.getServerURL(), board);
             loadBoardContent(board);
+            boardsList.setValue(board);
+        }
         else reset();
     }
 
@@ -358,24 +395,24 @@ public class MainPageCtrl implements Initializable {
      * method which creates new card (used as onAction)
      * @param board object of class Board where card is
      * @param list object of class CardList where card is
-     * @param list_element the element corresponding to the list container (this should be the element
+     * @param listElement the element corresponding to the list container (this should be the element
      *      which has the cards as direct children)
      * @throws IOException
      */
-    public void newCard(Board board, CardList list, VBox list_element) throws IOException {
+    public void newCard(Board board, CardList list, VBox listElement) throws IOException {
         Card card = new Card("Untitled");
         list.cards.add(card);
         card = server.addCard(list, card);
-        showCard(board, list, card, list_element, (HBox) main_page.lookup("#board"));
+        showCard(board, list, card, listElement, (HBox) mainPage.lookup("#board"));
     }
 
     /**
      * method which hides card from ui
      * @param n object of class Node to be hidden (card)
-     * @param list_container object of class VBox which represents list where card is
+     * @param listContainer object of class VBox which represents list where card is
      */
-    public void hideCard(Node n, VBox list_container) {
-        list_container.getChildren().remove(n);
+    public void hideCard(Node n, VBox listContainer) {
+        listContainer.getChildren().remove(n);
     }
 
 
@@ -384,11 +421,11 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where card is - grandparent
      * @param list object of class CardList where card is - parent
      * @param card object of class Card which represents the card to be deleted
-     * @param card_element JavaFX element of the card
+     * @param cardElement JavaFX element of the card
      */
-    public void deleteCard(Board board, CardList list, Card card, VBox card_element) {
+    public void deleteCard(Board board, CardList list, Card card, VBox cardElement) {
         server.deleteCard(card, list, board);
-        hideCard(card_element, (VBox) card_element.getParent());
+        hideCard(cardElement, (VBox) cardElement.getParent());
         refresh();
     }
 
@@ -399,7 +436,7 @@ public class MainPageCtrl implements Initializable {
      * @param card object of class Card which is to be edited
      */
     public void showEditCard(Board board, CardList list, Card card) {
-        mainCtrl.showEditCard(card, board);
+        mainCtrl.showEditCard(card, list, board);
     }
 
     /**
@@ -407,12 +444,19 @@ public class MainPageCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        connection_label.setText(server.isConnected() ? "Connected" : "Disconnected");
+        connectionLabel.setText(server.isConnected() ? "Connected" : "Disconnected");
+
+        List<String> joinedBoardIDs = preferences.getJoinedBoardIds(server.getServerURL());
+        List<Board> joinedBoards = new ArrayList<>();
+        for (Board b : boards) {
+            if (joinedBoardIDs.contains(Long.toString(b.id))) joinedBoards.add(b);
+        }
+
         if(!server.isConnected()) {
             reset();
-        } else if(!boards.equals(boards_list.getItems())) {
-            data = FXCollections.observableList(boards);
-            boards_list.setItems(data);
+        } else if(!joinedBoards.equals(boardsList.getItems())) {
+            data = FXCollections.observableList(joinedBoards);
+            boardsList.setItems(data);
         }
         //TODO - same for tags after TagController is ready
     }
@@ -422,9 +466,9 @@ public class MainPageCtrl implements Initializable {
      * @param board object of class Board where card is - grandparent
      * @param list object of class CardList where card is - parent
      * @param card object of class Card which represents the card to be marked as done
-     * @param card_element JavaFX element of the card
+     * @param cardElement JavaFX element of the card
      */
-    public void toggleCardState(Board board, CardList list, Card card, VBox card_element) {
+    public void toggleCardState(Board board, CardList list, Card card, VBox cardElement) {
         card.done = !card.done;
         server.editCard(card);
         refresh();
@@ -458,13 +502,20 @@ public class MainPageCtrl implements Initializable {
         mainCtrl.showServer();
     }
 
+    /**
+     * loads the admin page
+     */
+    public void showAdminPage() {
+        mainCtrl.showAdminPage();
+    }
+
 
     /**
      * removes the currently showing board from list selection and main ui
      */
     public void reset(){
-        hideBoard(main_page.lookup("#board_container"));
-        boards_list.getSelectionModel().clearSelection();
-        ID_field.setText("");
+        hideBoard(mainPage.lookup("#boardContainer"));
+        boardsList.getSelectionModel().clearSelection();
+        IDField.setText("");
     }
 }

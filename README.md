@@ -6,6 +6,14 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## Description of project
 
+This is a todo application that allows users to create boards, lists, and cards to manage their tasks. The application is built using Java, Spring Boot, and JavaFx.
+
+Users can create boards to organize their tasks, and each board can contain multiple lists. Each list can contain cards, which represent individual tasks. Users can assign tags to their cards for better clarity and move them between lists and within lists to order them by priority using drag and drop functionality. Each card can also have a description added to it to provide further context for the task.
+
+The application also features an admin connection, which allows an administrator to access all the boards created within the system.
+
+This application provides an easy and efficient way for users to manage their tasks and stay organized in their daily life.
+
 ## Group members
 
 | Profile Picture                                                                                                                | Name                  | Email                              |
@@ -25,6 +33,17 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## How to run it
 
+You should run both the server and the client to test the app. It is possible to run them on different computers.
+
+- To run the server :
+Execute the "bootRun" Gradle task, via IntelliJ or using "./gradlew bootRun"
+
+- To run the client :
+Execute the "run" Gradle task, via IntelliJ or using `./gradlew run`
+
 ## How to contribute to it
 
-## Copyright / License (opt.)
+We use IntelliJ IDEA to work on the code.
+Make sure to install the Checkstyle plugin, and use the configuration found in `checkstyle.xml`.
+
+To contribute new code, open a merge request.

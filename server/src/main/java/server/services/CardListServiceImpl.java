@@ -4,7 +4,6 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
 import server.database.CardListRepository;

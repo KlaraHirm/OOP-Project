@@ -71,7 +71,6 @@ public class EditCardCtrl {
         pollThread = new Thread(() -> {
             while (true) {
                 if (card == null) continue;
-                System.out.println("Polling");
                 Boolean result = false;
                 try {
                     result = server.pollCard(cardId);

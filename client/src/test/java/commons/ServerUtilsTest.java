@@ -1,32 +1,44 @@
 package commons;
 
 import client.utils.ServerUtils;
+import commons.mocks.BuilderMock;
+import commons.mocks.ClientMock;
+import commons.mocks.WebTargetMock;
 import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.client.ClientConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class ServerUtilsTest {
 
     @Mock
-    public Client client;
+    public ClientMock client;
+
+    @Mock
+    public WebTargetMock webTargetMock;
+
+    @Mock
+    public BuilderMock builderMock;
+
     public ServerUtils serverUtils;
 
     @BeforeEach
     public void setUp()
     {
-        client = ClientBuilder.newClient(new ClientConfig());
+        builderMock = new BuilderMock();
+        webTargetMock = new WebTargetMock(builderMock);
+        client = new ClientMock(webTargetMock);
+
         serverUtils = new ServerUtils();
         serverUtils.client = client;
 
-        serverUtils.serverURL = "http://0.0.0.0:8080";
+        serverUtils.serverURL = "http://domain.test:12";
         serverUtils.connected = true;
     }
 
@@ -34,16 +46,21 @@ public class ServerUtilsTest {
      *
      */
     @Test
-    void getBoards() {
-        List<Board> response = serverUtils.getBoards();
-        System.out.println(response);
-
-        // TODO
+    void testGetBoards() {
+        serverUtils.getBoards();
+        assertEquals("http://domain.test:12", client.url);
+        assertEquals("api/board", webTargetMock.path);
+        assertEquals("GET", builderMock.method);
+        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
     }
 
     @Test
-    void addBoard() {
-        // TODO
+    void testAddBoard() {
+        serverUtils.addBoard(new Board("title"));
+        assertEquals("http://domain.test:12", client.url);
+        assertEquals("api/board", webTargetMock.path);
+        assertEquals("POST", builderMock.method);
+        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
     }
 
 }

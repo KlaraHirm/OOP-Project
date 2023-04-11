@@ -156,6 +156,7 @@ public class MainPageCtrl implements Initializable {
      * @throws IOException
      */
     public Parent showBoard(Board board) throws IOException {
+        activeBoard = board;
         URL location = getClass().getResource("Board.fxml");
         FXMLLoader loader = new FXMLLoader(location);
         Parent parent =  loader.load();

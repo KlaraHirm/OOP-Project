@@ -265,6 +265,18 @@ public class ServerUtils {
     }
 
     /**
+     * get all existing boards in db
+     * @return list of all boards
+     */
+    public List<Tag> getTags(Board board) {
+        return client //
+                .target(serverURL).path("api/board/tags/"+board.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Tag>>() {});
+    }
+
+    /**
      * start long polling for a card if it was deleted
      * @param cardId id of a card
      * @return true if card was deleted

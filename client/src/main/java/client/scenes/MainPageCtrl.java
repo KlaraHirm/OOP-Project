@@ -37,7 +37,7 @@ public class MainPageCtrl implements Initializable {
 
     private ObservableList<Board> data;
 
-    private ObservableList<Board> tags;
+    private ObservableList<Tag> dataTags;
 
     @FXML
     private ComboBox<Board> boardsList;
@@ -210,6 +210,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setTitle();
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
+        refreshTags(board);
         return parent;
     }
 
@@ -382,6 +383,7 @@ public class MainPageCtrl implements Initializable {
         long boardID = Integer.parseInt(IDField.getText());
         Board board = server.getBoard(boardID);
         refresh();
+        refreshTags(board);
 
         if(board!=null) {
             preferences.saveBoardId(server.getServerURL(), board);
@@ -458,7 +460,14 @@ public class MainPageCtrl implements Initializable {
             data = FXCollections.observableList(joinedBoards);
             boardsList.setItems(data);
         }
-        //TODO - same for tags after TagController is ready
+    }
+
+    public void refreshTags(Board board) {
+        var tags = server.getTags(activeBoard);
+        if(!tagsList.getItems().equals(tags)){
+            dataTags = FXCollections.observableList(tags);
+            tagsList.setItems(dataTags);
+        }
     }
 
     /**
@@ -493,6 +502,7 @@ public class MainPageCtrl implements Initializable {
         Tag tag = new Tag("Untitled");
         tag = server.addTag(activeBoard, tag);
         refresh();
+        refreshTags(activeBoard);
     }
 
     /**

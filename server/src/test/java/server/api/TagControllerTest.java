@@ -114,7 +114,7 @@ public class TagControllerTest {
     public void testEditTagNull()
     {
         assertEquals(ResponseEntity.badRequest().build(), sut.editTag(null));
-        assertEquals(ResponseEntity.badRequest().build(), sut.editTag(new Tag(null)));
+        assertEquals(ResponseEntity.notFound().build(), sut.editTag(new Tag(null)));
     }
 
     /**

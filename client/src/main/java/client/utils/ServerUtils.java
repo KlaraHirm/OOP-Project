@@ -277,6 +277,19 @@ public class ServerUtils {
     }
 
     /**
+     * edit specified tag
+     * @param tag tag object to edit
+     * @return edited tag
+     */
+    public Tag editTag(Tag tag) {
+        return client //
+                .target(serverURL).path("api/tag") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
      * start long polling for a card if it was deleted
      * @param cardId id of a card
      * @return true if card was deleted

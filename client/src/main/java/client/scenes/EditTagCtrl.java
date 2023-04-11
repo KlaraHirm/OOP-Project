@@ -47,7 +47,7 @@ public class EditTagCtrl {
 
     public void submit() throws IOException {
         tag.title = titleField.getText();
-//        server.editTag(tag);
+        tag = server.editTag(tag);
         mainCtrl.showOverview(board);
     }
 

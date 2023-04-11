@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.PreferenceUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -20,11 +21,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class AdminCtrl {
 
     private final ServerUtils server;
+    private final PreferenceUtils preferences;
     private final MainClientCtrl mainCtrl;
 
     @FXML
@@ -39,7 +40,6 @@ public class AdminCtrl {
     @FXML
     private VBox boardListContainer;
 
-    private Preferences preferences;
 
     private ObservableList<Board> data;
 
@@ -52,10 +52,10 @@ public class AdminCtrl {
      * Sets EditCardCtrl
      */
     @Inject
-    public AdminCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
+    public AdminCtrl(ServerUtils server, PreferenceUtils preferences, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.preferences = Preferences.userRoot();
+        this.preferences = preferences;
     }
 
     /**
@@ -133,7 +133,7 @@ public class AdminCtrl {
      */
     public void deleteBoard(Board board, VBox boardElement) {
         server.deleteBoard(board);
-        removeBoardFromPreferences(board);
+        preferences.removeBoardId(server.getServerURL(), board);
         hideBoard(boardElement);
         loadContent();
     }
@@ -160,19 +160,6 @@ public class AdminCtrl {
         adminBoardCtrl.setTitle();
         boardListContainer.getChildren().addAll(parent);
         HBox.setMargin(parent, new Insets(10, 10, 10, 10));
-    }
-
-    /**
-     * Removes the board id from the preferences store
-     * so that it is hidden in the board list
-     * @param board the board to remove
-     */
-    private void removeBoardFromPreferences(Board board) {
-        List<String> joinedBoards = new ArrayList<>(Arrays.asList(
-                preferences.get(server.getServerURL(), "").split(",")
-        ));
-        joinedBoards.remove(Long.toString(board.id));
-        preferences.put(server.getServerURL(), String.join(",", joinedBoards));
     }
 
     /**

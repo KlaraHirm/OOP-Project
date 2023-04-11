@@ -6,6 +6,7 @@ import client.socket.StompSessionHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -24,8 +25,14 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 @Singleton
 public class ServerUtils {
 
-    private static String serverURL = "http://localhost:8080/";
-    private static boolean connected = false;
+    public Client client;
+
+    public static String serverURL = "http://localhost:8080/";
+    public static boolean connected = false;
+
+    public ServerUtils() {
+        client = ClientBuilder.newClient(new ClientConfig());
+    }
 
     private StompSession session;
     private StompSessionHandler stompSessionHandler;
@@ -37,7 +44,7 @@ public class ServerUtils {
     public List<Board> getBoards() {
         if(!connected)
             return new ArrayList<>();
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -53,14 +60,10 @@ public class ServerUtils {
     {
         if(!connected)
             return null;
-        Response response = ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/board/"+id) //
                 .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON).get();
-        if(response.getStatus() == 200)
-            return response.readEntity(Board.class);
-        else
-            return null;
+                .accept(APPLICATION_JSON).get(Board.class);
     }
 
     /**
@@ -69,7 +72,7 @@ public class ServerUtils {
      * @return the same board, however with generated id (before that it was always 0)
      */
     public Board addBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -82,7 +85,7 @@ public class ServerUtils {
      * @return the edited board
      */
     public Board editBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -95,7 +98,7 @@ public class ServerUtils {
      * @return response
      */
     public Response deleteBoard(Board board){
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/board/"+board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -108,7 +111,7 @@ public class ServerUtils {
      * @return object of class CardList which has the same id as passed in listId
      */
     public CardList getList(long listId) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/list/"+listId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -122,7 +125,7 @@ public class ServerUtils {
      * @return should be the same list but with the generated id
      */
     public CardList addList(Board board, CardList list) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/board/"+board.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -135,7 +138,7 @@ public class ServerUtils {
      * @return edited card list
      */
     public CardList editList(CardList list) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/list") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -148,7 +151,7 @@ public class ServerUtils {
      * @return response
      */
     public Response deleteList(Board board, CardList list) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/list/"+list.id) //
                 .queryParam("boardId", board.id) //
                 .request(APPLICATION_JSON) //
@@ -162,7 +165,7 @@ public class ServerUtils {
      * @return object of class Card which has the same id as passed in cardId
      */
     public Card getCard(long cardId) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/card/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -176,7 +179,7 @@ public class ServerUtils {
      * @return updated card (with updated id)
      */
     public Card addCard(CardList list, Card card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/list/"+list.id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -191,7 +194,7 @@ public class ServerUtils {
      * @return deleted card (for undo)
      */
     public Card deleteCard(Card card, CardList list, Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/card/"+card.id) //
                 .queryParam("boardId", board.id) //
                 .queryParam("listId", list.id) //
@@ -206,7 +209,7 @@ public class ServerUtils {
      * @return edited card
      */
     public Card editCard(Card card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/card") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -221,7 +224,7 @@ public class ServerUtils {
      * @return updated target
      */
     public CardList editCardPosition(Card card, CardList original, CardList target, int cardPlace) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/list/reorder") //
                 .queryParam("original", original.id) //
                 .queryParam("target", target.id) //
@@ -238,7 +241,7 @@ public class ServerUtils {
      * @return list of cards ordered by place
      */
     public List<Card> getCards(long listId) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        return client //
                 .target(serverURL).path("api/list/" + listId + "/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -281,7 +284,7 @@ public class ServerUtils {
         connected = false;
         try {
             serverURL = URL;
-            Response response = ClientBuilder.newClient(new ClientConfig())
+            Response response = client
                     .target(URL)
                     .path("api/board")
                     .request(APPLICATION_JSON)
@@ -298,7 +301,7 @@ public class ServerUtils {
      * @return true if successfully checked, false otherwise
      */
     public boolean checkPassword(String password){
-        Response response = ClientBuilder.newClient(new ClientConfig())
+        Response response = client
                     .target(serverURL)
                     .path("api/admin/check")
                     .queryParam("password", password) //

@@ -79,7 +79,6 @@ public class EditCardCtrl {
                 }
 
                 if (result) {
-                    System.out.println("Result");
                     Platform.runLater(() -> {
                         try {
                             mainCtrl.showOverview(board);

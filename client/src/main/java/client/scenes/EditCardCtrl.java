@@ -84,7 +84,7 @@ public class EditCardCtrl {
                         try {
                             mainCtrl.showOverview(board);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
                     });
                     break;

@@ -19,8 +19,8 @@ public class ServerUtils {
 
     public Client client;
 
-    public String serverURL = "http://localhost:8080/";
-    public boolean connected = false;
+    public static String serverURL = "http://localhost:8080/";
+    public static boolean connected = false;
 
     public ServerUtils() {
         client = ClientBuilder.newClient(new ClientConfig());

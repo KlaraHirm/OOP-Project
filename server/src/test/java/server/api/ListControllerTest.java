@@ -10,9 +10,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
+import server.api.util.SimpMessagingTemplateMock;
 import server.services.CardListServiceImpl;
 
 import java.util.*;
@@ -34,13 +36,19 @@ class ListControllerTest {
     private CardListServiceImpl service;
     private ListController sut;
 
+    @Mock
+    private SimpMessageSendingOperations messageTemplate;
+
     @BeforeEach
     public void setup()
     {
+        messageTemplate = new SimpMessagingTemplateMock();
         service = new CardListServiceImpl(repo, listRepo, cardRepo);
         sut = new ListController();
         sut.listService = service;
+        sut.messageTemplate = messageTemplate;
     }
+
 
     /**
      * Test that getList returns the correct CardList when given a valid ID

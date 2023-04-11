@@ -9,8 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
+import server.api.util.SimpMessagingTemplateMock;
 import server.services.BoardServiceImpl;
 
 import java.util.*;
@@ -32,13 +34,17 @@ class BoardControllerTest
     @Mock
     private BoardServiceImpl service;
     private BoardController sut;
+    @Mock
+    private SimpMessageSendingOperations messageTemplate;
 
     @BeforeEach
     public void setup()
     {
+        messageTemplate = new SimpMessagingTemplateMock();
         service = new BoardServiceImpl(repo, listRepo);
         sut = new BoardController();
         sut.boardService = service;
+        sut.messageTemplate = messageTemplate;
     }
 
     /**

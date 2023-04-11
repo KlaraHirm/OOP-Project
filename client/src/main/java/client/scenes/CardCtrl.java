@@ -6,9 +6,15 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.*;
+
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
+import java.io.IOException;
 
 public class CardCtrl {
 
@@ -82,7 +88,7 @@ public class CardCtrl {
     }
 
     /**
-     * setter for original_lis_element which is used in drag and drop to represent the origin of drag
+     * setter for originalListElement which is used in drag and drop to represent the origin of drag
      * @param originalListObject object of class CardList
      */
     public void setOriginalListObject(CardList originalListObject) {
@@ -134,7 +140,7 @@ public class CardCtrl {
     /**
      * Use as onAction to go to edit Scene
      */
-    public void showEdit() {
+    public void showEdit() throws IOException {
         pageCtrl.showEditCard(boardObject, listObject, cardObject);
     }
 
@@ -143,6 +149,13 @@ public class CardCtrl {
      */
     public void makeDraggable() {
         card.setOnMousePressed(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2) {
+                System.out.println("DOUBLE CLICK");
+                pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                return;
+            }
+
+            System.out.println("SINGLE CLICK");
             setOriginalListObject(listObject);
             this.mousePressed();
             mouseAnchorX = mouseEvent.getSceneX();
@@ -162,6 +175,7 @@ public class CardCtrl {
             this.mouseHighlightStart();
         });
         card.setOnMouseReleased(mouseEvent -> {
+
             this.mouseHighlightEnd();
             boolean foundList = false;
             for (int i = 0; i < boardElement.getChildren().size(); i++) {
@@ -169,7 +183,7 @@ public class CardCtrl {
                 if (list instanceof VBox) {
                     if (card.getBoundsInParent()
                             .intersects(list.getBoundsInParent())) {
-                        setListElement((VBox) list.lookup("#list_container"));
+                        setListElement((VBox) list.lookup("#listContainer"));
                         setListObject(boardObject.cardLists.get(i));
                         foundList = true;
                         break;
@@ -197,15 +211,15 @@ public class CardCtrl {
         double x = card.getLayoutX();
         double y = card.getLayoutY();
         listElement.getChildren().remove(card);
-        boardElement.getChildren().add(card);
         card.setManaged(false);
+        boardElement.getChildren().add(card);
 
         AnchorPane.setBottomAnchor(card, null);
         AnchorPane.setTopAnchor(card, null);
         AnchorPane.setLeftAnchor(card, null);
         AnchorPane.setRightAnchor(card, null);
 
-        ScrollPane listScrollPane = (ScrollPane)boardElement.lookup("#scroll_pane_" + listObject.id);
+        ScrollPane listScrollPane = (ScrollPane)boardElement.lookup("#scrollPane_" + listObject.id);
         VBox listParent = (VBox)listScrollPane.getParent();
         card.setLayoutX(listParent.getLayoutX() + x);
         card.setLayoutY(listParent.getLayoutY() + y + listScrollPane.getLayoutY());
@@ -223,11 +237,21 @@ public class CardCtrl {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.WHITE,
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(list.lookup("#list_container") != null) {
+                        ((VBox) list.lookup("#list_container")).setBackground(new Background(
+                                new BackgroundFill(Color.WHITE,
+                                        CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
                     intersectionFound = true;
                 } else {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.web("#eff6fa"),
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(list.lookup("#list_container") != null) {
+                        ((VBox) list.lookup("#list_container")).setBackground(new Background(
+                                new BackgroundFill(Color.web("#eff6fa"),
+                                        CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
                 }
             }
         }
@@ -246,6 +270,11 @@ public class CardCtrl {
                     ((VBox) list).setBackground(new Background(
                             new BackgroundFill(Color.web("#eff6fa"),
                                     CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(list.lookup("#list_container") != null) {
+                        ((VBox) list.lookup("#list_container")).setBackground(new Background(
+                                new BackgroundFill(Color.web("#eff6fa"),
+                                        CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
                 }
             }
         }
@@ -257,17 +286,30 @@ public class CardCtrl {
      */
     public void cardsIntersect() {
         int size = listElement.getChildren().size();
+        int firstIndex = -1;
         for (int indexCard = 0; indexCard < size; indexCard++) {
             Node aim = listElement.getChildren().get(indexCard);
             // Point testMouse = MouseInfo.getPointerInfo().getLocation();
             // Point2D mousePoint = new Point2D(mouseAnchorX, mouseAnchorY);
             if (card.localToScene(card.getBoundsInLocal())
                     .intersects(aim.localToScene(aim.getBoundsInLocal()))) {
-                listElement.getChildren().add(indexCard+1, card);
-                pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
-                break;
+                if(firstIndex==-1){
+                    firstIndex = indexCard;
+                }
+                else {
+                    listElement.getChildren().add(indexCard, card);
+                    pageCtrl.reorderCard(cardObject, originalListObject, listObject, indexCard);
+                    break;
+                }
             }
         }
+        if(!listElement.getChildren().contains(card)) {
+            if(firstIndex!=-1) {
+                listElement.getChildren().add(firstIndex, card);
+                pageCtrl.reorderCard(cardObject, originalListObject, listObject, firstIndex);
+            }
+        }
+        boardElement.getChildren().remove(card);
     }
 
     /**

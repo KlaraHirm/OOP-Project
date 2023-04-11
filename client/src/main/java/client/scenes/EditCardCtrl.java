@@ -66,7 +66,6 @@ public class EditCardCtrl {
      * Starts the long polling to check if the card is deleted
      */
     public void poll(Long cardId) {
-        System.out.println("initializing");
         if (pollThread != null) pollThread.interrupt();
 
         pollThread = new Thread(() -> {

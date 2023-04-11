@@ -24,9 +24,10 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private BoardRepository boardRepo;
 
-    public TagServiceImpl(TagRepository tagRepo, CardRepository cardRepo) {
+    public TagServiceImpl(TagRepository tagRepo, CardRepository cardRepo, BoardRepository boardRepo) {
         this.tagRepo = tagRepo;
         this.cardRepo = cardRepo;
+        this.boardRepo = boardRepo;
     }
 
     /**

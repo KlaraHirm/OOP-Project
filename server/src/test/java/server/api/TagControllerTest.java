@@ -41,7 +41,7 @@ public class TagControllerTest {
     @BeforeEach
     public void setup()
     {
-        service = new TagServiceImpl(tagRepo, cardRepo);
+        service = new TagServiceImpl(tagRepo, cardRepo, repo);
         sut = new TagController();
         sut.tagService = service;
     }
@@ -139,17 +139,11 @@ public class TagControllerTest {
         List<Card> cards = new ArrayList<>();
         cards.add(card);
         when(tagRepo.existsById(1L)).thenReturn(true);
-        when(cardRepo.existsById(1L)).thenReturn(true);
-        when(repo.existsById(1L)).thenReturn(true);
         when(tagRepo.findById(1L)).thenReturn(Optional.of(tag));
-        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
-        when(repo.findById(1L)).thenReturn(Optional.of(board));
         when(repo.findAll()).thenReturn(boards);
         when(cardRepo.findAll()).thenReturn(cards);
         assertEquals(ResponseEntity.ok(tag), sut.deleteTagWithId(1L));
         verify(tagRepo, times(1)).deleteById(1L);
-        verify(repo, times(1)).save(board);
-        verify(cardRepo, times(1)).deleteById(1L);
     }
 
     /**

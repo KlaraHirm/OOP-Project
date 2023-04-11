@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -343,5 +344,19 @@ class BoardControllerTest
         assertEquals(1, cardList1.place);
         assertEquals(2, cardList2.place);
         verify(repo, times(1)).save(board);
+    }
+
+    /**
+     * Test that getAllTags returns all Tag in the repo
+     */
+    @Test
+    public void testGetAllTags()
+    {
+        Board board = new Board("test");
+        List<Tag> tags = new ArrayList<>(List.of(new Tag[]{new Tag("test1"), new Tag("test2")}));
+        board.tags = new ArrayList<>(List.of(new Tag[]{new Tag("test1"), new Tag("test2")}));
+        board.id = 1L;
+        when(repo.findById(1L)).thenReturn(Optional.of(board));
+        assertEquals(ResponseEntity.ok(tags), sut.getAllTags(1L));
     }
 }

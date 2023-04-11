@@ -68,22 +68,12 @@ public class TagServiceImpl implements TagService {
         Tag tag = tagRepo.findById(tagId).get();
         tagRepo.deleteById(tagId);
         for (Board board : boardRepo.findAll()) {
-            if (board.tags.contains(tag)) {
-                board.tags.remove(tag);
-            }
+            board.tags.remove(tag);
             boardRepo.save(board);
         }
 
-        for (Board board : boardRepo.findAll()) {
-            if (board.tags.contains(tag)) {
-                board.tags.remove(tag);
-            }
-            boardRepo.save(board);
-        }
         for (Card card : cardRepo.findAll()) {
-            if (card.tags.contains(tag)) {
-                card.tags.remove(tag);
-            }
+            card.tags.remove(tag);
             cardRepo.save(card);
         }
         return tag;

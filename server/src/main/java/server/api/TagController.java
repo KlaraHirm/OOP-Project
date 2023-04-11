@@ -16,9 +16,6 @@ public class TagController {
     @Autowired
     TagServiceImpl tagService;
 
-    @Autowired
-    CardServiceImpl cardService;
-
     /**
      * Retrieve particular Tag using ID
      * @param id - ID of the Tag
@@ -59,7 +56,7 @@ public class TagController {
     {
         Tag retrieved = tagService.deleteTagWithId(tagId);
         if (retrieved  == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(retrieved);
     }

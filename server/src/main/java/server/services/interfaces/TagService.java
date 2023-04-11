@@ -8,5 +8,5 @@ import java.util.List;
 public interface TagService {
     Tag getTag(long tagId);
     Tag editTag(Tag tag);
-    Tag deleteTagWithId(long boardId);
+    Tag deleteTagWithId(long tagId);
 }

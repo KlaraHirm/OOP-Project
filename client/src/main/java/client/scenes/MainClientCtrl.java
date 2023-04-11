@@ -126,11 +126,11 @@ public class MainClientCtrl {
      */
     public void showEditCard(Card card, CardList list, Board board) {
         primaryStage.setTitle("Edit Card");
-        editCardCtrl.setFields(card);
         primaryStage.setScene(editCard);
+        editCardCtrl.setFields(card);
         editCardCtrl.setCard(card);
-        editCardCtrl.setList(list);
         editCardCtrl.setBoard(board);
+        editCardCtrl.setList(list);
     }
 
     /**

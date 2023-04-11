@@ -247,6 +247,25 @@ public class ServerUtils {
     }
 
     /**
+     * start long polling for a card if it was deleted
+     * @param cardId id of a card
+     * @return true if card was deleted
+     */
+    public Boolean pollCard(long cardId) {
+        Response resp =  null;
+        while (resp == null || resp.getStatus() == 503) {
+            resp =  ClientBuilder.newClient(new ClientConfig())
+                    .target(serverURL)
+                    .path("api/card/poll/" + cardId)
+                    .request(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON) //
+                    .get();
+        }
+        return resp.readEntity(Boolean.class);
+
+    }
+
+    /**
      * get whether the client is connected to server
      */
     public boolean isConnected(){

@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+
 
 public class EditCardCtrl {
 
@@ -47,6 +49,8 @@ public class EditCardCtrl {
 
     private Board board;
 
+    private Thread pollThread = null;
+
     /**
      * Sets EditCardCtrl
      * @param server
@@ -58,8 +62,41 @@ public class EditCardCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Starts the long polling to check if the card is deleted
+     */
+    public void poll(Long cardId) {
+        if (pollThread != null) pollThread.interrupt();
+
+        pollThread = new Thread(() -> {
+            while (true) {
+                if (card == null) continue;
+                Boolean result = false;
+                try {
+                    result = server.pollCard(cardId);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (result) {
+                    Platform.runLater(() -> {
+                        try {
+                            mainCtrl.showOverview(board);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    break;
+                }
+            }
+        });
+        pollThread.start();
+    }
+
+
     public void setCard(Card card) {
         this.card = card;
+        poll(card.id);
     }
 
     public void setList(CardList list) {
@@ -90,8 +127,6 @@ public class EditCardCtrl {
     public void cancel() throws IOException {
         mainCtrl.showOverview(board);
     }
-
-
 
 
     /**

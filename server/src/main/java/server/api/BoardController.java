@@ -148,7 +148,7 @@ public class BoardController
      * @return - json representation of successfully written Tag
      * Gives 400 if the body is malformed
      */
-    @PostMapping("/{id}")
+    @PostMapping("/tag/{id}")
     public ResponseEntity<Tag> addTag(@PathVariable("id") long boardId, @RequestBody Tag tag) {
         Board board = boardService.getBoard(boardId);
         Tag retrieved = boardService.addTag(board, tag);
@@ -167,7 +167,7 @@ public class BoardController
      * Retrieve all Tags in a Board
      * @return - a json array containing all Tags
      */
-    @GetMapping("")
+    @GetMapping("/tags/{id}")
     public ResponseEntity<List<Tag>> getAllTags(@PathVariable("id") long boardId) {
         return ResponseEntity.ok(boardService.getAllTags(boardId));
     }

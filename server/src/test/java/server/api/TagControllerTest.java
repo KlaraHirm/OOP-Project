@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import server.api.repository.TestBoardRepository;
@@ -86,7 +87,7 @@ public class TagControllerTest {
         afterTag.id = 1L;
 
         when(tagRepo.existsById(1L)).thenReturn(true);
-        when(tagRepo.findById(1L)).thenReturn(Optional.of(beforeTag));
+        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(beforeTag));
         when(tagRepo.save(afterTag)).thenReturn(afterTag);
 
         assertEquals(ResponseEntity.ok(afterTag), sut.editTag(changeTag));

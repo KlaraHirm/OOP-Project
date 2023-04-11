@@ -491,7 +491,7 @@ public class MainPageCtrl implements Initializable {
 
     public void newTag() {
         Tag tag = new Tag("Untitled");
-//        tag = server.addTag(board, tag);
+        tag = server.addTag(activeBoard, tag);
         refresh();
     }
 

@@ -164,7 +164,6 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoardObject(board);
         boardCtrl.setTitle();
-        server.subscribe(board.id);
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
         return parent;

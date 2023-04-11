@@ -58,6 +58,7 @@ public class ServerConnectionCtrl {
         statusLabel.setText(success ? "Connected!" : "Connection failed");
         mainCtrl.resetOverview();
         mainCtrl.refreshOverview();
+        mainCtrl.socketInit();
         if(success) {
             try {
                 mainCtrl.showOverview(null);

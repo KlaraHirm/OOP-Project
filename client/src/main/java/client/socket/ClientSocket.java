@@ -1,11 +1,11 @@
 package client.socket;
 
+import client.scenes.MainPageCtrl;
 import client.utils.ServerUtils;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-//import java.net.URI;
 
 import javax.inject.Inject;
 
@@ -14,14 +14,18 @@ public class ClientSocket implements Runnable{
     private String server;
     private ServerUtils serverUtils;
     public StompSessionHandler handler;
+    private MainPageCtrl pageCtrl;
 
     /**
      * constructor for the socket
      * @param serverUtils
+     * @param pageCtrl
      */
     @Inject
-    public ClientSocket(ServerUtils serverUtils) {
+    public ClientSocket(ServerUtils serverUtils, MainPageCtrl pageCtrl) {
         this.serverUtils = serverUtils;
+        this.pageCtrl = pageCtrl;
+
     }
 
     /**
@@ -33,9 +37,9 @@ public class ClientSocket implements Runnable{
         WebSocketStompClient stompClient =
                 new WebSocketStompClient(webSocketClient);
         //message converter for json
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+        stompClient.setMessageConverter(new StringMessageConverter());
         //create a session handler
-        handler = new StompSessionHandler(serverUtils);
+        handler = new StompSessionHandler(serverUtils, pageCtrl);
 
         //get the server URL
         server= serverUtils.getServerURL();

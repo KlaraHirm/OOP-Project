@@ -30,16 +30,6 @@
        <TextField fx:id="IDField" layoutX="396.0" layoutY="86.0" minWidth="72.0" prefHeight="26.0" prefWidth="72.0" promptText="Board ID" AnchorPane.rightAnchor="232.0" />
        <Button fx:id="loadBoardButton" layoutX="478.0" layoutY="86.0" minWidth="94.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="26.0" prefWidth="94.0" text="Open Board" AnchorPane.rightAnchor="128.0" />
        <Button fx:id="createBoardButton" layoutX="582.0" layoutY="86.0" minWidth="94.0" mnemonicParsing="false" onAction="#newBoard" prefHeight="26.0" prefWidth="104.0" text="Create Board" AnchorPane.rightAnchor="14.0" />
-      <ComboBox fx:id="tagsList" layoutX="172.0" layoutY="88.0" prefWidth="150.0" promptText="Tags" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;" AnchorPane.leftAnchor="170.0">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ComboBox>
-      <Button fx:id="newTag" layoutX="320.0" layoutY="90.0" mnemonicParsing="false" onAction="#newTag" prefHeight="17.0" prefWidth="12.0" style="-fx-border-radius: 50%; -fx-background-color: transparent; -fx-border-color: #2274A5;" text="+" textFill="#2274a5" AnchorPane.leftAnchor="320.0">
-         <font>
-            <Font size="11.0" />
-         </font>
-      </Button>
 
    </children>
 </AnchorPane>

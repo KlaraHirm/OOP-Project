@@ -111,33 +111,6 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
-        // convertor for tags_list (dropdown menu field with tag names)
-        tagsList.setConverter(new StringConverter<Tag>() {
-
-            /**
-             * toString method which converts elements in tags_list to String - this is shown in UI in ComboBox
-             * @param tag the object of type {@code T} to convert
-             * @return String representation of objects in tags_list
-             */
-            @Override
-            public String toString(Tag tag) {
-                return tag.title + " (" + tag.id + ")";
-            }
-
-            /**
-             * fromString method which converts String representation back to object in tags_list
-             * @param text the {@code String} to convert
-             * @return actual object of String representation
-             */
-            @Override
-            public Tag fromString(String text) {
-                String title = text.split(" ")[0];
-                String idString = text.split(" ")[1];
-                long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
-                return tagsList.getItems().stream().filter(t ->
-                        t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
-            }
-        });
 
         //adding event listener to boards_list which calls method loadBoardContent only when new value is selected
         boardsList.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -150,15 +123,6 @@ public class MainPageCtrl implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        });
-
-        //adding event listener to tags_list which calls method loadBoardContent only when new value is selected
-        tagsList.valueProperty().addListener((observable, oldValue, newValue) -> {
-            // This method will only run when a new value is selected
-            if(newValue == null){
-                return;
-            }
-            showEditTag(newValue, activeBoard);
         });
 
         //force only ints to be entered in ID_field
@@ -210,9 +174,10 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoardObject(board);
         boardCtrl.setTitle();
+        boardCtrl.setServer(server);
+        boardCtrl.refreshTags();
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
-        refreshTags(board);
         return parent;
     }
 
@@ -385,7 +350,6 @@ public class MainPageCtrl implements Initializable {
         long boardID = Integer.parseInt(IDField.getText());
         Board board = server.getBoard(boardID);
         refresh();
-        refreshTags(board);
 
         if(board!=null) {
             preferences.saveBoardId(server.getServerURL(), board);
@@ -464,13 +428,6 @@ public class MainPageCtrl implements Initializable {
         }
     }
 
-    public void refreshTags(Board board) {
-        var tags = server.getTags(activeBoard);
-        if(!tagsList.getItems().equals(tags)){
-            dataTags = FXCollections.observableList(tags);
-            tagsList.setItems(dataTags);
-        }
-    }
 
     /**
      * method which marks a card as done (checkbox checked) or not done (unchecked)
@@ -498,13 +455,6 @@ public class MainPageCtrl implements Initializable {
 
     public void showEditTag(Tag tag, Board board) {
         mainCtrl.showEditTag(tag, board);
-    }
-
-    public void newTag() {
-        Tag tag = new Tag("Untitled");
-        tag = server.addTag(activeBoard, tag);
-        refresh();
-        refreshTags(activeBoard);
     }
 
     /**

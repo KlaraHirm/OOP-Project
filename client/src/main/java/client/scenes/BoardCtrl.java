@@ -1,15 +1,24 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Board;
+import commons.Tag;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class BoardCtrl {
+public class BoardCtrl implements Initializable {
 
     @FXML
     private HBox board;
@@ -26,9 +35,72 @@ public class BoardCtrl {
     @FXML
     private Button newList;
 
+    private ObservableList<Tag> dataTags;
+
+    @FXML
+
+    private ComboBox<Tag> tagsList;
+
     private MainPageCtrl pageCtrl;
 
     private Board boardObject;
+
+    private ServerUtils server;
+
+    /**
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        // convertor for tags_list (dropdown menu field with tag names)
+        tagsList.setConverter(new StringConverter<Tag>() {
+
+            /**
+             * toString method which converts elements in tags_list to String - this is shown in UI in ComboBox
+             * @param tag the object of type {@code T} to convert
+             * @return String representation of objects in tags_list
+             */
+            @Override
+            public String toString(Tag tag) {
+                return tag.title + " (" + tag.id + ")";
+            }
+
+            /**
+             * fromString method which converts String representation back to object in tags_list
+             * @param text the {@code String} to convert
+             * @return actual object of String representation
+             */
+            @Override
+            public Tag fromString(String text) {
+                String title = text.split(" ")[0];
+                String idString = text.split(" ")[1];
+                long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
+                return tagsList.getItems().stream().filter(t ->
+                        t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
+            }
+        });
+
+        //adding event listener to tags_list which calls method loadBoardContent only when new value is selected
+        tagsList.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // This method will only run when a new value is selected
+            if(newValue == null){
+                return;
+            }
+            showEditTag(newValue, boardObject);
+        });
+    }
+
+    /**
+     * setter for server
+     * @param server ServerUtils
+     */
+    public void setServer(ServerUtils server) {
+        this.server = server;
+    }
 
     /**
      * Setter for MainPageCtrl pageCtrl
@@ -81,4 +153,24 @@ public class BoardCtrl {
     public void showEdit() {
         pageCtrl.showEditBoard(boardObject);
     }
+
+    public void refreshTags() {
+        var tags = server.getTags(boardObject);
+        if(!tagsList.getItems().equals(tags)){
+            dataTags = FXCollections.observableList(tags);
+            tagsList.setItems(dataTags);
+        }
+    }
+
+    public void showEditTag(Tag tag, Board board) {
+        pageCtrl.showEditTag(tag, board);
+    }
+
+    public void newTag() {
+        Tag tag = new Tag("Untitled");
+        tag = server.addTag(boardObject, tag);
+        pageCtrl.refresh();
+        refreshTags();
+    }
+
 }

@@ -290,6 +290,20 @@ public class ServerUtils {
     }
 
     /**
+     * delete specified tag
+     * @param tag Tag object to delete
+     * @return deleted tag (for undo)
+     */
+    public Tag deleteTag(Tag tag) {
+        return client //
+                .target(serverURL).path("api/tag/"+tag.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete(Tag.class);
+    }
+
+
+    /**
      * start long polling for a card if it was deleted
      * @param cardId id of a card
      * @return true if card was deleted

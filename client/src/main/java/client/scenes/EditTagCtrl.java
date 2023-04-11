@@ -56,7 +56,7 @@ public class EditTagCtrl {
     }
 
     public void delete() throws IOException {
-//        server.deleteTag(tag);
+        server.deleteTag(tag);
         mainCtrl.showOverview(board);
     }
 }

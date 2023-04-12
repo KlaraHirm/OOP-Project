@@ -10,6 +10,7 @@ import server.database.CardListRepository;
 import server.database.CardRepository;
 import server.services.interfaces.CardListService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,6 +58,7 @@ public class CardListServiceImpl implements CardListService {
         CardList cardList = listRepo.findById(listId).get();
         cardList.cards.add(card);
         card.place = cardList.cards.size();
+        if(card.tags==null) card.tags = new ArrayList<>();
         card = cardRepo.save(card);
         listRepo.save(cardList);
         return card;

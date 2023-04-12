@@ -12,6 +12,8 @@ import server.database.CardRepository;
 import server.database.TagRepository;
 import server.services.interfaces.CardService;
 
+import java.util.ArrayList;
+
 @Service
 public class CardServiceImpl implements CardService {
 
@@ -60,6 +62,24 @@ public class CardServiceImpl implements CardService {
     public Card editCard(Card card) {
         if (card == null) return null;
         if (!cardRepo.existsById(card.id)) return null;
+
+        Card original = cardRepo.findById(card.id).get();
+        if(original.tags==null) original.tags = new ArrayList<>();
+        if(card.tags==null) card.tags = new ArrayList<>();
+        for(Tag tagOriginal : original.tags) {
+            if(!card.tags.contains(tagOriginal)) {
+                if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
+                tagOriginal.cards.remove(original);
+                tagRepo.save(tagOriginal);
+            }
+        }
+        for(Tag tagCard : card.tags) {
+            if(!original.tags.contains(tagCard)) {
+                if(tagCard.cards == null) tagCard.cards = new ArrayList<>();
+                tagCard.cards.add(card);
+                tagRepo.save(tagCard);
+            }
+        }
         return cardRepo.save(card);
     }
 

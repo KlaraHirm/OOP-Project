@@ -7,9 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -81,6 +82,24 @@ public class BoardCtrl implements Initializable {
                 long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
                 return tagsList.getItems().stream().filter(t ->
                         t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
+            }
+        });
+
+        tagsList.setCellFactory(listView -> new ListCell<Tag>() {
+            @Override
+            protected void updateItem(Tag tag, boolean empty) {
+                super.updateItem(tag, empty);
+                if (empty || tag == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(tag.title + " (" + tag.id + ")");
+                    if (tag.color != null && !tag.color.isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.web(tag.color), CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
+                        setBackground(null);
+                    }
+                }
             }
         });
 

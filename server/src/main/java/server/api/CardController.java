@@ -168,7 +168,7 @@ public class CardController {
      * Gives 400 if cardId < 0 or tag is null or tag.title is null
      * Gives 404 if card doesn't exist or card doesn't contain the tag or the tag isn't in card
      */
-    @PutMapping("/tag/{id}")
+    @PostMapping("/tag/{id}")
     public ResponseEntity<Card> attachTag(@PathVariable("id") long cardId, @RequestBody Tag tag) {
         if(cardId < 0 || tag == null || tag.title == null) {
             return ResponseEntity.badRequest().build();

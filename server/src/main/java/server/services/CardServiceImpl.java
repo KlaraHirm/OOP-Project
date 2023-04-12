@@ -113,7 +113,7 @@ public class CardServiceImpl implements CardService {
             return null;
         }
         Card card = cardRepo.findById(cardId).get();
-        if(card.tags.contains(tag) && tag.cards.contains(card)) {
+        if(card.tags.contains(tag) || tag.cards.contains(card)) {
             return null;
         }
         card.tags.add(tag);

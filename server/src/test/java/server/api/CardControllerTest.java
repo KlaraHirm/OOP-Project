@@ -242,4 +242,24 @@ public class CardControllerTest {
         tag.cards.add(card);
         assertEquals(ResponseEntity.notFound().build(), sut.deleteTagFromCard(1L, tag));
     }
+
+    @Test
+    public void attachTagTest() {
+        Card card = new Card("Card");
+        card.id = 1L;
+        card.tags = new ArrayList<>();
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Tag tag1 = new Tag("Tag 1");
+        tag1.id = 1L;
+        tag1.cards = new ArrayList<>();
+        Mockito.lenient().when(tagRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag1));
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag1);
+        card = sut.attachTag(1L, tag1).getBody();
+        assertNotNull(card);
+        assertEquals(tags, card.tags);
+        assertTrue(tagRepo.findById(1L).get().cards.contains(card));
+    }
 }

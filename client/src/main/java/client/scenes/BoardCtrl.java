@@ -186,9 +186,9 @@ public class BoardCtrl implements Initializable {
         dialog.getDialogPane().setGraphic(null);
 
         // Customize the style of the dialog
-        dialog.getDialogPane().lookupButton(ButtonType.OK).setStyle("-fx-font: 16 arial; -fx-base: #b6e7c9;");
-        dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setStyle("-fx-font: 16 arial; -fx-base: #f4c2c2;");
-        ((TextField)dialog.getEditor()).setStyle("-fx-font: 18 arial; -fx-text-fill: #006699; -fx-background-color: #f5f5f5;");
+        dialog.getDialogPane().lookupButton(ButtonType.OK).setStyle("-fx-font: 16 arial; -fx-base: #567752;");
+        dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setStyle("-fx-font: 16 arial; -fx-base: #a32222;");
+        ((TextField)dialog.getEditor()).setStyle("-fx-font: 18 arial; -fx-text-fill: #2274A5; -fx-background-color: #CAE2F0;");
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){

@@ -20,13 +20,17 @@ public class TagController {
      * Retrieve particular Tag using ID
      * @param id - ID of the Tag
      * @return - Json representation of the Tag object
-     * Gives 400 if the body of the retrieved Tag is malformed
+     * Gives 400 if id < 0
+     * Gives 404 if tag doesn't exist
      */
     @GetMapping("/{id}")
     public ResponseEntity<Tag> getTag(@PathVariable("id") long id) {
+        if(id < 0){
+            return ResponseEntity.badRequest().build();
+        }
         Tag retrieved = tagService.getTag(id);
         if (retrieved == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(retrieved);
     }
@@ -40,7 +44,7 @@ public class TagController {
      */
     @PutMapping("")
     public ResponseEntity<Tag> editTag(@RequestBody Tag changedTag) {
-        if (changedTag == null) return ResponseEntity.badRequest().build();
+        if (changedTag == null || changedTag.title == null) return ResponseEntity.badRequest().build();
         Tag retrieved = tagService.editTag(changedTag);
         if (retrieved == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(retrieved);
@@ -50,10 +54,15 @@ public class TagController {
      * Deletes a Tag with particular ID
      * @param tagId - ID of the Tag to delete
      * @return - Response indicating success fo deletion
+     * Gives 400 if tagId < 0
+     * Gives 404 if tag doesn't exist
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Tag> deleteTagWithId(@PathVariable("id") long tagId)
     {
+        if(tagId < 0) {
+            return ResponseEntity.badRequest().build();
+        }
         Tag retrieved = tagService.deleteTagWithId(tagId);
         if (retrieved  == null) {
             return ResponseEntity.notFound().build();

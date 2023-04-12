@@ -232,15 +232,6 @@ public class EditCardCtrl implements Initializable {
     }
 
     public void addTag(Tag tag) throws IOException {
-        if(tagBox.getChildren().size() == 5) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Maximum Number of Tags Reached");
-            alert.setHeaderText(null);
-            alert.setContentText("You can't add more than 5 tags.");
-            alert.showAndWait();
-            return;
-        }
-
         showTag(tag);
         card.tags.add(tag);
     }

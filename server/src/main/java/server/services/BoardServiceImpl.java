@@ -24,9 +24,10 @@ public class BoardServiceImpl implements BoardService {
     @Autowired
     private TagRepository tagRepo;
 
-    public BoardServiceImpl(BoardRepository boardRepo, CardListRepository listRepo) {
+    public BoardServiceImpl(BoardRepository boardRepo, CardListRepository listRepo, TagRepository tagRepo) {
         this.boardRepo = boardRepo;
         this.listRepo = listRepo;
+        this.tagRepo = tagRepo;
     }
 
     /**

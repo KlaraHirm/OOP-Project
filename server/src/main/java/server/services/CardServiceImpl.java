@@ -27,11 +27,12 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private TagRepository tagRepo;
 
-    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo) {
+    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo, TagRepository tagRepo) {
 
         this.cardRepo = cardRepo;
         this.listRepo = listRepo;
         this.boardRepo = boardRepo;
+        this.tagRepo = tagRepo;
     }
 
 
@@ -101,7 +102,7 @@ public class CardServiceImpl implements CardService {
         }
         card.tags.remove(tag);
         tag.cards.remove(card);
-        card = cardRepo.save(card);
+        cardRepo.save(card);
         tagRepo.save(tag);
         return card;
     }

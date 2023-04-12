@@ -159,4 +159,24 @@ public class CardController {
         }
         return ResponseEntity.ok(card);
     }
+
+    /**
+     * Adds Tag to a Card
+     * @param cardId id of a card
+     * @param tag tag to be added to a card
+     * @return updated card
+     * Gives 400 if cardId < 0 or tag is null or tag.title is null
+     * Gives 404 if card doesn't exist or card doesn't contain the tag or the tag isn't in card
+     */
+    @PutMapping("/tag/{id}")
+    public ResponseEntity<Card> attachTag(@PathVariable("id") long cardId, @RequestBody Tag tag) {
+        if(cardId < 0 || tag == null || tag.title == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card card = cardService.attachTag(cardId, tag);
+        if(card == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(card);
+    }
 }

@@ -106,4 +106,20 @@ public class CardServiceImpl implements CardService {
         tagRepo.save(tag);
         return card;
     }
+
+    @Override
+    public Card attachTag(long cardId, Tag tag) {
+        if(!cardRepo.existsById(cardId)){
+            return null;
+        }
+        Card card = cardRepo.findById(cardId).get();
+        if(card.tags.contains(tag) && tag.cards.contains(card)) {
+            return null;
+        }
+        card.tags.add(tag);
+        tag.cards.add(card);
+        card = cardRepo.save(card);
+        tagRepo.save(tag);
+        return card;
+    }
 }

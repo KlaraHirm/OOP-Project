@@ -291,14 +291,16 @@ public class ServerUtilsTest {
 
     @Test
     void testDeleteTag() {
+        Board board = new Board("Board");
+        board.id = 1;
         Tag tag = new Tag("Tag");
         tag.id = 1;
-        serverUtils.deleteTag(tag);
+        serverUtils.deleteTag(tag, 1);
         assertEquals(serverURL, client.url);
         assertEquals("api/tag/1", webTargetMock.path);
         assertEquals("DELETE", builderMock.method);
         assertNull(builderMock.entity);
-        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
+        assertEquals(Arrays.asList("boardId"), webTargetMock.queryParamKeys);
     }
 
 }

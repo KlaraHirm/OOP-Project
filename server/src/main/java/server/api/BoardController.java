@@ -37,9 +37,6 @@ public class BoardController
 
     String update = "updates";
 
-    @Autowired
-    TagServiceImpl tagService;
-
     /**
      * Retrieve all boards in the database
      * @return a json array containing all boards

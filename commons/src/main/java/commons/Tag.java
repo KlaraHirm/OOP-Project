@@ -30,7 +30,7 @@ public class Tag {
     /**
      * Color of tag
      */
-    public String hexColor;
+    public String color;
 
 
     /**
@@ -44,10 +44,20 @@ public class Tag {
     /**
      * Creates a new Tag
      * @param title - Title of Tag
+     * @param color - color of the tag
      */
     public Tag(String title, String color){
         this.title = title;
-        this.hexColor = color;
+        this.color = color;
+    }
+
+    /**
+     * Creates a new Tag with default color
+     * @param title - Title of Tag
+     */
+    public Tag(String title){
+        this.title = title;
+        this.color = " #CAE2F0";
     }
 
     /**

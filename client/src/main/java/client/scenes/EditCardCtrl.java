@@ -198,7 +198,6 @@ public class EditCardCtrl implements Initializable {
     }
 
     public void addTag(Tag tag) throws IOException {
-//        server.addTagToCard()
         if(tagBox.getChildren().size() == 5) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Maximum Number of Tags Reached");
@@ -216,6 +215,8 @@ public class EditCardCtrl implements Initializable {
         controller.setEditCtrl(this);
         controller.setFields();
         tagBox.getChildren().add(n);
+        //        server.addTagToCard()
+        // update card
     }
 
 }

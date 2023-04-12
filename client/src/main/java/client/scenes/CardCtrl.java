@@ -164,7 +164,11 @@ public class CardCtrl {
         card.setOnMousePressed(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 System.out.println("DOUBLE CLICK");
-                pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                try {
+                    pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 return;
             }
 

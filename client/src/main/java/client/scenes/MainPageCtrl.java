@@ -403,7 +403,7 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList - parent of card
      * @param card object of class Card which is to be edited
      */
-    public void showEditCard(Board board, CardList list, Card card) {
+    public void showEditCard(Board board, CardList list, Card card) throws IOException {
         mainCtrl.showEditCard(card, list, board);
     }
 

@@ -170,9 +170,12 @@ public class EditCardCtrl implements Initializable {
         this.board = board;
     }
 
-    public void setFields(Card card) {
+    public void setFields(Card card) throws IOException {
         titleField.setText(card.title);
         bodyField.setText(card.description);
+        for(Tag tag:card.tags) {
+            showTag(tag);
+        }
     }
 
     public void setTagsList(List<Tag> tags) {
@@ -197,6 +200,17 @@ public class EditCardCtrl implements Initializable {
         mainCtrl.showOverview(board);
     }
 
+    public void showTag(Tag tag) throws IOException {
+        FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                Path.of("client", "scenes", "Tag.fxml").toString()));
+        Parent n = (Parent)fxml.load();
+        TagCtrl controller = fxml.getController();
+        controller.setTag(tag);
+        controller.setEditCtrl(this);
+        controller.setFields();
+        tagBox.getChildren().add(n);
+    }
+
     public void addTag(Tag tag) throws IOException {
         if(tagBox.getChildren().size() == 5) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -207,14 +221,7 @@ public class EditCardCtrl implements Initializable {
             return;
         }
 
-        FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-                Path.of("client", "scenes", "Tag.fxml").toString()));
-        Parent n = (Parent)fxml.load();
-        TagCtrl controller = fxml.getController();
-        controller.setTag(tag);
-        controller.setEditCtrl(this);
-        controller.setFields();
-        tagBox.getChildren().add(n);
+        showTag(tag);
         card.tags.add(tag);
     }
 

@@ -41,8 +41,14 @@ public class Card
     /**
      * List of Tags in the Card
      */
+
     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "TAG_CARDS",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_id"))
     public List<Tag> tags;
+
 
     /**
      * Empty constructor for object mappers

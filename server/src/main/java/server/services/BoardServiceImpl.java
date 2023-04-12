@@ -24,9 +24,10 @@ public class BoardServiceImpl implements BoardService {
     @Autowired
     private TagRepository tagRepo;
 
-    public BoardServiceImpl(BoardRepository boardRepo, CardListRepository listRepo) {
+    public BoardServiceImpl(BoardRepository boardRepo, CardListRepository listRepo, TagRepository tagRepo) {
         this.boardRepo = boardRepo;
         this.listRepo = listRepo;
+        this.tagRepo = tagRepo;
     }
 
     /**
@@ -168,18 +169,16 @@ public class BoardServiceImpl implements BoardService {
      * @return - object representation of successfully written Tag
      */
     @Override
-    public Tag addTag(Board board, Tag tag) {
-        if (tag.title == null)
-        {
+    public Tag addTag(long boardId, Tag tag) {
+        if(!boardRepo.existsById(boardId)) {
             return null;
         }
-        if (board == null) {
-            return null;
-        }
+        Board board = boardRepo.findById(boardId).get();
         board.tags.add(tag);
+        if(tag.cards == null) tag.cards = new ArrayList<>();
+        Tag saved = tagRepo.save(tag);
         boardRepo.save(board);
-        tag = tagRepo.save(tag);
-        return tag;
+        return saved;
     }
 
     /**

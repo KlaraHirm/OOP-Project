@@ -14,6 +14,6 @@ public interface BoardService {
     Board deleteBoardByID(long boardId);
     CardList addCardList(CardList list, long boardId);
     Board reorderCardLists(long boardId, long listId, int index);
-    Tag addTag(Board board, Tag tag);
+    Tag addTag(long boardId, Tag tag);
     List<Tag> getAllTags(long boardId);
 }

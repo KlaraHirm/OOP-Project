@@ -37,9 +37,6 @@ public class BoardController
 
     String update = "updates";
 
-    @Autowired
-    TagServiceImpl tagService;
-
     /**
      * Retrieve all boards in the database
      * @return a json array containing all boards
@@ -159,19 +156,18 @@ public class BoardController
      * Write a Tag to the Board
      * @param tag - Tag object to create/ write
      * @return - json representation of successfully written Tag
-     * Gives 400 if the body is malformed
+     * Gives 400 if boardId<0 or tag is null or tag title is null
+     * Gives 404 if board with boardId doesn't exist
      */
     @PostMapping("/tag/{id}")
     public ResponseEntity<Tag> addTag(@PathVariable("id") long boardId, @RequestBody Tag tag) {
-        Board board = boardService.getBoard(boardId);
-        Tag retrieved = boardService.addTag(board, tag);
-        if (retrieved == null)
-        {
+        if (boardId < 0 || tag == null || tag.title == null) {
             return ResponseEntity.badRequest().build();
         }
-        if (board == null)
+        Tag retrieved = boardService.addTag(boardId, tag);
+        if (retrieved == null)
         {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(retrieved);
     }
@@ -179,9 +175,13 @@ public class BoardController
     /**
      * Retrieve all Tags in a Board
      * @return - a json array containing all Tags
+     * 400 is boardId<0
      */
     @GetMapping("/tags/{id}")
     public ResponseEntity<List<Tag>> getAllTags(@PathVariable("id") long boardId) {
+        if(boardId < 0) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(boardService.getAllTags(boardId));
     }
 }

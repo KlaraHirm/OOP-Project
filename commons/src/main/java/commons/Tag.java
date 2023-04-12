@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Tag {
@@ -19,6 +20,13 @@ public class Tag {
      * Title of Tag
      */
     public String title;
+
+    /**
+     * ManyToMany relationship with Card
+     */
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tags")
+    public List<Card> cards;
+
 
     /**
      * Empty constructor for object mappers

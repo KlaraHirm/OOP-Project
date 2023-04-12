@@ -18,12 +18,15 @@ package server.api;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +39,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
+import server.api.repository.TestTagRepository;
 import server.api.util.SimpMessagingTemplateMock;
 import server.services.CardServiceImpl;
 
@@ -51,6 +55,9 @@ public class CardControllerTest {
     @Mock
     private TestBoardRepository boardRepo;
 
+    @Mock
+    private TestTagRepository tagRepo;
+
     private CardServiceImpl service;
     private CardController sut;
 
@@ -61,7 +68,7 @@ public class CardControllerTest {
     public void setup()
     {
         messageTemplate = new SimpMessagingTemplateMock();
-        service = new CardServiceImpl(cardRepo, listRepo, boardRepo);
+        service = new CardServiceImpl(cardRepo, listRepo, boardRepo, tagRepo);
         sut = new CardController();
         sut.cardService = service;
         sut.messageTemplate = messageTemplate;
@@ -143,5 +150,96 @@ public class CardControllerTest {
     @Test
     public void deleteCardNotFound() {
         assertEquals(ResponseEntity.notFound().build(), sut.deleteCard(1L, 1L, 1L));
+    }
+
+    @Test
+    public void getTagsTest() {
+        Card card = new Card("Card");
+        card.id = 1L;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Tag tag1 = new Tag("Tag 1");
+        tag1.id = 1L;
+        Mockito.lenient().when(tagRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag1));
+        Tag tag2 = new Tag("Tag 2");
+        tag2.id = 2L;
+        Mockito.lenient().when(tagRepo.existsById(2L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(2L)).thenReturn(Optional.of(tag2));
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag1);
+        tags.add(tag2);
+        card.tags = tags;
+        List<Card> cards = new ArrayList<>();
+        cards.add(card);
+        tag1.cards = cards;
+        tag2.cards = cards;
+        assertEquals(ResponseEntity.ok(tags), sut.getTags(1L));
+    }
+
+    @Test
+    public void getTags400() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.getTags(-1L));
+    }
+
+    @Test
+    public void getTags404() {
+        assertEquals(ResponseEntity.notFound().build(), sut.getTags(1L));
+    }
+
+    @Test
+    public void deleteTagFromCardTest() {
+        Card card = new Card("Card");
+        card.id = 1L;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Tag tag1 = new Tag("Tag 1");
+        tag1.id = 1L;
+        Mockito.lenient().when(tagRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag1));
+        Tag tag2 = new Tag("Tag 2");
+        tag2.id = 2L;
+        Mockito.lenient().when(tagRepo.existsById(2L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(2L)).thenReturn(Optional.of(tag2));
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag1);
+        tags.add(tag2);
+        card.tags = tags;
+        List<Card> cards = new ArrayList<>();
+        cards.add(card);
+        tag1.cards = cards;
+        tag2.cards = cards;
+        Card updated =  sut.deleteTagFromCard(1L, tag1).getBody();
+        card.tags.remove(tag1);
+        assertEquals(card, updated);
+        tag1.cards.remove(card);
+        assertEquals(tag1, tagRepo.findById(1L).get());
+    }
+
+    @Test
+    public void deleteTagFromCard400() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteTagFromCard(-1L, new Tag("Tag")));
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteTagFromCard(1L, null));
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteTagFromCard(1L, new Tag(null)));
+    }
+
+    @Test
+    public void deleteTagFromCard404() {
+        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagFromCard(1L, new Tag("Tag")));
+        Card card = new Card("card");
+        card.id = 1L;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Tag tag = new Tag("tag");
+        tag.id = 1L;
+        Mockito.lenient().when(tagRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag));
+        card.tags = new ArrayList<>();
+        card.tags.add(tag);
+        tag.cards = new ArrayList<>();
+        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagFromCard(1L, tag));
+        card.tags.remove(tag);
+        tag.cards.add(card);
+        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagFromCard(1L, tag));
     }
 }

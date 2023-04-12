@@ -108,11 +108,12 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Card attachTag(long cardId, Tag tag) {
+    public Card attachTag(long cardId, long tagId) {
         if(!cardRepo.existsById(cardId)){
             return null;
         }
         Card card = cardRepo.findById(cardId).get();
+        Tag tag = tagRepo.findById(tagId).get();
         if(card.tags.contains(tag) || tag.cards.contains(card)) {
             return null;
         }

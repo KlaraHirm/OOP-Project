@@ -257,7 +257,7 @@ public class CardControllerTest {
         Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag1));
         List<Tag> tags = new ArrayList<>();
         tags.add(tag1);
-        card = sut.attachTag(1L, tag1).getBody();
+        card = sut.attachTag(1L, 1L).getBody();
         assertNotNull(card);
         assertEquals(tags, card.tags);
         assertTrue(tagRepo.findById(1L).get().cards.contains(card));

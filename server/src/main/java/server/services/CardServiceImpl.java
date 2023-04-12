@@ -109,7 +109,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Card attachTag(long cardId, long tagId) {
-        if(!cardRepo.existsById(cardId)){
+        if(!cardRepo.existsById(cardId) || !tagRepo.existsById(tagId)){
             return null;
         }
         Card card = cardRepo.findById(cardId).get();

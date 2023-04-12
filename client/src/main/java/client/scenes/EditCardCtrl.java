@@ -175,10 +175,8 @@ public class EditCardCtrl implements Initializable {
     public void setFields(Card card) throws IOException {
         titleField.setText(card.title);
         bodyField.setText(card.description);
-        if(tagBox.getChildren().isEmpty()) {
-            for (Tag tag : card.tags) {
-                showTag(tag);
-            }
+        for (Tag tag : card.tags) {
+            showTag(tag);
         }
     }
 
@@ -202,6 +200,7 @@ public class EditCardCtrl implements Initializable {
     }
 
     public void cancel() throws IOException {
+        tagBox.getChildren().clear();
         mainCtrl.showOverview(board);
     }
 

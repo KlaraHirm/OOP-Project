@@ -129,40 +129,40 @@ public class EditCardCtrl {
     }
 
 
-//    /**
-//     * adds a tag using fxml loader
-//     * loads TagObject.fxml
-//     * calls display on TagPopup
-//     * **/
-//    @FXML
-//    private void addTag() {
-//        try {
-//            Stage popupwindow = new Stage();
-//            popupwindow.initModality(Modality.APPLICATION_MODAL);
-//            popupwindow.setTitle("Add Tag(s)");
-//
-//            //gets fxml of ListObject.fxml
-//            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-//                    Path.of("client", "scenes", "TagPopup.fxml").toString()));
-//
-//            Scene popUpScene = new Scene((Parent)fxml.load(), 200, 250);
-//            popupwindow.setScene(popUpScene);
-//
-//            //loads it into parent object
-//            TagPopupCtrl popupCtrl = fxml.getController();
-//            popupCtrl.setEditCtrl(this);
-//
-//            popupwindow.showAndWait();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     * adds a tag using fxml loader
+     * loads Tag.fxml
+     * calls display on TagPopup
+     * **/
+    @FXML
+    private void addTag() {
+        try {
+            Stage popupwindow = new Stage();
+            popupwindow.initModality(Modality.APPLICATION_MODAL);
+            popupwindow.setTitle("Add Tag(s)");
+
+            //gets fxml of ListObject.fxml
+            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                    Path.of("client", "scenes", "TagPopup.fxml").toString()));
+
+            Scene popUpScene = new Scene((Parent)fxml.load(), 200, 250);
+            popupwindow.setScene(popUpScene);
+
+            //loads it into parent object
+            TagPopupCtrl popupCtrl = fxml.getController();
+            popupCtrl.setEditCtrl(this);
+
+            popupwindow.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 //
 //    public void createNewTag(String name) {
 //        try {
 //            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-//                    Path.of("client", "objects", "TagObject.fxml").toString()));
+//                    Path.of("client", "objects", "Tag.fxml").toString()));
 //            Parent n = (Parent)fxml.load();
 //            TagObjectCtrl controller = fxml.getController();
 //            controller.setEditCtrl(this);

@@ -215,8 +215,7 @@ public class EditCardCtrl implements Initializable {
         controller.setEditCtrl(this);
         controller.setFields();
         tagBox.getChildren().add(n);
-        //        server.addTagToCard()
-        // update card
+        card.tags.add(tag);
     }
 
 }

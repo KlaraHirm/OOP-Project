@@ -302,10 +302,6 @@ public class ServerUtils {
                 .delete(Tag.class);
     }
 
-//    public Card attachTagToCard(Card card, Tag tag) {
-//
-//    }
-
     /**
      * start long polling for a card if it was deleted
      * @param cardId id of a card

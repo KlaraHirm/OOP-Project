@@ -65,6 +65,7 @@ public class CardServiceImpl implements CardService {
 
         Card original = cardRepo.findById(card.id).get();
         if(original.tags==null) original.tags = new ArrayList<>();
+        if(card.tags==null) card.tags = new ArrayList<>();
         for(Tag tagOriginal : original.tags) {
             if(!card.tags.contains(tagOriginal)) {
                 if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
@@ -72,7 +73,6 @@ public class CardServiceImpl implements CardService {
                 tagRepo.save(tagOriginal);
             }
         }
-        if(card.tags==null) card.tags = new ArrayList<>();
         for(Tag tagCard : card.tags) {
             if(!original.tags.contains(tagCard)) {
                 if(tagCard.cards == null) tagCard.cards = new ArrayList<>();

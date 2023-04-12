@@ -107,6 +107,30 @@ public class CardControllerTest {
     }
 
     @Test
+    public void editCardTest() {
+        Card card = new Card("Title");
+        card.id = 1L;
+        card.tags = new ArrayList<>();
+
+        Tag tag = new Tag("Tag");
+        tag.id = 1L;
+        tag.cards = new ArrayList<>();
+
+        card.tags.add(tag);
+        tag.cards.add(card);
+
+        Card card1 = new Card("Title2");
+        card1.id = 1L;
+
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Mockito.lenient().when(cardRepo.save(card1)).thenReturn(card1);
+
+        assertEquals(ResponseEntity.ok(card1), sut.editCard(card1));
+        verify(cardRepo, times(1)).save(card1);
+    }
+
+    @Test
     public void editCardBadRequest() {
         assertEquals(ResponseEntity.badRequest().build(), sut.editCard(null));
     }

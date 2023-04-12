@@ -15,6 +15,7 @@ import javafx.util.StringConverter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class BoardCtrl implements Initializable {
@@ -194,12 +195,18 @@ public class BoardCtrl implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             String tagName = result.get();
-
-            Tag tag = new Tag(tagName);
+            String randomColor = generateHexColor();
+            Tag tag = new Tag(tagName, randomColor);
             tag = server.addTag(boardObject, tag);
             pageCtrl.refresh();
             refreshTags();
         }
+    }
+
+    public String generateHexColor() {
+        Random obj = new Random();
+        int rand_num = obj.nextInt(0xffffff + 1);
+        return String.format("#%06x", rand_num);
     }
 
 }

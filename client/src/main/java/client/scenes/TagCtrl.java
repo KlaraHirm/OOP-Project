@@ -27,7 +27,7 @@ public class TagCtrl {
      * **/
     public void setFields(){
         tagLabel.setText(tag.title);
-        tagHBox.setStyle("-fx-background-color: " + tag.color + ";");
+        tagLabel.setStyle("-fx-background-color: " + tag.color + ";");
     }
 
     /**

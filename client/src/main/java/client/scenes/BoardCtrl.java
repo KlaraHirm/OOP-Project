@@ -204,9 +204,19 @@ public class BoardCtrl implements Initializable {
     }
 
     public String generateHexColor() {
-        Random obj = new Random();
-        int rand_num = obj.nextInt(0xffffff + 1);
-        return String.format("#%06x", rand_num);
+        Random random = new Random();
+        // Generate random RGB values
+        int r = random.nextInt(256);
+        int g = random.nextInt(256);
+        int b = random.nextInt(256);
+
+        // Ensure alpha value is "ff"
+        String alpha = "ff";
+
+        // Convert RGB values to hexadecimal format
+
+        // Return hexadecimal color code
+        return String.format("#%02x%02x%02x%s", r, g, b, alpha);
     }
 
 }

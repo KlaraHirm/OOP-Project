@@ -6,10 +6,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox fx:id="tagHBox" alignment="CENTER" prefHeight="11.0" prefWidth="70.0" spacing="10.0" style="-fx-background-color: #CAE2F0;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.objects.TagObjectCtrl">
+<HBox fx:id="tagHBox" alignment="CENTER" prefHeight="11.0" prefWidth="70.0" spacing="10.0" style="-fx-background-color: #CAE2F0;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagCtrl">
 
     <Label fx:id="tagLabel" alignment="CENTER" text="Tag" textFill="#2274a5" />
-    <Button mnemonicParsing="false" onAction="#deleteTag" prefHeight="19.0" prefWidth="14.0" style="-fx-border-radius: 50%; -fx-background-color: transparent; -fx-border-color: #a32222;" text="x" textFill="#a32222">
+    <Button mnemonicParsing="false" prefHeight="19.0" prefWidth="14.0" style="-fx-border-radius: 50%; -fx-background-color: transparent; -fx-border-color: #a32222;" text="x" textFill="#a32222">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor></Button>

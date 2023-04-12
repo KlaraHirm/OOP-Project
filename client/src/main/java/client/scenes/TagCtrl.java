@@ -1,16 +1,12 @@
-package client.objects;
+package client.scenes;
 
 import client.scenes.EditCardCtrl;
+import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class TagObjectCtrl {
+public class TagCtrl {
     //gets box tags go in
     @FXML
     private HBox tagHBox;
@@ -20,16 +16,17 @@ public class TagObjectCtrl {
 
     private EditCardCtrl editCtrl;
 
-    public TagObjectCtrl() {
+    private Tag tag;
 
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     /**
-     * @param name
      * Sets tagLabel to name
      * **/
-    public void setTagLabel(String name){
-        tagLabel.setText(name);
+    public void setFields(){
+        tagLabel.setText(tag.title);
     }
 
     /**
@@ -40,10 +37,10 @@ public class TagObjectCtrl {
         this.editCtrl = e;
     }
 
-    /**
-     * sends delete to editctrl with whats getting deleted
-     * **/
-    public void deleteTag() {
-        editCtrl.deleteTag(tagHBox);
-    }
+//    /**
+//     * sends delete to editctrl with whats getting deleted
+//     * **/
+//    public void deleteTag() {
+//        editCtrl.deleteTag(tagHBox);
+//    }
 }

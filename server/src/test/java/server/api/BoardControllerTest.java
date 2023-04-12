@@ -2,14 +2,17 @@ package server.api;
 
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
+import server.api.util.SimpMessagingTemplateMock;
 import server.services.BoardServiceImpl;
 
 import java.util.*;
@@ -31,13 +34,17 @@ class BoardControllerTest
     @Mock
     private BoardServiceImpl service;
     private BoardController sut;
+    @Mock
+    private SimpMessageSendingOperations messageTemplate;
 
     @BeforeEach
     public void setup()
     {
+        messageTemplate = new SimpMessagingTemplateMock();
         service = new BoardServiceImpl(repo, listRepo);
         sut = new BoardController();
         sut.boardService = service;
+        sut.messageTemplate = messageTemplate;
     }
 
     /**
@@ -343,5 +350,19 @@ class BoardControllerTest
         assertEquals(1, cardList1.place);
         assertEquals(2, cardList2.place);
         verify(repo, times(1)).save(board);
+    }
+
+    /**
+     * Test that getAllTags returns all Tag in the repo
+     */
+    @Test
+    public void testGetAllTags()
+    {
+        Board board = new Board("test");
+        List<Tag> tags = new ArrayList<>(List.of(new Tag[]{new Tag("test1"), new Tag("test2")}));
+        board.tags = new ArrayList<>(List.of(new Tag[]{new Tag("test1"), new Tag("test2")}));
+        board.id = 1L;
+        when(repo.findById(1L)).thenReturn(Optional.of(board));
+        assertEquals(ResponseEntity.ok(tags), sut.getAllTags(1L));
     }
 }

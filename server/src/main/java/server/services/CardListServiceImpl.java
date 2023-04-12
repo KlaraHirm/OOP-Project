@@ -10,6 +10,8 @@ import server.database.CardListRepository;
 import server.database.CardRepository;
 import server.services.interfaces.CardListService;
 
+import java.util.List;
+
 @Service
 public class CardListServiceImpl implements CardListService {
 
@@ -54,8 +56,9 @@ public class CardListServiceImpl implements CardListService {
         if (listId < 0 || !listRepo.existsById(listId)) return null;
         CardList cardList = listRepo.findById(listId).get();
         cardList.cards.add(card);
+        card.place = cardList.cards.size();
+        card = cardRepo.save(card);
         listRepo.save(cardList);
-        cardRepo.save(card);
         return card;
     }
 
@@ -107,7 +110,7 @@ public class CardListServiceImpl implements CardListService {
      * Returns null if IDs and position do not exist
      */
     @Override
-    public CardList reorder(long idOriginal, long idTarget, long idCard) {
+    public CardList reorder(long idOriginal, long idTarget, long idCard, int cardPlace) {
         if ((idOriginal < 0 || !listRepo.existsById(idOriginal)) &&
                 (idTarget < 0 || !listRepo.existsById(idTarget))) {
             return  null;
@@ -116,17 +119,31 @@ public class CardListServiceImpl implements CardListService {
         CardList oldList = listRepo.findById(idOriginal).get();
         CardList newList = listRepo.findById(idTarget).get();
         Card card = cardRepo.findById(idCard).get();
-        int position = 0;
         if (!oldList.cards.contains(card)) return null;
-        for (int i = 0; i < oldList.cards.size(); i++) {
-            if (oldList.cards.get(i).equals(card)) {
-                position++;
-            }
-        }
         oldList.cards.remove(card);
-        newList.cards.add(position, card);
+        int place = 0;
+        for(Card oldListCard : oldList.cards) {
+            oldListCard.place = place;
+            place++;
+        }
+        if (cardPlace < newList.cards.size()) {
+          newList.cards.add(cardPlace, card);
+        } else {
+          newList.cards.add(card);
+        }
+        place = 1;
+        for(Card newListCard : newList.cards) {
+            newListCard.place = place;
+            place++;
+        }
         listRepo.save(oldList);
         listRepo.save(newList);
         return newList;
+    }
+
+    public List<Card> getCards(long listId) {
+        if (listId < 0 || !listRepo.existsById(listId)) return null;
+        CardList cardList = listRepo.findById(listId).get();
+        return cardList.cards;
     }
 }

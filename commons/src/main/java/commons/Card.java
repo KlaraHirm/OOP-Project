@@ -46,6 +46,13 @@ public class Card
     public List<SubTask> subTasks;
 
     /**
+     * List of Tags in the Card
+     */
+    @ManyToMany(cascade = CascadeType.ALL)
+    public List<Tag> tags;
+
+
+    /**
      * Empty constructor for object mappers
      */
     @SuppressWarnings("unused")
@@ -67,6 +74,7 @@ public class Card
         this.description = description;
         this.done = done;
         this.subTasks = new ArrayList<SubTask>();
+        this.tags = new ArrayList<Tag>();
     }
 
     /**
@@ -99,6 +107,7 @@ public class Card
                 .append(id, card.id)
                 .append(title, card.title)
                 .append(description, card.description)
+                .append(tags, card.tags)
                 .append(done, card.done)
                 .append(subTasks, card.subTasks)
                 .isEquals();
@@ -117,6 +126,7 @@ public class Card
                 .append(description)
                 .append(done)
                 .append(subTasks)
+                .append(tags)
                 .toHashCode();
     }
 
@@ -132,6 +142,7 @@ public class Card
                 .append("title", title)
                 .append("place", place)
                 .append("description", description)
+                .append("tags", tags)
                 .append("done", done)
                 .append("subTasks", subTasks)
                 .toString();

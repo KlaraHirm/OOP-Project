@@ -1,19 +1,14 @@
 package server.api;
 
-import commons.Board;
 import commons.Card;
-import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.CardListServiceImpl;
+import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.services.CardServiceImpl;
-
-import java.util.Optional;
-import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/card")
@@ -21,7 +16,14 @@ public class CardController {
 
     @Autowired
     CardServiceImpl cardService;
+    @Autowired
+    SimpMessageSendingOperations messageTemplate;
 
+    private ExecutorService cardPoll = Executors.newFixedThreadPool(5);
+
+    private final Object lock = new Object();
+
+    String update = "updates";
 
     /**
      * Get info about a card
@@ -34,10 +36,9 @@ public class CardController {
             @PathVariable("id") long cardId
     ) {
         Card ret = cardService.getCard(cardId);
-        if(ret==null){
+        if(ret==null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(ret);
     }
 
@@ -49,12 +50,11 @@ public class CardController {
      * Gives 400 if the body is malformed
      */
     @PutMapping("")
-    public ResponseEntity<Card>  editCard(
-            @RequestBody Card newCard
-    ) {
+    public ResponseEntity<Card> editCard(@RequestBody Card newCard) {
         if (newCard == null) return ResponseEntity.badRequest().build();
         Card ret = cardService.editCard(newCard);
         if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -68,11 +68,55 @@ public class CardController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Card> deleteCard(
-            @RequestParam("boardId") long boardId, @RequestParam("listId") long listId, @PathVariable("id") long cardId
+            @RequestParam("boardId") long boardId,
+            @RequestParam("listId") long listId,
+            @PathVariable("id") long cardId
     ) {
-        if(cardId < 0 || listId < 0 || boardId < 0) return ResponseEntity.badRequest().build();
+        if(cardId < 0 || listId < 0 || boardId < 0)
+            return ResponseEntity.badRequest().build();
         Card ret = cardService.deleteCard(boardId, listId, cardId);
         if (ret == null) return ResponseEntity.notFound().build();
+        synchronized(lock) {
+            lock.notifyAll();
+        }
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
+
+    /**
+     * Long Polling to detect if card was deleted
+     * @param cardId id of a card
+     * @return true if card was deleted
+     */
+    @GetMapping("/poll/{id}")
+    public DeferredResult<Boolean> pollCard(@PathVariable("id") long cardId) {
+        DeferredResult<Boolean> deferredResult = new DeferredResult<>();
+        cardPoll.execute(() -> {
+            synchronized(lock) {
+                while (pollCardExist(cardId)) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                deferredResult.setResult(true);
+            }
+        });
+        return deferredResult;
+    }
+
+    /**
+     * Method which checks if card exists
+     * @param cardId id of a card
+     * @return true if card exists, false otherwise
+     */
+    public boolean pollCardExist(long cardId) {
+        if (cardId < 0) {
+            return false;
+        }
+        Card ret = cardService.getCard(cardId);
+        return ret != null;
+    }
+
 }

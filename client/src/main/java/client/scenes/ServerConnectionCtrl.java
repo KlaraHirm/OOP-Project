@@ -23,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class ServerConnectionCtrl {
 
@@ -31,10 +30,10 @@ public class ServerConnectionCtrl {
     private final MainClientCtrl mainCtrl;
 
     @FXML
-    private TextField server_address_field;
+    private TextField serverAddressField;
 
     @FXML
-    private Label status_label;
+    private Label statusLabel;
 
 
     /**
@@ -53,12 +52,13 @@ public class ServerConnectionCtrl {
      * should connect to the given server address and go to the main page of that address
      */
     public void connectServer() {
-        String serverAddress = server_address_field.getText();
-        status_label.setText("Connecting...");
+        String serverAddress = serverAddressField.getText();
+        statusLabel.setText("Connecting...");
         boolean success = server.connect(serverAddress);
-        status_label.setText(success ? "Connected!" : "Connection failed");
+        statusLabel.setText(success ? "Connected!" : "Connection failed");
         mainCtrl.resetOverview();
         mainCtrl.refreshOverview();
+        mainCtrl.socketInit();
         if(success) {
             try {
                 mainCtrl.showOverview(null);
@@ -73,6 +73,6 @@ public class ServerConnectionCtrl {
      * sets the initial values of the UI elements when the scene is loaded
      */
     public void setUIValues() {
-        server_address_field.setText(server.getServerURL());
+        serverAddressField.setText(server.getServerURL());
     }
 }

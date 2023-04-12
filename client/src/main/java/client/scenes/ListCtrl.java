@@ -5,6 +5,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -12,37 +13,43 @@ import java.io.IOException;
 public class ListCtrl {
 
     @FXML
-    private Button delete_list;
+    private Button deleteList;
 
     @FXML
     private VBox list;
 
     @FXML
-    private Label list_title;
+    private VBox listContainer;
 
     @FXML
-    private Button new_card;
+    private Label listTitle;
 
-    private Board board_object;
+    @FXML
+    private Button newCard;
 
-    private CardList list_object;
+    @FXML
+    private ScrollPane scrollPane;
+
+    private Board boardObject;
+
+    private CardList listObject;
 
     private MainPageCtrl pageCtrl;
 
     /**
-     * setter for board_object
-     * @param board_object object of class Board where list is
+     * setter for boardObject
+     * @param boardObject object of class Board where list is
      */
-    public void setBoard_object(Board board_object) {
-        this.board_object = board_object;
+    public void setBoardObject(Board boardObject) {
+        this.boardObject = boardObject;
     }
 
     /**
-     * setter for list_object
-     * @param list_object object of class CardList representing a list
+     * setter for listObject
+     * @param listObject object of class CardList representing a list
      */
-    public void setList_object(CardList list_object) {
-        this.list_object = list_object;
+    public void setListObject(CardList listObject) {
+        this.listObject = listObject;
     }
 
     /**
@@ -57,7 +64,7 @@ public class ListCtrl {
      * set title which is shown in ui of list to its title with id in brackets
      */
     public void setTitle() {
-        list_title.setText(list_object.title + " (" + list_object.id + ")");
+        listTitle.setText(listObject.title + " (" + listObject.id + ")");
     }
 
     /**
@@ -65,20 +72,45 @@ public class ListCtrl {
      * @throws IOException
      */
     public void newCard() throws IOException {
-        pageCtrl.newCard(board_object, list_object, list);
+        pageCtrl.newCard(boardObject, listObject, listContainer);
+    }
+
+    /*
+     * Returns the inner list container (where the cards go)
+     */
+    public VBox getListContainer() {
+        return listContainer;
+    }
+
+    /*
+     * Returns the outer list container (under the board HBox)
+     */
+    public VBox getList() {
+        return list;
+    }
+
+    public void setScrollPaneId() {
+        scrollPane.setId("scrollPane_" + listObject.id);
     }
 
     /**
      * used as onAction to delete current list
      */
     public void deleteList() {
-        pageCtrl.deleteList(board_object, list_object, list);
+        pageCtrl.deleteList(boardObject, listObject, list);
+    }
+
+    /**
+     * sets id of element representing list to contain its object id
+     */
+    public void setListId() {
+        list.setId("list_" + listObject.id);
     }
 
     /**
      * used as onAction to show the page to edit the list
      */
     public void showEdit() {
-        pageCtrl.showEditList(board_object, list_object);
+        pageCtrl.showEditList(boardObject, listObject);
     }
 }

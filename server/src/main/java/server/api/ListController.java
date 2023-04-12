@@ -1,16 +1,13 @@
 package server.api;
 
-import commons.Board;
 import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.services.BoardServiceImpl;
 import server.services.CardListServiceImpl;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/list")
@@ -18,6 +15,10 @@ public class ListController {
 
     @Autowired
     CardListServiceImpl listService;
+    @Autowired
+    SimpMessageSendingOperations messageTemplate;
+
+    String update = "updates";
 
     /**
      * Get a particular CardList using ID
@@ -46,6 +47,7 @@ public class ListController {
         if (card == null || card.title == null) return ResponseEntity.badRequest().build();
         Card ret = listService.addCard(card, id);
         if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -61,6 +63,7 @@ public class ListController {
         if (cardListNew == null || cardListNew.title == null) return ResponseEntity.badRequest().build();
         CardList ret = listService.editList(cardListNew);
         if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -75,6 +78,7 @@ public class ListController {
     public ResponseEntity<CardList> deleteList(@RequestParam("boardId") long boardId, @PathVariable("id") long id) {
         CardList ret = listService.deleteList(boardId, id);
         if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }
 
@@ -82,17 +86,33 @@ public class ListController {
      * Reorder CardLists when drag and drop
      * @param idOld - the original list
      * @param idNew - the target list
-     * @param idCard - the Card to be displaced
      * @return the saved target list
      * Returns 404 if IDs and position do not exist
      */
     @PutMapping(path = {"/reorder"})
     public ResponseEntity<CardList> reorder(@RequestParam("original") long idOld, @RequestParam("target") long idNew,
-                                            @RequestParam("cardId") long idCard) {
-        CardList ret = listService.reorder(idOld, idNew, idCard);
+                                  @RequestParam("cardId") long idCard, @RequestParam("cardPlace") int placeCard) {
+        if(placeCard < 0 || idOld < 0 || idNew < 0 || idCard < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        CardList ret = listService.reorder(idOld, idNew, idCard, placeCard);
         if (ret == null) {
             return  ResponseEntity.notFound().build();
         }
+        messageTemplate.convertAndSend("/topic/updates", update);
+        return ResponseEntity.ok(ret);
+    }
+
+    /**
+     * Getter for cards in list
+     * @param listId id of a list
+     * @return ordered list of cards by place
+     * Returns 404 when ID not exists
+     */
+    @GetMapping(path = {"/{id}/cards"})
+    public ResponseEntity<List<Card>> getCards(@PathVariable("id") long listId) {
+        List<Card> ret = listService.getCards(listId);
+        if (ret == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ret);
     }
 }

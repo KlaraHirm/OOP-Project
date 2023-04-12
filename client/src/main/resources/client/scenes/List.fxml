@@ -10,7 +10,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
          <children>
-            <Button fx:id="new_card" mnemonicParsing="false" onAction="#newCard" style="-fx-background-color: #D7DDE1; -fx-border-color: #2274A5;" text="New Card" textFill="#2274a5" wrapText="true">
+            <Button fx:id="newCard" mnemonicParsing="false" onAction="#newCard" style="-fx-background-color: #D7DDE1; -fx-border-color: #2274A5;" text="New Card" textFill="#2274a5" wrapText="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -18,12 +18,12 @@
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
             </Button>
-            <Label fx:id="list_title" text="Untitled" textFill="#2274a5" wrapText="true">
+            <Label fx:id="listTitle" text="Untitled" textFill="#2274a5" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="edit_list" layoutX="242.0" layoutY="21.0" mnemonicParsing="false" onAction="#showEdit" style="-fx-background-color: #D7DDE1; -fx-border-color: #2274A5;" text="Edit" textFill="#2274a5" wrapText="true">
+            <Button fx:id="editList" layoutX="242.0" layoutY="21.0" mnemonicParsing="false" onAction="#showEdit" style="-fx-background-color: #D7DDE1; -fx-border-color: #2274A5;" text="Edit" textFill="#2274a5" wrapText="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -31,7 +31,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="delete_list" mnemonicParsing="false" onAction="#deleteList" style="-fx-background-color: #D7DDE1; -fx-border-color: a32222;" text="Delete" textFill="#a32222" wrapText="true">
+            <Button fx:id="deleteList" mnemonicParsing="false" onAction="#deleteList" style="-fx-background-color: #D7DDE1; -fx-border-color: a32222;" text="Delete" textFill="#a32222" wrapText="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -41,5 +41,8 @@
             </Button>
          </children>
       </HBox>
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;">
+         <VBox fx:id="listContainer" prefWidth="375.0" style="-fx-background-color: #eff6fa;" styleClass="listContainer" />
+      </ScrollPane>
    </children>
 </VBox>

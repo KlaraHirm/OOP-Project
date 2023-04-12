@@ -5,31 +5,27 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="main_page" accessibleRole="BUTTON" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: e9ecef;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainPageCtrl">
+<AnchorPane fx:id="mainPage" accessibleRole="BUTTON" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: e9ecef;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainPageCtrl">
    <children>
       <AnchorPane prefHeight="70.0" prefWidth="600.0" style="-fx-background-color: f8f9fa;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="connection_label" layoutX="531.0" layoutY="48.0" text="Disconnected" AnchorPane.rightAnchor="50.0" />
-            <Label alignment="CENTER" layoutY="24.0" maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="600.0" text="Welcome to your digital workspace!" textFill="#2274a5" wrapText="true" AnchorPane.leftAnchor="0.0">
+            <Label fx:id="connectionLabel" alignment="CENTER" layoutX="531.0" layoutY="48.0" prefHeight="18.0" prefWidth="133.0" text="Disconnected" AnchorPane.rightAnchor="13.0" />
+            <Label alignment="CENTER" layoutY="24.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="436.0" text="Welcome to your digital workspace!" textFill="#2274a5" wrapText="true" AnchorPane.leftAnchor="0.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="disconnect_button" layoutX="571.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeServerConnection" prefHeight="24.0" prefWidth="163.0" text="Edit Connection" AnchorPane.rightAnchor="50.0" />
+            <Button fx:id="disconnectButton" layoutX="519.0" layoutY="22.0" mnemonicParsing="false" onAction="#changeServerConnection" prefHeight="26.0" prefWidth="133.0" text="Disconnect" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="adminPageButton" layoutX="440.0" layoutY="22.0" mnemonicParsing="false" onAction="#showAdminPage" prefHeight="26.0" prefWidth="104.0" text="Admin page" AnchorPane.rightAnchor="156.0" />
          </children>
       </AnchorPane>
-      <Button layoutX="537.0" layoutY="82.0" mnemonicParsing="false" onAction="#newBoard" style="-fx-background-color: e9ecef; -fx-border-color: #2274a5; -fx-border-radius: 50%;" text="+" textFill="#2274a5" AnchorPane.rightAnchor="26.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <ComboBox fx:id="boards_list" layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">
+      <ComboBox fx:id="boardsList" layoutX="29.0" layoutY="88.0" prefWidth="150.0" promptText="Boards" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </ComboBox>
+      <TextField fx:id="IDField" layoutX="396.0" layoutY="86.0" minWidth="72.0" prefHeight="26.0" prefWidth="72.0" promptText="Board ID" AnchorPane.rightAnchor="232.0" />
+      <Button fx:id="loadBoardButton" layoutX="478.0" layoutY="86.0" minWidth="94.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="26.0" prefWidth="94.0" text="Open Board" AnchorPane.rightAnchor="128.0" />
+      <Button fx:id="createBoardButton" layoutX="582.0" layoutY="86.0" minWidth="94.0" mnemonicParsing="false" onAction="#newBoard" prefHeight="26.0" prefWidth="104.0" text="Create Board" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>

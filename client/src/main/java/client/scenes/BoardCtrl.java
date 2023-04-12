@@ -7,15 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class BoardCtrl implements Initializable {
@@ -154,6 +153,9 @@ public class BoardCtrl implements Initializable {
         pageCtrl.showEditBoard(boardObject);
     }
 
+    /**
+     * Refreshes tagsList
+     */
     public void refreshTags() {
         var tags = server.getTags(boardObject);
         if(!tagsList.getItems().equals(tags)){
@@ -162,15 +164,41 @@ public class BoardCtrl implements Initializable {
         }
     }
 
+    /**
+     * Go to editTag scene
+     * @param tag tag to edit
+     * @param board board where tag is
+     */
     public void showEditTag(Tag tag, Board board) {
         pageCtrl.showEditTag(tag, board);
     }
 
+    /**
+     * create new tag
+     */
     public void newTag() {
-        Tag tag = new Tag("Untitled");
-        tag = server.addTag(boardObject, tag);
-        pageCtrl.refresh();
-        refreshTags();
+        TextInputDialog dialog = new TextInputDialog("Untitled");
+        dialog.setTitle("New Tag");
+        dialog.setHeaderText("Enter the name of the new tag:");
+        dialog.setContentText("Tag Name:");
+
+        // Remove the question mark icon from the dialog
+        dialog.getDialogPane().setGraphic(null);
+
+        // Customize the style of the dialog
+        dialog.getDialogPane().lookupButton(ButtonType.OK).setStyle("-fx-font: 16 arial; -fx-base: #b6e7c9;");
+        dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setStyle("-fx-font: 16 arial; -fx-base: #f4c2c2;");
+        ((TextField)dialog.getEditor()).setStyle("-fx-font: 18 arial; -fx-text-fill: #006699; -fx-background-color: #f5f5f5;");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            String tagName = result.get();
+
+            Tag tag = new Tag(tagName);
+            tag = server.addTag(boardObject, tag);
+            pageCtrl.refresh();
+            refreshTags();
+        }
     }
 
 }

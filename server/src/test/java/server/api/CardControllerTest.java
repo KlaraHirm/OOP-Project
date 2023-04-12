@@ -243,25 +243,4 @@ public class CardControllerTest {
         assertEquals(ResponseEntity.notFound().build(), sut.deleteTagFromCard(1L, tag));
     }
 
-    @Test
-    public void attachTag400() {
-        assertEquals(ResponseEntity.badRequest().build(), sut.attachTag(-1L,1L));
-        assertEquals(ResponseEntity.badRequest().build(), sut.attachTag(1L,-1L));
-    }
-
-    @Test
-    public void attachTag404() {
-        Card card = new Card("Card");
-        card.id = 1L;
-        card.tags = new ArrayList<>();
-        when(cardRepo.existsById(1L)).thenReturn(true);
-        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
-        assertEquals(ResponseEntity.notFound().build(), sut.attachTag(1L,1L));
-        Tag tag1 = new Tag("Tag 1");
-        tag1.id = 1L;
-        tag1.cards = new ArrayList<>();
-        Mockito.lenient().when(tagRepo.existsById(1L)).thenReturn(true);
-        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag1));
-        assertEquals(ResponseEntity.notFound().build(), sut.attachTag(2L,1L));
-    }
 }

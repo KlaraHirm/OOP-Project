@@ -1,6 +1,5 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -48,7 +47,6 @@ public class Card
             name = "TAG_CARDS",
             joinColumns = @JoinColumn(name = "card_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @JsonManagedReference("card-tag")
     public List<Tag> tags;
 
 

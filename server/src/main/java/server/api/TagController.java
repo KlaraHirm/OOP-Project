@@ -30,13 +30,13 @@ public class TagController {
         }
         Tag retrieved = tagService.getTag(id);
         if (retrieved == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(retrieved);
     }
 
     /**
-     * Update a Tag
+     * Update a Tag (not used to update tag.cards)
      * @param changedTag - the Tag object to edit, with the corresponding ID
      * @return - the edited Tag
      * Gives 404 if the Tag does not exist

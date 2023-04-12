@@ -47,6 +47,7 @@ public class Card
             name = "TAG_CARDS",
             joinColumns = @JoinColumn(name = "card_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonManagedReference("card-tag")
     public List<Tag> tags;
 
 

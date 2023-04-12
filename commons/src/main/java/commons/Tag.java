@@ -25,7 +25,7 @@ public class Tag {
      * ManyToMany relationship with Card
      */
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tags")
-//    @JsonBackReference("card-tag")
+    @JsonBackReference("card-tag")
     public List<Card> cards;
 
 

@@ -266,4 +266,39 @@ public class ServerUtilsTest {
         assertNull(client.url);
     }
 
+    @Test
+    void testGetTags() {
+        Board board = new Board("Board");
+        board.id = 1;
+        serverUtils.getTags(board);
+        assertEquals(serverURL, client.url);
+        assertEquals("api/board/tags/1", webTargetMock.path);
+        assertEquals("GET", builderMock.method);
+        assertNull(builderMock.entity);
+        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
+    }
+
+    @Test
+    void testEditTag() {
+        Tag tag = new Tag("Tag");
+        serverUtils.editTag(tag);
+        assertEquals(serverURL, client.url);
+        assertEquals("api/tag", webTargetMock.path);
+        assertEquals("PUT", builderMock.method);
+        assertEquals(tag, builderMock.entity.getEntity());
+        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
+    }
+
+    @Test
+    void testDeleteTag() {
+        Tag tag = new Tag("Tag");
+        tag.id = 1;
+        serverUtils.deleteTag(tag);
+        assertEquals(serverURL, client.url);
+        assertEquals("api/tag/1", webTargetMock.path);
+        assertEquals("DELETE", builderMock.method);
+        assertNull(builderMock.entity);
+        assertEquals(Arrays.asList(), webTargetMock.queryParamKeys);
+    }
+
 }

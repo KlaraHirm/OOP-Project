@@ -13,15 +13,13 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -123,6 +121,24 @@ public class EditCardCtrl implements Initializable {
                 addTag(newValue);
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }
+        });
+
+        tagsList.setCellFactory(listView -> new ListCell<Tag>() {
+            @Override
+            protected void updateItem(Tag tag, boolean empty) {
+                super.updateItem(tag, empty);
+                if (empty || tag == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(tag.title + " (" + tag.id + ")");
+                    if (tag.color != null && !tag.color.isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.web(tag.color), CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
+                        setBackground(null);
+                    }
+                }
             }
         });
     }

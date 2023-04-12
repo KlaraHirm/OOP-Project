@@ -3,6 +3,7 @@ package server.services;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
@@ -87,5 +88,21 @@ public class CardServiceImpl implements CardService {
         cardRepo.deleteById(cardId);
 
         return deleted;
+    }
+
+    @Override
+    public Card deleteTagFromCard(long cardId, Tag tag) {
+        if(!cardRepo.existsById(cardId)){
+            return null;
+        }
+        Card card = cardRepo.findById(cardId).get();
+        if(!card.tags.contains(tag) || !tag.cards.contains(card)) {
+            return null;
+        }
+        card.tags.remove(tag);
+        tag.cards.remove(card);
+        card = cardRepo.save(card);
+        tagRepo.save(tag);
+        return card;
     }
 }

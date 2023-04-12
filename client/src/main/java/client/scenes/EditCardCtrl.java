@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -28,6 +29,7 @@ import javafx.util.StringConverter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -157,7 +159,7 @@ public class EditCardCtrl implements Initializable {
     }
 
 
-    public void setCard(Card card) {
+    public void setCard(Card card) throws IOException {
         this.card = card;
         poll(card.id);
     }
@@ -173,8 +175,10 @@ public class EditCardCtrl implements Initializable {
     public void setFields(Card card) throws IOException {
         titleField.setText(card.title);
         bodyField.setText(card.description);
-        for(Tag tag:card.tags) {
-            showTag(tag);
+        if(tagBox.getChildren().isEmpty()) {
+            for (Tag tag : card.tags) {
+                showTag(tag);
+            }
         }
     }
 
@@ -193,6 +197,7 @@ public class EditCardCtrl implements Initializable {
         card.title = titleField.getText();
         card.description = bodyField.getText();
         server.editCard(card);
+        tagBox.getChildren().clear();
         mainCtrl.showOverview(board);
     }
 
@@ -223,6 +228,12 @@ public class EditCardCtrl implements Initializable {
 
         showTag(tag);
         card.tags.add(tag);
+    }
+
+    public void deleteTag(HBox tagElement, Tag tag) {
+        tagBox.getChildren().remove(tagElement);
+        card.tags.remove(tag);
+        server.editCard(card);
     }
 
 }

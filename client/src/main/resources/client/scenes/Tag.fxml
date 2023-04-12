@@ -13,7 +13,7 @@
       <font>
          <Font name="System Bold" size="13.0" />
       </font></Label>
-    <Button mnemonicParsing="false" prefHeight="19.0" prefWidth="14.0" style="-fx-border-radius: 50%; -fx-background-color: transparent; -fx-border-color: #a32222;" text="x" textFill="#a32222">
+    <Button mnemonicParsing="false" onAction="#deleteTag" prefHeight="19.0" prefWidth="14.0" style="-fx-border-radius: 50%; -fx-background-color: transparent; -fx-border-color: #a32222;" text="x" textFill="#a32222">
         <cursor>
             <Cursor fx:constant="HAND" />
         </cursor></Button>

@@ -38,10 +38,10 @@ public class TagCtrl {
         this.editCtrl = e;
     }
 
-//    /**
-//     * sends delete to editctrl with whats getting deleted
-//     * **/
-//    public void deleteTag() {
-//        editCtrl.deleteTag(tagHBox);
-//    }
+    /**
+     * sends delete to editctrl with whats getting deleted
+     * **/
+    public void deleteTag() {
+        editCtrl.deleteTag(tagHBox, tag);
+    }
 }

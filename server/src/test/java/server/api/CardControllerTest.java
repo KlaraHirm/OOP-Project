@@ -98,14 +98,11 @@ public class CardControllerTest {
         Card card1 = new Card("Title2");
         card1.id = 1L;
 
-        Card card2 = new Card("Title2");
-        card2.id = 1L;
-
         when(cardRepo.existsById(1L)).thenReturn(true);
         Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
-        when(cardRepo.save(card2)).thenReturn(card2);
+        Mockito.lenient().when(cardRepo.save(card1)).thenReturn(card1);
 
-        assertEquals(ResponseEntity.ok(card2), sut.editCard(card1));
+        assertEquals(ResponseEntity.ok(card1), sut.editCard(card1));
         verify(cardRepo, times(1)).save(card1);
     }
 

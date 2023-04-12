@@ -59,7 +59,7 @@ public class Tag {
      */
     public Tag(String title){
         this.title = title;
-        this.color = " #CAE2F0";
+        this.color = "#6FA8DC";
     }
 
     /**

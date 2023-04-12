@@ -225,9 +225,9 @@ public class BoardCtrl implements Initializable {
     public String generateHexColor() {
         Random random = new Random();
         // Generate random RGB values
-        int r = random.nextInt(256);
-        int g = random.nextInt(256);
-        int b = random.nextInt(256);
+        int r = 200 + random.nextInt(56);
+        int g = 200 + random.nextInt(56);
+        int b = 200 + random.nextInt(56);
 
         // Ensure alpha value is "ff"
         String alpha = "ff";

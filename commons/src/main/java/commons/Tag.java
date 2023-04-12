@@ -27,6 +27,11 @@ public class Tag {
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tags")
     public List<Card> cards;
 
+    /**
+     * Color of tag
+     */
+    public String hexColor;
+
 
     /**
      * Empty constructor for object mappers
@@ -40,8 +45,9 @@ public class Tag {
      * Creates a new Tag
      * @param title - Title of Tag
      */
-    public Tag(String title){
+    public Tag(String title, String color){
         this.title = title;
+        this.hexColor = color;
     }
 
     /**

@@ -161,6 +161,7 @@ public class BoardCtrl implements Initializable {
         if(!tagsList.getItems().equals(tags)){
             dataTags = FXCollections.observableList(tags);
             tagsList.setItems(dataTags);
+            boardObject.tags = tags;
         }
     }
 

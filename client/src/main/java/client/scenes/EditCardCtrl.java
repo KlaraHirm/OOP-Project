@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -198,12 +199,22 @@ public class EditCardCtrl implements Initializable {
 
     public void addTag(Tag tag) throws IOException {
 //        server.addTagToCard()
+        if(tagBox.getChildren().size() == 5) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Maximum Number of Tags Reached");
+            alert.setHeaderText(null);
+            alert.setContentText("You can't add more than 5 tags.");
+            alert.showAndWait();
+            return;
+        }
+
         FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
                 Path.of("client", "scenes", "Tag.fxml").toString()));
         Parent n = (Parent)fxml.load();
         TagCtrl controller = fxml.getController();
         controller.setTag(tag);
         controller.setEditCtrl(this);
+        controller.setFields();
         tagBox.getChildren().add(n);
     }
 

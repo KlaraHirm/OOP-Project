@@ -25,7 +25,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button alignment="CENTER" layoutX="144.0" layoutY="300.0" mnemonicParsing="false" onAction="#delete" text="Delete" textFill="#a32222">
+      <Button alignment="CENTER" layoutX="144.0" layoutY="300.0" mnemonicParsing="false" onAction="#delete" text="Delete" textFill="#a32222" AnchorPane.rightAnchor="20.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

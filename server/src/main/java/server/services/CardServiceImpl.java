@@ -60,6 +60,19 @@ public class CardServiceImpl implements CardService {
     public Card editCard(Card card) {
         if (card == null) return null;
         if (!cardRepo.existsById(card.id)) return null;
+        Card original = cardRepo.findById(card.id).get();
+        for(Tag tagOriginal : original.tags) {
+            if(!card.tags.contains(tagOriginal)) {
+                tagOriginal.cards.remove(original);
+                tagRepo.save(tagOriginal);
+            }
+        }
+        for(Tag tagCard : card.tags) {
+            if(!original.tags.contains(tagCard)) {
+                tagCard.cards.add(card);
+                tagRepo.save(tagCard);
+            }
+        }
         return cardRepo.save(card);
     }
 
@@ -103,23 +116,6 @@ public class CardServiceImpl implements CardService {
         card.tags.remove(tag);
         tag.cards.remove(card);
         cardRepo.save(card);
-        tagRepo.save(tag);
-        return card;
-    }
-
-    @Override
-    public Card attachTag(long cardId, long tagId) {
-        if(!cardRepo.existsById(cardId) || !tagRepo.existsById(tagId)){
-            return null;
-        }
-        Card card = cardRepo.findById(cardId).get();
-        Tag tag = tagRepo.findById(tagId).get();
-        if(card.tags.contains(tag) || tag.cards.contains(card)) {
-            return null;
-        }
-        card.tags.add(tag);
-        tag.cards.add(card);
-        card = cardRepo.save(card);
         tagRepo.save(tag);
         return card;
     }

@@ -30,6 +30,11 @@ public class Tag {
     @JsonIgnore
     public List<Card> cards;
 
+    /**
+     * Color of tag
+     */
+    public String color;
+
 
     /**
      * Empty constructor for object mappers
@@ -42,10 +47,21 @@ public class Tag {
     /**
      * Creates a new Tag
      * @param title - Title of Tag
+     * @param color - color of the tag
+     */
+    public Tag(String title, String color){
+        this.title = title;
+        this.color = color;
+    }
+
+    /**
+     * Creates a new Tag with default color
+     * @param title - Title of Tag
      */
     public Tag(String title){
 
         this.title = title;
+        this.color = "#6FA8DC";
         this.cards = new ArrayList<>();
     }
 

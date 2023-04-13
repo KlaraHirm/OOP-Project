@@ -132,13 +132,14 @@ public class MainClientCtrl {
      * @param card card to edit
      * @param board that the card belongs to
      */
-    public void showEditCard(Card card, CardList list, Board board) {
+    public void showEditCard(Card card, CardList list, Board board) throws IOException {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
-        editCardCtrl.setFields(card);
-        editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
+        editCardCtrl.setCard(card);
         editCardCtrl.setList(list);
+        editCardCtrl.refreshTags();
+        editCardCtrl.setFields(card);
     }
 
     /**

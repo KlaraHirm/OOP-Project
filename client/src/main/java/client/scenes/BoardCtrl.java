@@ -7,14 +7,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class BoardCtrl implements Initializable {
@@ -80,6 +82,24 @@ public class BoardCtrl implements Initializable {
                 long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
                 return tagsList.getItems().stream().filter(t ->
                         t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
+            }
+        });
+
+        tagsList.setCellFactory(listView -> new ListCell<Tag>() {
+            @Override
+            protected void updateItem(Tag tag, boolean empty) {
+                super.updateItem(tag, empty);
+                if (empty || tag == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(tag.title + " (" + tag.id + ")");
+                    if (tag.color != null && !tag.color.isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.web(tag.color), CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
+                        setBackground(null);
+                    }
+                }
             }
         });
 
@@ -161,6 +181,7 @@ public class BoardCtrl implements Initializable {
         if(!tagsList.getItems().equals(tags)){
             dataTags = FXCollections.observableList(tags);
             tagsList.setItems(dataTags);
+            boardObject.tags = tags;
         }
     }
 
@@ -193,12 +214,28 @@ public class BoardCtrl implements Initializable {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             String tagName = result.get();
-
-            Tag tag = new Tag(tagName);
+            String randomColor = generateHexColor();
+            Tag tag = new Tag(tagName, randomColor);
             tag = server.addTag(boardObject, tag);
             pageCtrl.refresh();
             refreshTags();
         }
+    }
+
+    public String generateHexColor() {
+        Random random = new Random();
+        // Generate random RGB values
+        int r = 200 + random.nextInt(56);
+        int g = 200 + random.nextInt(56);
+        int b = 200 + random.nextInt(56);
+
+        // Ensure alpha value is "ff"
+        String alpha = "ff";
+
+        // Convert RGB values to hexadecimal format
+
+        // Return hexadecimal color code
+        return String.format("#%02x%02x%02x%s", r, g, b, alpha);
     }
 
 }

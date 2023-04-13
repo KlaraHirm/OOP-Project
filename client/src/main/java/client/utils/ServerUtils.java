@@ -303,7 +303,6 @@ public class ServerUtils {
                 .delete(Tag.class);
     }
 
-
     /**
      * start long polling for a card if it was deleted
      * @param cardId id of a card

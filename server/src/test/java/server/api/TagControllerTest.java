@@ -11,9 +11,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardRepository;
 import server.api.repository.TestTagRepository;
+import server.api.util.SimpMessagingTemplateMock;
 import server.services.TagServiceImpl;
 
 import java.util.ArrayList;
@@ -36,22 +38,27 @@ public class TagControllerTest {
     @Mock
     private TestBoardRepository repo;
 
+    @Mock
+    private SimpMessageSendingOperations messageTemplate;
+
     private TagServiceImpl service;
     private TagController sut;
 
     @BeforeEach
     public void setup()
     {
+        messageTemplate = new SimpMessagingTemplateMock();
         service = new TagServiceImpl(tagRepo, cardRepo, repo);
         sut = new TagController();
         sut.tagService = service;
+        sut.messageTemplate = messageTemplate;
     }
 
     /**
      * Test that getTag returns the correct Tag when given a valid ID
      */
     @Test
-    public void testGetList() {
+    public void testGetTag() {
         commons.Tag tag = new commons.Tag("test");
         when(tagRepo.existsById(1L)).thenReturn(true);
         when(tagRepo.findById(1L)).thenReturn(Optional.of(tag));
@@ -60,14 +67,23 @@ public class TagControllerTest {
     }
 
     /**
-     * Test that getTag returns 404
-     * when Tag is not found or ID is invalid
+     * Test that getTag returns 400
+     * when Tag ID is invalid
      */
     @Test
-    public void testGetTag404()
+    public void testGetTag400()
     {
-        assertEquals(ResponseEntity.notFound().build(), sut.getTag(-1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.getTag(-1L));
+    }
+
+    /**
+     * Test that getTag returns 404
+     * when Tag is not found
+     */
+    @Test
+    public void testGetTag404() {
         assertEquals(ResponseEntity.notFound().build(), sut.getTag(1L));
+
     }
 
     /**
@@ -103,7 +119,6 @@ public class TagControllerTest {
     {
         Tag tag = new Tag("test");
         tag.id = 1L;
-        when(tagRepo.existsById(1L)).thenReturn(false);
         assertEquals(ResponseEntity.notFound().build(), sut.editTag(tag));
     }
 
@@ -115,7 +130,7 @@ public class TagControllerTest {
     public void testEditTagNull()
     {
         assertEquals(ResponseEntity.badRequest().build(), sut.editTag(null));
-        assertEquals(ResponseEntity.notFound().build(), sut.editTag(new Tag(null)));
+        assertEquals(ResponseEntity.badRequest().build(), sut.editTag(new Tag(null)));
     }
 
     /**
@@ -136,14 +151,18 @@ public class TagControllerTest {
         card.tags = new ArrayList<>();
         card.tags.add(tag);
         card.id = 1L;
+        tag.cards = new ArrayList<>();
+        tag.cards.add(card);
         boards.add(board);
         List<Card> cards = new ArrayList<>();
         cards.add(card);
         when(tagRepo.existsById(1L)).thenReturn(true);
         when(tagRepo.findById(1L)).thenReturn(Optional.of(tag));
-        when(repo.findAll()).thenReturn(boards);
-        when(cardRepo.findAll()).thenReturn(cards);
-        assertEquals(ResponseEntity.ok(tag), sut.deleteTagWithId(1L));
+        when(repo.existsById(1L)).thenReturn(true);
+        when(repo.findById(1L)).thenReturn(Optional.of(board));
+        Mockito.lenient().when(repo.findAll()).thenReturn(boards);
+        Mockito.lenient().when(cardRepo.findAll()).thenReturn(cards);
+        assertEquals(ResponseEntity.ok(tag), sut.deleteTagWithId(1L,1L));
         verify(tagRepo, times(1)).deleteById(1L);
     }
 
@@ -155,7 +174,7 @@ public class TagControllerTest {
     public void testDeleteTagNonExistent1()
     {
         when(tagRepo.existsById(1L)).thenReturn(false);
-        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagWithId(1L));
+        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagWithId(1L, 1L));
     }
 
     /**
@@ -165,6 +184,6 @@ public class TagControllerTest {
     @Test
     public void testDeleteListInvalidID()
     {
-        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagWithId(-1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteTagWithId(-1L, 1L));
     }
 }

@@ -39,10 +39,23 @@ public class Card
     public boolean done;
 
     /**
+     * List of SUbTasks in the card
+     */
+    @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("place")
+    public List<Subtask> subtasks;
+
+    /**
      * List of Tags in the Card
      */
+
     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "TAG_CARDS",
+            joinColumns = @JoinColumn(name = "card_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     public List<Tag> tags;
+
 
     /**
      * Empty constructor for object mappers
@@ -58,13 +71,15 @@ public class Card
      * @param place Place of the card (to determine order in the list)
      * @param description Description of the card
      * @param done If the card is checked/done
+     *
      */
     public Card(String title, int place, String description, boolean done){
         this.title = title;
         this.place = place;
         this.description = description;
         this.done = done;
-        this.tags = new ArrayList<>();
+        this.subtasks = new ArrayList<Subtask>();
+        this.tags = new ArrayList<Tag>();
     }
 
     /**
@@ -76,6 +91,8 @@ public class Card
         this.place = 0;
         this.description = "";
         this.done = false;
+        this.subtasks = new ArrayList<Subtask>();
+        this.tags = new ArrayList<Tag>();
     }
 
     /**
@@ -98,6 +115,7 @@ public class Card
                 .append(description, card.description)
                 .append(tags, card.tags)
                 .append(done, card.done)
+                .append(subtasks, card.subtasks)
                 .isEquals();
     }
 
@@ -113,6 +131,7 @@ public class Card
                 .append(title)
                 .append(description)
                 .append(done)
+                .append(subtasks)
                 .append(tags)
                 .toHashCode();
     }
@@ -131,6 +150,7 @@ public class Card
                 .append("description", description)
                 .append("tags", tags)
                 .append("done", done)
+                .append("subTasks", subtasks)
                 .toString();
     }
 }

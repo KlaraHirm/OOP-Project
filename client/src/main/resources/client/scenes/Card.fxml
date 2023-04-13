@@ -20,6 +20,7 @@
                <children>
                   <Label fx:id="title" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" style="-fx-background-color: transparent;" textAlignment="CENTER" textFill="#2274a5" wrapText="true" />
                   <Label fx:id="description" />
+                  <HBox fx:id="tags" prefHeight="10.0" prefWidth="200.0" />
                </children>
                <opaqueInsets>
                   <Insets />

@@ -1,12 +1,15 @@
 package server.api;
 
 import commons.Card;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.services.CardServiceImpl;
+
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -117,6 +120,24 @@ public class CardController {
         }
         Card ret = cardService.getCard(cardId);
         return ret != null;
+    }
+
+    /**
+     * Getter for all tags of a card
+     * @param cardId id of a card
+     * @return all the tags card has
+     * Gives 400 if cardId < 0
+     */
+    @GetMapping("/tags/{id}")
+    public ResponseEntity<List<Tag>> getTags(@PathVariable("id") long cardId) {
+        if(cardId < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card card = cardService.getCard(cardId);
+        if(card == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(card.tags);
     }
 
 }

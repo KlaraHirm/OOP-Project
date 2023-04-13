@@ -18,12 +18,15 @@ package server.api;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +39,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
 import server.api.repository.TestCardRepository;
+import server.api.repository.TestTagRepository;
 import server.api.util.SimpMessagingTemplateMock;
 import server.services.CardServiceImpl;
 
@@ -51,6 +55,9 @@ public class CardControllerTest {
     @Mock
     private TestBoardRepository boardRepo;
 
+    @Mock
+    private TestTagRepository tagRepo;
+
     private CardServiceImpl service;
     private CardController sut;
 
@@ -61,7 +68,7 @@ public class CardControllerTest {
     public void setup()
     {
         messageTemplate = new SimpMessagingTemplateMock();
-        service = new CardServiceImpl(cardRepo, listRepo, boardRepo);
+        service = new CardServiceImpl(cardRepo, listRepo, boardRepo, tagRepo);
         sut = new CardController();
         sut.cardService = service;
         sut.messageTemplate = messageTemplate;
@@ -91,14 +98,35 @@ public class CardControllerTest {
         Card card1 = new Card("Title2");
         card1.id = 1L;
 
-        Card card2 = new Card("Title2");
-        card2.id = 1L;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Mockito.lenient().when(cardRepo.save(card1)).thenReturn(card1);
+
+        assertEquals(ResponseEntity.ok(card1), sut.editCard(card1));
+        verify(cardRepo, times(1)).save(card1);
+    }
+
+    @Test
+    public void editCardTest() {
+        Card card = new Card("Title");
+        card.id = 1L;
+        card.tags = new ArrayList<>();
+
+        Tag tag = new Tag("Tag");
+        tag.id = 1L;
+        tag.cards = new ArrayList<>();
+
+        card.tags.add(tag);
+        tag.cards.add(card);
+
+        Card card1 = new Card("Title2");
+        card1.id = 1L;
 
         when(cardRepo.existsById(1L)).thenReturn(true);
         Mockito.lenient().when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
-        when(cardRepo.save(card2)).thenReturn(card2);
+        Mockito.lenient().when(cardRepo.save(card1)).thenReturn(card1);
 
-        assertEquals(ResponseEntity.ok(card2), sut.editCard(card1));
+        assertEquals(ResponseEntity.ok(card1), sut.editCard(card1));
         verify(cardRepo, times(1)).save(card1);
     }
 
@@ -144,4 +172,40 @@ public class CardControllerTest {
     public void deleteCardNotFound() {
         assertEquals(ResponseEntity.notFound().build(), sut.deleteCard(1L, 1L, 1L));
     }
+
+    @Test
+    public void getTagsTest() {
+        Card card = new Card("Card");
+        card.id = 1L;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        Tag tag1 = new Tag("Tag 1");
+        tag1.id = 1L;
+        Mockito.lenient().when(tagRepo.existsById(1L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(1L)).thenReturn(Optional.of(tag1));
+        Tag tag2 = new Tag("Tag 2");
+        tag2.id = 2L;
+        Mockito.lenient().when(tagRepo.existsById(2L)).thenReturn(true);
+        Mockito.lenient().when(tagRepo.findById(2L)).thenReturn(Optional.of(tag2));
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag1);
+        tags.add(tag2);
+        card.tags = tags;
+        List<Card> cards = new ArrayList<>();
+        cards.add(card);
+        tag1.cards = cards;
+        tag2.cards = cards;
+        assertEquals(ResponseEntity.ok(tags), sut.getTags(1L));
+    }
+
+    @Test
+    public void getTags400() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.getTags(-1L));
+    }
+
+    @Test
+    public void getTags404() {
+        assertEquals(ResponseEntity.notFound().build(), sut.getTags(1L));
+    }
+
 }

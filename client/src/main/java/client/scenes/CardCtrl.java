@@ -3,6 +3,7 @@ package client.scenes;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 
@@ -35,6 +37,10 @@ public class CardCtrl {
 
     @FXML
     private CheckBox done;
+
+    @FXML
+    private HBox tags;
+
     private Card cardObject;
 
     private Board boardObject;
@@ -128,6 +134,13 @@ public class CardCtrl {
         title.setText(cardObject.title + " (" + cardObject.id + ")");
         description.setText(cardObject.description);
         done.setSelected(cardObject.done);
+        for(Tag tag:cardObject.tags) {
+            Circle tagSymbol = new Circle();
+            tagSymbol.setRadius(10);
+            tagSymbol.setManaged(true);
+            tagSymbol.setStyle("-fx-fill: " + tag.color + ";");
+            tags.getChildren().add(tagSymbol);
+        }
     }
 
     /**
@@ -151,7 +164,11 @@ public class CardCtrl {
         card.setOnMousePressed(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 System.out.println("DOUBLE CLICK");
-                pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                try {
+                    pageCtrl.showEditCard(boardObject, listObject, cardObject);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 return;
             }
 

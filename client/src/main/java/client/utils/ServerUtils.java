@@ -6,6 +6,7 @@ import client.socket.StompSessionHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -247,6 +248,59 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {
                 });
+    }
+
+    /**
+     * add newly created tag to db
+     * @param board object of class Board where the tag is
+     * @param tag newly create object of class Tag which is to be added to the db
+     * @return updated card (with updated id)
+     */
+    public Tag addTag(Board board, Tag tag) {
+        return client //
+                .target(serverURL).path("api/board/tag/"+board.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
+     * get all existing boards in db
+     * @return list of all boards
+     */
+    public List<Tag> getTags(Board board) {
+        return client //
+                .target(serverURL).path("api/board/tags/"+board.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Tag>>() {});
+    }
+
+    /**
+     * edit specified tag
+     * @param tag tag object to edit
+     * @return edited tag
+     */
+    public Tag editTag(Tag tag) {
+        return client //
+                .target(serverURL).path("api/tag") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    /**
+     * delete specified tag
+     * @param tag Tag object to delete
+     * @return deleted tag (for undo)
+     */
+    public Tag deleteTag(Tag tag, long boardId) {
+        return client //
+                .target(serverURL).path("api/tag/"+tag.id) //
+                .queryParam("boardId", boardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete(Tag.class);
     }
 
     /**

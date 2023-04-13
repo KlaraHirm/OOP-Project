@@ -4,27 +4,20 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 
-public class EditListCtrl {
+public class EditTagCtrl {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
-
     @FXML
     private TextField titleField;
 
-    @FXML
-    private FlowPane listPane;
-
-    @FXML
-    private TextField checkField;
-
-    private CardList list;
+    private Tag tag;
 
     private Board board;
 
@@ -35,26 +28,26 @@ public class EditListCtrl {
      * Sets EditCardCtrl
      */
     @Inject
-    public EditListCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
+    public EditTagCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
-    public void setList(CardList list) {
-        this.list = list;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     public void setBoard(Board board) {
         this.board = board;
     }
 
-    public void setFields(CardList list) {
-        titleField.setText(list.title);
+    public void setFields(Tag tag) {
+        titleField.setText(tag.title);
     }
 
     public void submit() throws IOException {
-        list.title = titleField.getText();
-        server.editList(list);
+        tag.title = titleField.getText();
+        tag = server.editTag(tag);
         mainCtrl.showOverview(board);
     }
 
@@ -62,4 +55,8 @@ public class EditListCtrl {
         mainCtrl.showOverview(board);
     }
 
+    public void delete() throws IOException {
+        server.deleteTag(tag, board.id);
+        mainCtrl.showOverview(board);
+    }
 }

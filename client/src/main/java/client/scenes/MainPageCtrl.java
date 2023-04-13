@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,11 +37,18 @@ public class MainPageCtrl implements Initializable {
 
     private ObservableList<Board> data;
 
+    private ObservableList<Tag> dataTags;
+
     @FXML
     private ComboBox<Board> boardsList;
 
     @FXML
+
+    private ComboBox<Tag> tagsList;
+
+    @FXML
     private AnchorPane mainPage;
+
     @FXML
     private Button disconnectButton;
 
@@ -54,6 +62,7 @@ public class MainPageCtrl implements Initializable {
     private Button loadBoardButton;
 
     private Board activeBoard;
+
 
     @Inject
     public MainPageCtrl(ServerUtils server, PreferenceUtils preferences, MainClientCtrl mainCtrl) {
@@ -102,7 +111,8 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
-        //adding event listener to boardsList which calls method loadBoardContent only when new value is selected
+
+        //adding event listener to boards_list which calls method loadBoardContent only when new value is selected
         boardsList.valueProperty().addListener((observable, oldValue, newValue) -> {
             // This method will only run when a new value is selected
             if(newValue == null || oldValue == newValue){
@@ -115,7 +125,7 @@ public class MainPageCtrl implements Initializable {
             }
         });
 
-        //force only ints to be entered in IDField
+        //force only ints to be entered in ID_field
         IDField.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
 
         refresh();
@@ -164,6 +174,8 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setPageCtrl(this);
         boardCtrl.setBoardObject(board);
         boardCtrl.setTitle();
+        boardCtrl.setServer(server);
+        boardCtrl.refreshTags();
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
         return parent;
@@ -391,7 +403,7 @@ public class MainPageCtrl implements Initializable {
      * @param list object of class CardList - parent of card
      * @param card object of class Card which is to be edited
      */
-    public void showEditCard(Board board, CardList list, Card card) {
+    public void showEditCard(Board board, CardList list, Card card) throws IOException {
         mainCtrl.showEditCard(card, list, board);
     }
 
@@ -415,6 +427,7 @@ public class MainPageCtrl implements Initializable {
             boardsList.setItems(data);
         }
     }
+
 
     /**
      * method which marks a card as done (checkbox checked) or not done (unchecked)
@@ -440,13 +453,8 @@ public class MainPageCtrl implements Initializable {
         refresh();
     }
 
-    /**
-     * method used to get list based on id
-     * @param listId id of list
-     * @return object of class CardList which had the same id as passed in listId
-     */
-    public CardList getList(long listId) {
-        return server.getList(listId);
+    public void showEditTag(Tag tag, Board board) {
+        mainCtrl.showEditTag(tag, board);
     }
 
     /**

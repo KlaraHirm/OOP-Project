@@ -3,6 +3,7 @@ package server.services;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
@@ -10,6 +11,9 @@ import server.database.CardListRepository;
 import server.database.CardRepository;
 import server.database.TagRepository;
 import server.services.interfaces.CardService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -26,11 +30,12 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private TagRepository tagRepo;
 
-    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo) {
+    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo, TagRepository tagRepo) {
 
         this.cardRepo = cardRepo;
         this.listRepo = listRepo;
         this.boardRepo = boardRepo;
+        this.tagRepo = tagRepo;
     }
 
 
@@ -58,6 +63,26 @@ public class CardServiceImpl implements CardService {
     public Card editCard(Card card) {
         if (card == null) return null;
         if (!cardRepo.existsById(card.id)) return null;
+
+        Card original = cardRepo.findById(card.id).get();
+        if(original.tags==null) original.tags = new ArrayList<>();
+        if(card.tags==null) card.tags = new ArrayList<>();
+        for(Tag tagOriginal : original.tags) {
+            if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
+            tagOriginal.cards.remove(original);
+            tagRepo.save(tagOriginal);
+        }
+        List<Tag> tags = new ArrayList<>();
+        for(Tag tagCard : card.tags) {
+            if(!tagRepo.existsById(tagCard.id)){
+                continue;
+            }
+            if(tagCard.cards == null) tagCard.cards = new ArrayList<>();
+            tagCard.cards.add(card);
+            tagRepo.save(tagCard);
+            tags.add(tagCard);
+        }
+        card.tags = tags;
         return cardRepo.save(card);
     }
 

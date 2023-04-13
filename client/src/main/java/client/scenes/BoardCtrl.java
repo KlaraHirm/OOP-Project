@@ -145,7 +145,8 @@ public class BoardCtrl implements Initializable {
     }
 
     public void setColors() {
-        board.setStyle("-fx-background-color: "+boardObject.backColor);
+        board.setStyle("-fx-background-color: " + boardObject.backColor + ";");
+        boardTitle.setStyle("-fx-text-fill: " + boardObject.fontColor + ";");
     }
 
     /**

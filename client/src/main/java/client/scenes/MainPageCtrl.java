@@ -176,6 +176,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setTitle();
         boardCtrl.setServer(server);
         boardCtrl.refreshTags();
+        boardCtrl.setColors();
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
         return parent;

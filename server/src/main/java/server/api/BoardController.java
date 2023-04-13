@@ -169,6 +169,7 @@ public class BoardController
         {
             return ResponseEntity.notFound().build();
         }
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(retrieved);
     }
 

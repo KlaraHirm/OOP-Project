@@ -13,6 +13,7 @@ import server.database.TagRepository;
 import server.services.interfaces.CardService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -67,19 +68,21 @@ public class CardServiceImpl implements CardService {
         if(original.tags==null) original.tags = new ArrayList<>();
         if(card.tags==null) card.tags = new ArrayList<>();
         for(Tag tagOriginal : original.tags) {
-            if(!card.tags.contains(tagOriginal)) {
-                if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
-                tagOriginal.cards.remove(original);
-                tagRepo.save(tagOriginal);
-            }
+            if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
+            tagOriginal.cards.remove(original);
+            tagRepo.save(tagOriginal);
         }
+        List<Tag> tags = new ArrayList<>();
         for(Tag tagCard : card.tags) {
-            if(!original.tags.contains(tagCard)) {
-                if(tagCard.cards == null) tagCard.cards = new ArrayList<>();
-                tagCard.cards.add(card);
-                tagRepo.save(tagCard);
+            if(!tagRepo.existsById(tagCard.id)){
+                continue;
             }
+            if(tagCard.cards == null) tagCard.cards = new ArrayList<>();
+            tagCard.cards.add(card);
+            tagRepo.save(tagCard);
+            tags.add(tagCard);
         }
+        card.tags = tags;
         return cardRepo.save(card);
     }
 

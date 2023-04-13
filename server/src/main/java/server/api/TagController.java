@@ -53,17 +53,18 @@ public class TagController {
     /**
      * Deletes a Tag with particular ID
      * @param tagId - ID of the Tag to delete
+     * @param boardId - id of a board
      * @return - Response indicating success fo deletion
      * Gives 400 if tagId < 0
      * Gives 404 if tag doesn't exist
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Tag> deleteTagWithId(@PathVariable("id") long tagId)
+    public ResponseEntity<Tag> deleteTagWithId(@PathVariable("id") long tagId, @RequestParam("boardId") long boardId)
     {
-        if(tagId < 0) {
+        if(tagId < 0 || boardId < 0) {
             return ResponseEntity.badRequest().build();
         }
-        Tag retrieved = tagService.deleteTagWithId(tagId);
+        Tag retrieved = tagService.deleteTagWithId(tagId, boardId);
         if (retrieved  == null) {
             return ResponseEntity.notFound().build();
         }

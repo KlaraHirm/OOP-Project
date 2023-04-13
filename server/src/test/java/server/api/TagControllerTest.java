@@ -151,9 +151,11 @@ public class TagControllerTest {
         cards.add(card);
         when(tagRepo.existsById(1L)).thenReturn(true);
         when(tagRepo.findById(1L)).thenReturn(Optional.of(tag));
-        when(repo.findAll()).thenReturn(boards);
+        when(repo.existsById(1L)).thenReturn(true);
+        when(repo.findById(1L)).thenReturn(Optional.of(board));
+        Mockito.lenient().when(repo.findAll()).thenReturn(boards);
         Mockito.lenient().when(cardRepo.findAll()).thenReturn(cards);
-        assertEquals(ResponseEntity.ok(tag), sut.deleteTagWithId(1L));
+        assertEquals(ResponseEntity.ok(tag), sut.deleteTagWithId(1L,1L));
         verify(tagRepo, times(1)).deleteById(1L);
     }
 
@@ -165,7 +167,7 @@ public class TagControllerTest {
     public void testDeleteTagNonExistent1()
     {
         when(tagRepo.existsById(1L)).thenReturn(false);
-        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagWithId(1L));
+        assertEquals(ResponseEntity.notFound().build(), sut.deleteTagWithId(1L, 1L));
     }
 
     /**
@@ -175,6 +177,6 @@ public class TagControllerTest {
     @Test
     public void testDeleteListInvalidID()
     {
-        assertEquals(ResponseEntity.badRequest().build(), sut.deleteTagWithId(-1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.deleteTagWithId(-1L, 1L));
     }
 }

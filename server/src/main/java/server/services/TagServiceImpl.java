@@ -62,15 +62,14 @@ public class TagServiceImpl implements TagService {
      * @return - deleted Tag
      */
     @Override
-    public Tag deleteTagWithId(long tagId) {
-        if (tagId < 0 || !tagRepo.existsById(tagId)) {
+    public Tag deleteTagWithId(long tagId, long boardId) {
+        if (tagId < 0 || !tagRepo.existsById(tagId) || !boardRepo.existsById(boardId)) {
             return null;
         }
         Tag tag = tagRepo.findById(tagId).get();
-        for (Board board : boardRepo.findAll()) {
-            board.tags.remove(tag);
-            boardRepo.save(board);
-        }
+        Board board = boardRepo.findById(boardId).get();
+        board.tags.remove(tag);
+        boardRepo.save(board);
 
         for (Card card : tag.cards) {
             card.tags.remove(tag);

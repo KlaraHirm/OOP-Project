@@ -294,9 +294,10 @@ public class ServerUtils {
      * @param tag Tag object to delete
      * @return deleted tag (for undo)
      */
-    public Tag deleteTag(Tag tag) {
+    public Tag deleteTag(Tag tag, long boardId) {
         return client //
                 .target(serverURL).path("api/tag/"+tag.id) //
+                .queryParam("boardId", boardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete(Tag.class);

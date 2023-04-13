@@ -5,8 +5,10 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
@@ -23,6 +25,12 @@ public class EditBoardCtrl {
 
     @FXML
     private TextField checkField;
+
+    @FXML
+    private ColorPicker backgroundColor;
+
+    @FXML
+    private ColorPicker fontColor;
 
     private Board board;
 
@@ -44,6 +52,8 @@ public class EditBoardCtrl {
 
     public void setFields(Board board) {
         titleField.setText(board.title);
+        backgroundColor.setValue(Color.web(board.backColor));
+        fontColor.setValue(Color.web(board.fontColor));
     }
 
     public void submit() throws IOException {

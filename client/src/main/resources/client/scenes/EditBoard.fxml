@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="350.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditBoardCtrl">
+<AnchorPane prefHeight="350.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditBoardCtrl">
     <children>
         <Label alignment="CENTER" layoutX="5.0" layoutY="27.0" prefHeight="17.0" prefWidth="700.0" text="Edit Board" textAlignment="CENTER" textFill="#2274a5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <font>
@@ -23,5 +27,17 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <ColorPicker fx:id="backgroundColor" editable="true" layoutX="133.0" layoutY="124.0" promptText="Background Color">
+         <value>
+            <Color red="0.7921568751335144" green="0.886274516582489" blue="0.9411764740943909" />
+         </value>
+      </ColorPicker>
+      <Label layoutX="20.0" layoutY="128.0" text="Background Color:" textFill="#2274a5" />
+      <Label layoutX="20.0" layoutY="158.0" text="Font Color:" textFill="#2274a5" />
+      <ColorPicker fx:id="fontColor" editable="true" layoutX="133.0" layoutY="154.0">
+         <value>
+            <Color red="0.13333334028720856" green="0.45490196347236633" blue="0.6470588445663452" />
+         </value>
+      </ColorPicker>
     </children>
 </AnchorPane>

@@ -240,8 +240,4 @@ public class BoardCtrl implements Initializable {
 
         return String.format("#%02x%02x%02x%s", r, g, b, alpha);
     }
-
-    public void goToCustomize() {
-        pageCtrl.customize(boardObject);
-    }
 }

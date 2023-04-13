@@ -49,6 +49,5 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="customize" layoutX="361.0" layoutY="359.0" mnemonicParsing="false" text="Customize" textFill="#2274a5" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="313.0" />
    </children>
 </AnchorPane>

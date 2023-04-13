@@ -11,9 +11,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardRepository;
 import server.api.repository.TestTagRepository;
+import server.api.util.SimpMessagingTemplateMock;
 import server.services.TagServiceImpl;
 
 import java.util.ArrayList;
@@ -36,15 +38,20 @@ public class TagControllerTest {
     @Mock
     private TestBoardRepository repo;
 
+    @Mock
+    private SimpMessageSendingOperations messageTemplate;
+
     private TagServiceImpl service;
     private TagController sut;
 
     @BeforeEach
     public void setup()
     {
+        messageTemplate = new SimpMessagingTemplateMock();
         service = new TagServiceImpl(tagRepo, cardRepo, repo);
         sut = new TagController();
         sut.tagService = service;
+        sut.messageTemplate = messageTemplate;
     }
 
     /**

@@ -36,6 +36,9 @@ public class BoardCtrl implements Initializable {
     @FXML
     private Button newList;
 
+    @FXML
+    private Button customize;
+
     private ObservableList<Tag> dataTags;
 
     @FXML
@@ -229,18 +232,16 @@ public class BoardCtrl implements Initializable {
 
     public String generateHexColor() {
         Random random = new Random();
-        // Generate random RGB values
         int r = 200 + random.nextInt(56);
         int g = 200 + random.nextInt(56);
         int b = 200 + random.nextInt(56);
 
-        // Ensure alpha value is "ff"
         String alpha = "ff";
 
-        // Convert RGB values to hexadecimal format
-
-        // Return hexadecimal color code
         return String.format("#%02x%02x%02x%s", r, g, b, alpha);
     }
 
+    public void goToCustomize() {
+        pageCtrl.customize(boardObject);
+    }
 }

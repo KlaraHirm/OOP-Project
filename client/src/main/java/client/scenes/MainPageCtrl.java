@@ -246,6 +246,10 @@ public class MainPageCtrl implements Initializable {
         hideBoard(boardContainer);
     }
 
+    public void customize(Board board) {
+
+    }
+
     /**
      * method which shows existing list
      * @param board object of class Board where list is

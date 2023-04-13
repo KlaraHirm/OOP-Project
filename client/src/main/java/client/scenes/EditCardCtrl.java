@@ -33,6 +33,8 @@ public class EditCardCtrl implements Initializable {
     private final MainClientCtrl mainCtrl;
 
     @FXML
+    private AnchorPane page;
+    @FXML
     private TextField titleField;
 
     @FXML
@@ -249,8 +251,12 @@ public class EditCardCtrl implements Initializable {
         Parent n = (Parent)fxml.load();
         SubtaskCtrl controller = fxml.getController();
         controller.setSubtask(subtask);
+        controller.setCard(card);
         controller.setEditCtrl(this);
+        controller.setSubtaskList(subtaskBox);
+        controller.setPage(page);
         controller.setFields();
+        controller.makeDraggable();
         subtaskBox.getChildren().add(n);
     }
 
@@ -268,6 +274,7 @@ public class EditCardCtrl implements Initializable {
     public void addSubtask(Subtask subtask) throws IOException {
         showSubtask(subtask);
         card.subtasks.add(subtask);
+        server.addSubtask(subtask, card);
     }
 
     public void newSubtask() throws IOException {
@@ -285,5 +292,9 @@ public class EditCardCtrl implements Initializable {
     public void deleteSubtask(Node subtaskElement, Subtask subtask) {
         subtaskBox.getChildren().remove(subtaskElement);
         card.subtasks.remove(subtask);
+    }
+
+    public void editSubtask(Subtask subtask) {
+        server.editSubtask(subtask);
     }
 }

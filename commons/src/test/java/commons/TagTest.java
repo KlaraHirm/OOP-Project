@@ -75,6 +75,20 @@ class TagTest
     }
 
     /**
+     * Test that the Tag Equals method returns false and the hashcodes differ when different Cards
+     */
+    @Test
+    public void testNotEqualsCards()
+    {
+        Tag tag2 = new Tag("Test Tag");
+        tag2.id = 1L;
+        Card card1 = new Card("Test Card");
+        tag2.cards.add(card1);
+        assertNotEquals(tag, tag2);
+        assertNotEquals(tag2.hashCode(), tag.hashCode());
+    }
+
+    /**
      * Test that the Tag toString method works as expected
      */
     @Test

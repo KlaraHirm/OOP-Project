@@ -3,8 +3,10 @@ package client.scenes;
 import client.scenes.EditCardCtrl;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class TagCtrl {
     //gets box tags go in

@@ -124,6 +124,10 @@ public class BoardCtrl implements Initializable {
         boardTitle.setText(boardObject.title + " (" + boardObject.id + ")");
     }
 
+    public void setColors() {
+        board.setStyle("-fx-background-color: "+boardObject.backColor);
+    }
+
     /**
      * used as onAction to delete board
      */

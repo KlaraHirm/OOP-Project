@@ -196,10 +196,19 @@ public class EditCardCtrl implements Initializable {
         }
     }
 
-    public void setTagsList(List<Tag> tags) {
-        tags.removeIf(tag -> card.tags.contains(tag));
-        dataTags = FXCollections.observableList(tags);
-        tagsList.setItems(dataTags);
+    /**
+     * Refreshes tagsList
+     */
+    public void refreshTags() {
+        var tags = server.getTags(board);
+        for(Tag t: card.tags){
+            tags.remove(t);
+        }
+        if(!tagsList.getItems().equals(tags)){
+            dataTags = FXCollections.observableList(tags);
+            tagsList.setItems(dataTags);
+            board.tags = tags;
+        }
     }
 
     public void deleteCard() throws IOException {
@@ -234,11 +243,13 @@ public class EditCardCtrl implements Initializable {
     public void addTag(Tag tag) throws IOException {
         showTag(tag);
         card.tags.add(tag);
+        refreshTags();
     }
 
     public void deleteTag(HBox tagElement, Tag tag) {
         tagBox.getChildren().remove(tagElement);
         card.tags.remove(tag);
+        refreshTags();
     }
 
 }

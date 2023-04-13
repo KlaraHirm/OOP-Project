@@ -138,7 +138,7 @@ public class MainClientCtrl {
         editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
         editCardCtrl.setList(list);
-        editCardCtrl.setTagsList(board.tags);
+        editCardCtrl.refreshTags();
         editCardCtrl.setFields(card);
     }
 

@@ -14,21 +14,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -52,7 +46,7 @@ public class EditCardCtrl implements Initializable {
     private TextArea bodyField;
 
     @FXML
-    private ComboBox<Tag> tagsList;
+    private ComboBox<Tag> unusedTagsList;
 
     private ObservableList<Tag> dataTags;
 
@@ -84,7 +78,7 @@ public class EditCardCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // convertor for tags_list (dropdown menu field with tag names)
-        tagsList.setConverter(new StringConverter<Tag>() {
+        unusedTagsList.setConverter(new StringConverter<Tag>() {
 
             /**
              * toString method which converts elements in tags_list to String - this is shown in UI in ComboBox
@@ -106,13 +100,13 @@ public class EditCardCtrl implements Initializable {
                 String title = text.split(" ")[0];
                 String idString = text.split(" ")[1];
                 long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
-                return tagsList.getItems().stream().filter(t ->
+                return unusedTagsList.getItems().stream().filter(t ->
                         t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
             }
         });
 
         //adding event listener to tags_list which calls method loadBoardContent only when new value is selected
-        tagsList.valueProperty().addListener((observable, oldValue, newValue) -> {
+        unusedTagsList.valueProperty().addListener((observable, oldValue, newValue) -> {
             // This method will only run when a new value is selected
             if(newValue == null){
                 return;
@@ -124,7 +118,7 @@ public class EditCardCtrl implements Initializable {
             }
         });
 
-        tagsList.setCellFactory(listView -> new ListCell<Tag>() {
+        unusedTagsList.setCellFactory(listView -> new ListCell<Tag>() {
             @Override
             protected void updateItem(Tag tag, boolean empty) {
                 super.updateItem(tag, empty);
@@ -204,9 +198,9 @@ public class EditCardCtrl implements Initializable {
         for(Tag t: card.tags){
             tags.remove(t);
         }
-        if(!tagsList.getItems().equals(tags)){
+        if(!unusedTagsList.getItems().equals(tags)){
             dataTags = FXCollections.observableList(tags);
-            tagsList.setItems(dataTags);
+            unusedTagsList.setItems(dataTags);
             board.tags = tags;
         }
     }

@@ -135,8 +135,8 @@ public class MainClientCtrl {
     public void showEditCard(Card card, CardList list, Board board) throws IOException {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
-        editCardCtrl.setCard(card);
         editCardCtrl.setBoard(board);
+        editCardCtrl.setCard(card);
         editCardCtrl.setList(list);
         editCardCtrl.refreshTags();
         editCardCtrl.setFields(card);

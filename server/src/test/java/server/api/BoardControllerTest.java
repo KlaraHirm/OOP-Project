@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.api.repository.TestBoardRepository;
 import server.api.repository.TestCardListRepository;
+import server.api.repository.TestTagRepository;
 import server.api.util.SimpMessagingTemplateMock;
 import server.services.BoardServiceImpl;
 
@@ -32,6 +33,9 @@ class BoardControllerTest
     private TestCardListRepository listRepo;
 
     @Mock
+    private TestTagRepository tagRepo;
+
+    @Mock
     private BoardServiceImpl service;
     private BoardController sut;
     @Mock
@@ -41,7 +45,7 @@ class BoardControllerTest
     public void setup()
     {
         messageTemplate = new SimpMessagingTemplateMock();
-        service = new BoardServiceImpl(repo, listRepo);
+        service = new BoardServiceImpl(repo, listRepo, tagRepo);
         sut = new BoardController();
         sut.boardService = service;
         sut.messageTemplate = messageTemplate;

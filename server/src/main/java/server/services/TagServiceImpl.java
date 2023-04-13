@@ -35,7 +35,7 @@ public class TagServiceImpl implements TagService {
      */
     @Override
     public Tag getTag(long tagId) {
-        if (tagId < 0 || !tagRepo.existsById(tagId)) {
+        if (!tagRepo.existsById(tagId)) {
             return null;
         }
         return tagRepo.findById(tagId).get();
@@ -51,6 +51,8 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag editTag(Tag changedTag) {
         if (changedTag == null || !tagRepo.existsById(changedTag.id)) return null;
+        Tag original = tagRepo.findById(changedTag.id).get();
+        changedTag.cards = original.cards;
         return tagRepo.save(changedTag);
     }
 
@@ -60,21 +62,20 @@ public class TagServiceImpl implements TagService {
      * @return - deleted Tag
      */
     @Override
-    public Tag deleteTagWithId(long tagId) {
-        if (tagId < 0 || !tagRepo.existsById(tagId)) {
+    public Tag deleteTagWithId(long tagId, long boardId) {
+        if (tagId < 0 || !tagRepo.existsById(tagId) || !boardRepo.existsById(boardId)) {
             return null;
         }
         Tag tag = tagRepo.findById(tagId).get();
-        tagRepo.deleteById(tagId);
-        for (Board board : boardRepo.findAll()) {
-            board.tags.remove(tag);
-            boardRepo.save(board);
-        }
+        Board board = boardRepo.findById(boardId).get();
+        board.tags.remove(tag);
+        boardRepo.save(board);
 
-        for (Card card : cardRepo.findAll()) {
+        for (Card card : tag.cards) {
             card.tags.remove(tag);
             cardRepo.save(card);
         }
+        tagRepo.deleteById(tagId);
         return tag;
     }
 

@@ -1,12 +1,15 @@
 package server.api;
 
 import commons.Card;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import server.services.CardServiceImpl;
+
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -119,4 +122,41 @@ public class CardController {
         return ret != null;
     }
 
+    /**
+     * Getter for all tags of a card
+     * @param cardId id of a card
+     * @return all the tags card has
+     * Gives 400 if cardId < 0
+     */
+    @GetMapping("/tags/{id}")
+    public ResponseEntity<List<Tag>> getTags(@PathVariable("id") long cardId) {
+        if(cardId < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card card = cardService.getCard(cardId);
+        if(card == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(card.tags);
+    }
+
+    /**
+     * Removes Tag from a Card
+     * @param cardId id of a card
+     * @param tag tag to be removed from card
+     * @return updated card
+     * Gives 400 if cardId < 0 or tag is null or tag.title is null
+     * Gives 404 if card doesn't exist or card doesn't contain the tag or the tag isn't in card
+     */
+    @DeleteMapping("/tag/{id}")
+    public ResponseEntity<Card> deleteTagFromCard(@PathVariable("id") long cardId, @RequestBody Tag tag) {
+        if(cardId < 0 || tag == null || tag.title == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card card = cardService.deleteTagFromCard(cardId, tag);
+        if(card == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(card);
+    }
 }

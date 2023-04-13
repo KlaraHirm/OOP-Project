@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 public class SubtaskController {
 
     @Autowired
-    SubtaskService subtaskService;
+    SubtaskServiceImpl subtaskService;
     @Autowired
     SimpMessageSendingOperations messageTemplate;
 

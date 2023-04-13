@@ -32,6 +32,12 @@ public class EditBoardCtrl {
     @FXML
     private ColorPicker fontColor;
 
+    @FXML
+    private ColorPicker listBackgroundColor;
+
+    @FXML
+    private ColorPicker listFontColor;
+
     private Board board;
 
     /**
@@ -54,12 +60,16 @@ public class EditBoardCtrl {
         titleField.setText(board.title);
         backgroundColor.setValue(Color.web(board.backColor));
         fontColor.setValue(Color.web(board.fontColor));
+        listBackgroundColor.setValue(Color.web(board.listBackColor));
+        listFontColor.setValue(Color.web(board.listFontColor));
     }
 
     public void submit() throws IOException {
         board.title = titleField.getText();
         board.fontColor = "#" + fontColor.getValue().toString().substring(2, 8);
         board.backColor = "#" + backgroundColor.getValue().toString().substring(2, 8);
+        board.listFontColor = "#" + listFontColor.getValue().toString().substring(2, 8);
+        board.listBackColor = "#" + listBackgroundColor.getValue().toString().substring(2, 8);
         server.editBoard(board);
         mainCtrl.showOverview(board);
     }

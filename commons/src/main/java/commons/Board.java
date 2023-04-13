@@ -74,8 +74,8 @@ public class Board
        this.tags = new ArrayList<>();
        this.fontColor = "#2274a5";
        this.backColor = "#CAE2F0";
-       this.listFontColor = "#eff6fa";
-       this.listBackColor = "#2274a5";
+       this.listBackColor = "#eff6fa";
+       this.listFontColor = "#2274a5";
    }
 
     /**

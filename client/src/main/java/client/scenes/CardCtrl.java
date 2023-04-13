@@ -138,7 +138,7 @@ public class CardCtrl {
             Circle tagSymbol = new Circle();
             tagSymbol.setRadius(10);
             tagSymbol.setManaged(true);
-            tagSymbol.setStyle("-fx-fill: " + tag.color + ";");
+            tagSymbol.setStyle("-fx-fill: " + tag.backColor + ";");
             tags.getChildren().add(tagSymbol);
         }
     }

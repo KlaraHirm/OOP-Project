@@ -57,6 +57,8 @@ public class Tag {
     public Tag(String title, String color){
         this.title = title;
         this.backColor = color;
+        this.fontColor = "#000000";
+        this.cards = new ArrayList<>();
     }
 
     /**

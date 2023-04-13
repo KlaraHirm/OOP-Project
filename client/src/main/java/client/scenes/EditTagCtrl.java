@@ -49,7 +49,7 @@ public class EditTagCtrl {
         this.board = board;
     }
 
-    public void setFields(Tag tag) {
+    public void setFields() {
         titleField.setText(tag.title);
         backgroundColor.setValue(Color.web(tag.backColor));
         fontColor.setValue(Color.web(tag.fontColor));

@@ -47,6 +47,16 @@ public class Board
     public String backColor;
 
     /**
+     * Front color of Board lists
+     */
+    public String listFontColor;
+
+    /**
+     * Back color of board lists
+     */
+    public String listBackColor;
+
+    /**
      * Empty constructor for object mappers
      */
    @SuppressWarnings("unused")
@@ -64,6 +74,8 @@ public class Board
        this.tags = new ArrayList<>();
        this.fontColor = "#2274a5";
        this.backColor = "#CAE2F0";
+       this.listFontColor = "#eff6fa";
+       this.listBackColor = "#2274a5";
    }
 
     /**
@@ -87,6 +99,8 @@ public class Board
                 .append(tags, board.tags)
                 .append(fontColor, board.fontColor)
                 .append(backColor, board.backColor)
+                .append(listFontColor, board.listFontColor)
+                .append(listBackColor, board.listBackColor)
                 .isEquals();
     }
 
@@ -104,6 +118,8 @@ public class Board
                 .append(tags)
                 .append(fontColor)
                 .append(backColor)
+                .append(listFontColor)
+                .append(listBackColor)
                 .toHashCode();
     }
 
@@ -121,6 +137,8 @@ public class Board
                 .append("tags", tags)
                 .append("fontColor", fontColor)
                 .append("backColor", backColor)
+                .append("listFontColor", listFontColor)
+                .append("listBackColor", listBackColor)
                 .toString();
     }
 }

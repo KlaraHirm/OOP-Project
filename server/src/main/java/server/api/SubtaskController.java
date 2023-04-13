@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @RestController
-@RequestMapping("/api/subtasks")
+@RequestMapping("/api/subtask")
 public class SubtaskController {
 
     @Autowired

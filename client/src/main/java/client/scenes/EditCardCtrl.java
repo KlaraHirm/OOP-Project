@@ -2,10 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,6 +45,10 @@ public class EditCardCtrl implements Initializable {
 
     @FXML
     private HBox tagBox;
+
+    @FXML
+    private VBox subtaskBox;
+
     @FXML
     private TextArea bodyField;
 
@@ -191,8 +192,13 @@ public class EditCardCtrl implements Initializable {
     public void setFields(Card card) throws IOException {
         titleField.setText(card.title);
         bodyField.setText(card.description);
+        clearTags();
         for (Tag tag : card.tags) {
             showTag(tag);
+        }
+        clearSubtasks();
+        for (Subtask subtask : card.subtasks) {
+            showSubtask(subtask);
         }
     }
 
@@ -220,6 +226,10 @@ public class EditCardCtrl implements Initializable {
         mainCtrl.showOverview(board);
     }
 
+    public void clearTags() {
+        tagBox.getChildren().clear();
+    }
+
     public void showTag(Tag tag) throws IOException {
         FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
                 Path.of("client", "scenes", "Tag.fxml").toString()));
@@ -229,6 +239,21 @@ public class EditCardCtrl implements Initializable {
         controller.setEditCtrl(this);
         controller.setFields();
         tagBox.getChildren().add(n);
+    }
+
+    public void clearSubtasks() {
+        subtaskBox.getChildren().clear();
+    }
+
+    public void showSubtask(Subtask subtask) throws IOException {
+        FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                Path.of("client", "scenes", "Subtask.fxml").toString()));
+        Parent n = (Parent)fxml.load();
+        SubtaskCtrl controller = fxml.getController();
+        controller.setSubtask(subtask);
+        controller.setEditCtrl(this);
+        controller.setFields();
+        subtaskBox.getChildren().add(n);
     }
 
     public void addTag(Tag tag) throws IOException {
@@ -242,4 +267,18 @@ public class EditCardCtrl implements Initializable {
         server.editCard(card);
     }
 
+    public void addSubtask(Subtask subtask) throws IOException {
+        showSubtask(subtask);
+        card.subtasks.add(subtask);
+    }
+
+    public void addSubtask() throws IOException {
+        Subtask subtask = new Subtask("Untitled");
+        addSubtask(subtask);
+    }
+
+    public void deleteSubtask(Node subtaskElement, Subtask subtask) {
+        subtaskBox.getChildren().remove(subtaskElement);
+        card.subtasks.remove(subtask);
+    }
 }

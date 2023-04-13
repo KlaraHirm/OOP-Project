@@ -1,13 +1,16 @@
 package client.scenes;
 
+import client.utils.DialogUtils;
 import commons.Subtask;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import javax.inject.Inject;
+import java.util.Optional;
 
 public class SubtaskCtrl {
     //gets box tags go in
@@ -64,6 +67,15 @@ public class SubtaskCtrl {
      * Shows the edit screen for the subtask
      */
     public void showEdit() {
-
+        // TODO: Use dependency injection
+        String title = new DialogUtils().showDialog(
+                subtask.title,
+                "Edit subtask",
+                "Enter the subtask title:"
+        );
+        if (title != null) {
+            subtask.title = title;
+            subtaskLabel.setText(title);
+        }
     }
 }

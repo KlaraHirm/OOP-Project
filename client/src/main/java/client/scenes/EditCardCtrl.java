@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.DialogUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
@@ -13,19 +14,16 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -272,9 +270,16 @@ public class EditCardCtrl implements Initializable {
         card.subtasks.add(subtask);
     }
 
-    public void addSubtask() throws IOException {
-        Subtask subtask = new Subtask("Untitled");
-        addSubtask(subtask);
+    public void newSubtask() throws IOException {
+        String title = new DialogUtils().showDialog(
+                "",
+                "New subtask",
+                "Enter the subtask title:"
+        );
+        if (title != null) {
+            Subtask subtask = new Subtask(title);
+            addSubtask(subtask);
+        }
     }
 
     public void deleteSubtask(Node subtaskElement, Subtask subtask) {

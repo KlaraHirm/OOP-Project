@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -35,6 +36,8 @@ public class MainClientCtrl {
     private EditBoardCtrl editBoardCtrl;
     private Scene editBoard;
 
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
     private AdminCtrl adminCtrl;
     private Scene admin;
 
@@ -55,6 +58,7 @@ public class MainClientCtrl {
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<EditListCtrl, Parent> editList,
                            Pair<EditBoardCtrl, Parent> editBoard,
+                           Pair<EditTagCtrl, Parent> editTag,
                            Pair<ServerConnectionCtrl, Parent> serverConnection,
                            Pair<AdminCtrl, Parent> admin
     ) throws IOException {
@@ -76,6 +80,10 @@ public class MainClientCtrl {
         this.editBoardCtrl = editBoard.getKey();
         this.editBoard = new Scene(editBoard.getValue());
 
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
+
+        showServer();
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
 
@@ -163,5 +171,13 @@ public class MainClientCtrl {
         editBoardCtrl.setFields(board);
         primaryStage.setScene(editBoard);
         editBoardCtrl.setBoard(board);
+    }
+
+    public void showEditTag(Tag tag, Board board) {
+        primaryStage.setTitle("Edit Tag");
+        editTagCtrl.setFields(tag);
+        primaryStage.setScene(editTag);
+        editTagCtrl.setBoard(board);
+        editTagCtrl.setTag(tag);
     }
 }

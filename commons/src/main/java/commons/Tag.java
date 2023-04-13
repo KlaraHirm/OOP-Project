@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -25,7 +26,13 @@ public class Tag {
      * ManyToMany relationship with Card
      */
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tags")
+    @JsonIgnore
     public List<Card> cards;
+
+    /**
+     * Color of tag
+     */
+    public String color;
 
 
     /**
@@ -39,9 +46,20 @@ public class Tag {
     /**
      * Creates a new Tag
      * @param title - Title of Tag
+     * @param color - color of the tag
+     */
+    public Tag(String title, String color){
+        this.title = title;
+        this.color = color;
+    }
+
+    /**
+     * Creates a new Tag with default color
+     * @param title - Title of Tag
      */
     public Tag(String title){
         this.title = title;
+        this.color = "#6FA8DC";
     }
 
     /**

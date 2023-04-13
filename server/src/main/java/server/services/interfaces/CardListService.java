@@ -2,6 +2,7 @@ package server.services.interfaces;
 
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 
 import java.util.List;
 

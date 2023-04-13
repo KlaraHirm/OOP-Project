@@ -52,8 +52,8 @@ public class Card
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "TAG_CARDS",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "card_id"))
+            joinColumns = @JoinColumn(name = "card_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     public List<Tag> tags;
 
 

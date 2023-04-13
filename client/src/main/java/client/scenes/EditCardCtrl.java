@@ -1,30 +1,38 @@
 package client.scenes;
 
-import client.objects.TagObjectCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
-public class EditCardCtrl {
+public class EditCardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainClientCtrl mainCtrl;
@@ -43,6 +51,11 @@ public class EditCardCtrl {
     @FXML
     private TextArea bodyField;
 
+    @FXML
+    private ComboBox<Tag> tagsList;
+
+    private ObservableList<Tag> dataTags;
+
     private Card card;
 
     private CardList list;
@@ -60,6 +73,74 @@ public class EditCardCtrl {
     public EditCardCtrl(ServerUtils server, MainClientCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // convertor for tags_list (dropdown menu field with tag names)
+        tagsList.setConverter(new StringConverter<Tag>() {
+
+            /**
+             * toString method which converts elements in tags_list to String - this is shown in UI in ComboBox
+             * @param tag the object of type {@code T} to convert
+             * @return String representation of objects in tags_list
+             */
+            @Override
+            public String toString(Tag tag) {
+                return tag.title + " (" + tag.id + ")";
+            }
+
+            /**
+             * fromString method which converts String representation back to object in tags_list
+             * @param text the {@code String} to convert
+             * @return actual object of String representation
+             */
+            @Override
+            public Tag fromString(String text) {
+                String title = text.split(" ")[0];
+                String idString = text.split(" ")[1];
+                long tagId = Long.parseLong(idString.substring(1, idString.length()-1));
+                return tagsList.getItems().stream().filter(t ->
+                        t!=null && t.title.equals(title) && t.id == tagId).findFirst().orElse(null);
+            }
+        });
+
+        //adding event listener to tags_list which calls method loadBoardContent only when new value is selected
+        tagsList.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // This method will only run when a new value is selected
+            if(newValue == null){
+                return;
+            }
+            try {
+                addTag(newValue);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        tagsList.setCellFactory(listView -> new ListCell<Tag>() {
+            @Override
+            protected void updateItem(Tag tag, boolean empty) {
+                super.updateItem(tag, empty);
+                if (empty || tag == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(tag.title + " (" + tag.id + ")");
+                    if (tag.color != null && !tag.color.isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.web(tag.color), CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
+                        setBackground(null);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -94,7 +175,7 @@ public class EditCardCtrl {
     }
 
 
-    public void setCard(Card card) {
+    public void setCard(Card card) throws IOException {
         this.card = card;
         poll(card.id);
     }
@@ -107,9 +188,18 @@ public class EditCardCtrl {
         this.board = board;
     }
 
-    public void setFields(Card card) {
+    public void setFields(Card card) throws IOException {
         titleField.setText(card.title);
         bodyField.setText(card.description);
+        for (Tag tag : card.tags) {
+            showTag(tag);
+        }
+    }
+
+    public void setTagsList(List<Tag> tags) {
+        tags.removeIf(tag -> card.tags.contains(tag));
+        dataTags = FXCollections.observableList(tags);
+        tagsList.setItems(dataTags);
     }
 
     public void deleteCard() throws IOException {
@@ -121,64 +211,35 @@ public class EditCardCtrl {
         card.title = titleField.getText();
         card.description = bodyField.getText();
         server.editCard(card);
+        tagBox.getChildren().clear();
         mainCtrl.showOverview(board);
     }
 
     public void cancel() throws IOException {
+        tagBox.getChildren().clear();
         mainCtrl.showOverview(board);
     }
 
-
-    /**
-     * adds a tag using fxml loader
-     * loads TagObject.fxml
-     * calls display on TagPopup
-     * **/
-    @FXML
-    private void addTag() {
-        try {
-            Stage popupwindow = new Stage();
-            popupwindow.initModality(Modality.APPLICATION_MODAL);
-            popupwindow.setTitle("Add Tag(s)");
-
-            //gets fxml of ListObject.fxml
-            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-                    Path.of("client", "scenes", "TagPopup.fxml").toString()));
-
-            Scene popUpScene = new Scene((Parent)fxml.load(), 200, 250);
-            popupwindow.setScene(popUpScene);
-
-            //loads it into parent object
-            TagPopupCtrl popupCtrl = fxml.getController();
-            popupCtrl.setEditCtrl(this);
-
-            popupwindow.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void showTag(Tag tag) throws IOException {
+        FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
+                Path.of("client", "scenes", "Tag.fxml").toString()));
+        Parent n = (Parent)fxml.load();
+        TagCtrl controller = fxml.getController();
+        controller.setTag(tag);
+        controller.setEditCtrl(this);
+        controller.setFields();
+        tagBox.getChildren().add(n);
     }
 
-    public void createNewTag(String name) {
-        try {
-            FXMLLoader fxml = new FXMLLoader(EditCardCtrl.class.getClassLoader().getResource(
-                    Path.of("client", "objects", "TagObject.fxml").toString()));
-            Parent n = (Parent)fxml.load();
-            TagObjectCtrl controller = fxml.getController();
-            controller.setEditCtrl(this);
-            controller.setTagLabel(name);
-            tagBox.getChildren().add(n);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void addTag(Tag tag) throws IOException {
+        showTag(tag);
+        card.tags.add(tag);
     }
 
-    /**
-     * deletes object from tagBox
-     * **/
-    public void deleteTag(Node n) {
-        //removes object from tagBox
-        tagBox.getChildren().remove(n);
+    public void deleteTag(HBox tagElement, Tag tag) {
+        tagBox.getChildren().remove(tagElement);
+        card.tags.remove(tag);
+        server.editCard(card);
     }
 
 }

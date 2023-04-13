@@ -1,15 +1,9 @@
 package server.services;
 
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.database.TagRepository;
+import server.database.*;
 import server.services.interfaces.CardService;
 
 import java.util.ArrayList;
@@ -29,12 +23,21 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private TagRepository tagRepo;
 
-    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo, TagRepository tagRepo) {
+    @Autowired
+    private SubtaskRepository subtaskRepo;
 
+    public CardServiceImpl(
+            CardRepository cardRepo,
+            CardListRepository listRepo,
+            BoardRepository boardRepo,
+            TagRepository tagRepo,
+            SubtaskRepository subtaskRepo
+    ) {
         this.cardRepo = cardRepo;
         this.listRepo = listRepo;
         this.boardRepo = boardRepo;
         this.tagRepo = tagRepo;
+        this.subtaskRepo = subtaskRepo;
     }
 
 
@@ -80,6 +83,20 @@ public class CardServiceImpl implements CardService {
                 tagRepo.save(tagCard);
             }
         }
+
+        if(original.subtasks==null) original.subtasks = new ArrayList<>();
+        if(card.subtasks==null) card.subtasks = new ArrayList<>();
+        for(Subtask subtaskOriginal : original.subtasks) {
+            if(!card.subtasks.contains(subtaskOriginal)) {
+                subtaskRepo.save(subtaskOriginal);
+            }
+        }
+        for(Subtask subtaskCard : card.subtasks) {
+            if(!original.subtasks.contains(subtaskCard)) {
+                subtaskRepo.save(subtaskCard);
+            }
+        }
+
         return cardRepo.save(card);
     }
 

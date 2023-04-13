@@ -23,10 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +33,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import server.api.repository.TestBoardRepository;
-import server.api.repository.TestCardListRepository;
-import server.api.repository.TestCardRepository;
-import server.api.repository.TestTagRepository;
+import server.api.repository.*;
 import server.api.util.SimpMessagingTemplateMock;
 import server.services.CardServiceImpl;
 
@@ -58,6 +52,9 @@ public class CardControllerTest {
     @Mock
     private TestTagRepository tagRepo;
 
+    @Mock
+    private TestSubtaskRepository subtaskRepo;
+
     private CardServiceImpl service;
     private CardController sut;
 
@@ -68,7 +65,7 @@ public class CardControllerTest {
     public void setup()
     {
         messageTemplate = new SimpMessagingTemplateMock();
-        service = new CardServiceImpl(cardRepo, listRepo, boardRepo, tagRepo);
+        service = new CardServiceImpl(cardRepo, listRepo, boardRepo, tagRepo, subtaskRepo);
         sut = new CardController();
         sut.cardService = service;
         sut.messageTemplate = messageTemplate;
@@ -116,6 +113,10 @@ public class CardControllerTest {
         tag.id = 1L;
         tag.cards = new ArrayList<>();
 
+        Subtask subtask = new Subtask("Subtask");
+        subtask.id = 2L;
+
+        card.subtasks.add(subtask);
         card.tags.add(tag);
         tag.cards.add(card);
 

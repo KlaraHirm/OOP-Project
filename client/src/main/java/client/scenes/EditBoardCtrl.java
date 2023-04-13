@@ -58,6 +58,8 @@ public class EditBoardCtrl {
 
     public void submit() throws IOException {
         board.title = titleField.getText();
+        board.fontColor = "#" + fontColor.getValue().toString().substring(2, 8);
+        board.backColor = "#" + backgroundColor.getValue().toString().substring(2, 8);
         server.editBoard(board);
         mainCtrl.showOverview(board);
     }

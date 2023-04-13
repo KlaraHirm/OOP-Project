@@ -239,7 +239,6 @@ public class EditCardCtrl implements Initializable {
     public void deleteTag(HBox tagElement, Tag tag) {
         tagBox.getChildren().remove(tagElement);
         card.tags.remove(tag);
-        server.editCard(card);
     }
 
 }

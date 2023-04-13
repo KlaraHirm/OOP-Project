@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.Subtask;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -158,6 +159,24 @@ public class CardController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(card);
+    }
+
+    /**
+     * Add a Subtask on a card with ID
+     * @param subtask - Subtask object
+     * @param id - ID of the card to add it to
+     * @return the saved card
+     * Gives 404 if the CardList does not exist
+     * Gives 400 if the body is malformed
+     */
+    @PostMapping(path = {"/{id}"})
+    public ResponseEntity<Subtask> addSubtask(@RequestBody Subtask subtask, @PathVariable("id") long id)
+    {
+        if (subtask == null || subtask.title == null) return ResponseEntity.badRequest().build();
+        Subtask ret = cardService.addSubtask(subtask, id);
+        if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
+        return ResponseEntity.ok(ret);
     }
 
 }

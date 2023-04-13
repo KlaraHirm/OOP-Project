@@ -143,4 +143,24 @@ public class CardServiceImpl implements CardService {
         tagRepo.save(tag);
         return card;
     }
+
+    /**
+     * Add a subtask on a card with ID
+     * @param subtask - Subtask object
+     * @param cardId - ID of the CardList to which Card should be attached
+     * @return the saved card
+     * Gives null if the CardList does not exist
+     * Gives null if the body is malformed
+     */
+    @Override
+    public Subtask addSubtask(Subtask subtask, long cardId) {
+        if (subtask == null || subtask.title == null) return null;
+        if (cardId < 0 || !cardRepo.existsById(cardId)) return null;
+        Card card = cardRepo.findById(cardId).get();
+        card.subtasks.add(subtask);
+        subtask.place = card.subtasks.size();
+        subtask = subtaskRepo.save(subtask);
+        cardRepo.save(card);
+        return subtask;
+    }
 }

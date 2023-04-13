@@ -265,4 +265,51 @@ public class CardControllerTest {
         assertEquals(ResponseEntity.notFound().build(), sut.deleteTagFromCard(1L, tag));
     }
 
+    /**
+     * Test that addSubtask correctly adds the subtask to the card
+     */
+    @Test
+    public void testAddSubtask()
+    {
+        Subtask subtask = new Subtask("test");
+        subtask.id = 2L;
+        Card card = new Card("test");
+        card.id = 1L;
+        card.subtasks = new ArrayList<>();
+
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        when(cardRepo.save(card)).thenReturn(card);
+        when(subtaskRepo.save(subtask)).thenReturn(subtask);
+        assertEquals(ResponseEntity.ok(subtask), sut.addSubtask(subtask, 1L));
+        verify(cardRepo, times(1)).save(card);
+        verify(subtaskRepo, times(1)).save(subtask);
+        assertEquals(1, card.subtasks.size());
+    }
+
+    /**
+     * Test that addSubtask returns 404 when given an invalid card ID
+     * or if card with a certain ID doesn't exit
+     */
+    @Test
+    public void testAddSubtaskInvalidListID()
+    {
+        Subtask subtask = new Subtask("test");
+        assertEquals(ResponseEntity.notFound().build(), sut.addSubtask(subtask, -1L));
+        when(cardRepo.existsById(1L)).thenReturn(false);
+        assertEquals(ResponseEntity.notFound().build(), sut.addSubtask(subtask, 1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.addSubtask(null, 1L));
+    }
+
+    /**
+     * Test that addSubtask returns 400 when given a null subtask or null title
+     */
+    @Test
+    public void testAddSubtaskNull()
+    {
+        assertEquals(ResponseEntity.badRequest().build(), sut.addSubtask(null, 1L));
+        assertEquals(ResponseEntity.badRequest().build(), sut.addSubtask(new Subtask(null), 1L));
+    }
+
+
 }

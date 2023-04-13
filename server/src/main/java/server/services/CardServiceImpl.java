@@ -113,20 +113,4 @@ public class CardServiceImpl implements CardService {
 
         return deleted;
     }
-
-    @Override
-    public Card deleteTagFromCard(long cardId, Tag tag) {
-        if(!cardRepo.existsById(cardId)){
-            return null;
-        }
-        Card card = cardRepo.findById(cardId).get();
-        if(!card.tags.contains(tag) || !tag.cards.contains(card)) {
-            return null;
-        }
-        card.tags.remove(tag);
-        tag.cards.remove(card);
-        cardRepo.save(card);
-        tagRepo.save(tag);
-        return card;
-    }
 }

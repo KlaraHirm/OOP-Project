@@ -166,4 +166,36 @@ public class CardServiceImpl implements CardService {
         cardRepo.save(card);
         return subtask;
     }
+
+    /**
+     * Reorder subtasks when drag and drop
+     * @param cardId - the card in which to move the subtask
+     * @param subtaskId - the subtask to move
+     * @param subtaskPlace - the place to move it
+     * @return the saved card
+     * Returns null if IDs and position do not exist
+     */
+    @Override
+    public Card reorder(long cardId, long subtaskId, int subtaskPlace) {
+        if (cardId < 0 || !cardRepo.existsById(cardId)) {
+            return  null;
+        }
+        if (subtaskId < 0 || !subtaskRepo.existsById(subtaskId)) return null;
+        Card card = cardRepo.findById(cardId).get();
+        Subtask subtask = subtaskRepo.findById(subtaskId).get();
+        if (!card.subtasks.contains(subtask)) return null;
+        card.subtasks.remove(subtask);
+        if (subtaskPlace < card.subtasks.size()) {
+            card.subtasks.add(subtaskPlace, subtask);
+        } else {
+            card.subtasks.add(subtask);
+        }
+        int place = 1;
+        for(Subtask s : card.subtasks) {
+            s.place = place;
+            place++;
+        }
+        cardRepo.save(card);
+        return card;
+    }
 }

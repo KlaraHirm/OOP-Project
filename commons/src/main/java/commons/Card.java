@@ -43,7 +43,7 @@ public class Card
      */
     @OneToMany(cascade = CascadeType.ALL)
     @OrderBy("place")
-    public List<SubTask> subTasks;
+    public List<Subtask> subtasks;
 
     /**
      * List of Tags in the Card
@@ -73,7 +73,7 @@ public class Card
         this.place = place;
         this.description = description;
         this.done = done;
-        this.subTasks = new ArrayList<SubTask>();
+        this.subtasks = new ArrayList<Subtask>();
         this.tags = new ArrayList<Tag>();
     }
 
@@ -86,7 +86,7 @@ public class Card
         this.place = 0;
         this.description = "";
         this.done = false;
-        this.subTasks = new ArrayList<SubTask>();
+        this.subtasks = new ArrayList<Subtask>();
     }
 
     /**
@@ -109,7 +109,7 @@ public class Card
                 .append(description, card.description)
                 .append(tags, card.tags)
                 .append(done, card.done)
-                .append(subTasks, card.subTasks)
+                .append(subtasks, card.subtasks)
                 .isEquals();
     }
 
@@ -125,7 +125,7 @@ public class Card
                 .append(title)
                 .append(description)
                 .append(done)
-                .append(subTasks)
+                .append(subtasks)
                 .append(tags)
                 .toHashCode();
     }
@@ -144,7 +144,7 @@ public class Card
                 .append("description", description)
                 .append("tags", tags)
                 .append("done", done)
-                .append("subTasks", subTasks)
+                .append("subTasks", subtasks)
                 .toString();
     }
 }

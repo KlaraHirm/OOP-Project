@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class SubTask {
+public class Subtask {
 
     /**
      * Id of a SubTask
@@ -38,7 +38,7 @@ public class SubTask {
      * Empty constructor for object mappers
      */
     @SuppressWarnings("unused")
-    private SubTask() {
+    private Subtask() {
         // for object mappers
     }
 
@@ -48,7 +48,7 @@ public class SubTask {
      * @param done done status of a subtask
      * @param place place of a SubTask in a card
      */
-    public SubTask(String title, boolean done, int place) {
+    public Subtask(String title, boolean done, int place) {
         this.title = title;
         this.done = done;
         this.place = place;
@@ -58,7 +58,7 @@ public class SubTask {
      * Create a new SubTask instance, which has done status as false and place as 0
      * @param title title of a subtask
      */
-    public SubTask(String title) {
+    public Subtask(String title) {
         this.title = title;
         this.done = false;
         this.place = 0;
@@ -73,9 +73,9 @@ public class SubTask {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (!(o instanceof SubTask)) return false;
+        if (!(o instanceof Subtask)) return false;
 
-        SubTask subTask = (SubTask) o;
+        Subtask subTask = (Subtask) o;
 
         return new EqualsBuilder()
                 .append(id, subTask.id)

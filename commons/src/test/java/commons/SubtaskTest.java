@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SubTaskTest {
+public class SubtaskTest {
 
-    SubTask subTask;
+    Subtask subTask;
 
     @BeforeEach
     public void setUp()
     {
-        subTask = new SubTask("Test SubTask", true, 1);
+        subTask = new Subtask("Test SubTask", true, 1);
         subTask.id = 7L;
     }
 
@@ -32,10 +32,10 @@ public class SubTaskTest {
     @Test
     public void testEqualsHashcode()
     {
-        SubTask subTask2 = new SubTask("Test SubTask", true, 1);
-        subTask2.id = 7L;
-        assertEquals(subTask, subTask2);
-        assertEquals(subTask.hashCode(), subTask2.hashCode());
+        Subtask subtask2 = new Subtask("Test SubTask", true, 1);
+        subtask2.id = 7L;
+        assertEquals(subTask, subtask2);
+        assertEquals(subTask.hashCode(), subtask2.hashCode());
     }
 
     /**
@@ -44,10 +44,10 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsID()
     {
-        SubTask subTask1 = new SubTask("Test SubTask 1", true, 1);
-        subTask1.id = 8L;
-        assertNotEquals(subTask, subTask1);
-        assertNotEquals(subTask.hashCode(), subTask1.hashCode());
+        Subtask subtask1 = new Subtask("Test SubTask 1", true, 1);
+        subtask1.id = 8L;
+        assertNotEquals(subTask, subtask1);
+        assertNotEquals(subTask.hashCode(), subtask1.hashCode());
     }
 
     /**
@@ -56,10 +56,10 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsTitle()
     {
-        SubTask subTask3 = new SubTask("Test SubTask 3", true, 1);
-        subTask3.id = 7L;
-        assertNotEquals(subTask, subTask3);
-        assertNotEquals(subTask.hashCode(), subTask3.hashCode());
+        Subtask subtask3 = new Subtask("Test SubTask 3", true, 1);
+        subtask3.id = 7L;
+        assertNotEquals(subTask, subtask3);
+        assertNotEquals(subTask.hashCode(), subtask3.hashCode());
     }
 
     /**
@@ -68,10 +68,10 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsDone()
     {
-        SubTask subTask2 = new SubTask("Test SubTask",false,1);
-        subTask2.id = 7L;
-        assertNotEquals(subTask, subTask2);
-        assertNotEquals(subTask.hashCode(), subTask2.hashCode());
+        Subtask subtask2 = new Subtask("Test SubTask",false,1);
+        subtask2.id = 7L;
+        assertNotEquals(subTask, subtask2);
+        assertNotEquals(subTask.hashCode(), subtask2.hashCode());
     }
 
     /**
@@ -80,10 +80,10 @@ public class SubTaskTest {
     @Test
     public void testNotEqualsPlace()
     {
-        SubTask subTask2 = new SubTask("Test SubTask",false,2);
-        subTask2.id = 7L;
-        assertNotEquals(subTask, subTask2);
-        assertNotEquals(subTask.hashCode(), subTask2.hashCode());
+        Subtask subtask2 = new Subtask("Test SubTask",false,2);
+        subtask2.id = 7L;
+        assertNotEquals(subTask, subtask2);
+        assertNotEquals(subTask.hashCode(), subtask2.hashCode());
     }
 
     /**

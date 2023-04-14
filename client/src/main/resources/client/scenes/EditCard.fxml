@@ -24,11 +24,13 @@
 
 
         <HBox fx:id="tagBox" layoutX="23.0" layoutY="250.0" prefHeight="31.0" prefWidth="538.0" style="-fx-border-color: transparent; -fx-background-color: transparent;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="90.0" />
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" prefWidth="680.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="300">
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" prefWidth="680.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="300" fitToWidth="true">
          <content>
-            <VBox fx:id="subtaskBox" />
+             <AnchorPane>
+                 <VBox fx:id="subtaskBox" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
+             </AnchorPane>
          </content></ScrollPane>
-        <ComboBox fx:id="tagsList" layoutX="598.0" layoutY="252.0" prefHeight="28.0" prefWidth="82.0" promptText="Tags" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;" AnchorPane.rightAnchor="20.0">
+        <ComboBox fx:id="unusedTagsList" layoutX="598.0" layoutY="252.0" prefHeight="28.0" prefWidth="82.0" promptText="Tags" style="-fx-border-color: #2274A5; -fx-background-color: #f8f9fa; -fx-border-radius: 30%; -fx-background-radius: 30%;" AnchorPane.rightAnchor="20.0">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
@@ -41,6 +43,11 @@
              <cursor>
                 <Cursor fx:constant="HAND" />
              </cursor>
+        </Button>
+        <Button alignment="CENTER" layoutX="145.0" layoutY="300.0" mnemonicParsing="false" onAction="#deleteCard" text="Delete Card" textFill="#a32222" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="20.0">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
         </Button>
       <Button alignment="CENTER" layoutX="474.0" layoutY="363.0" mnemonicParsing="false" onAction="#newSubtask" text="Add subtask" textFill="#2274a5" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="132.0">
          <cursor>

@@ -7,6 +7,7 @@ import server.database.*;
 import server.services.interfaces.CardService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -70,19 +71,21 @@ public class CardServiceImpl implements CardService {
         if(original.tags==null) original.tags = new ArrayList<>();
         if(card.tags==null) card.tags = new ArrayList<>();
         for(Tag tagOriginal : original.tags) {
-            if(!card.tags.contains(tagOriginal)) {
-                if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
-                tagOriginal.cards.remove(original);
-                tagRepo.save(tagOriginal);
-            }
+            if(tagOriginal.cards == null) tagOriginal.cards = new ArrayList<>();
+            tagOriginal.cards.remove(original);
+            tagRepo.save(tagOriginal);
         }
+        List<Tag> tags = new ArrayList<>();
         for(Tag tagCard : card.tags) {
-            if(!original.tags.contains(tagCard)) {
-                if(tagCard.cards == null) tagCard.cards = new ArrayList<>();
-                tagCard.cards.add(card);
-                tagRepo.save(tagCard);
+            if(!tagRepo.existsById(tagCard.id)){
+                continue;
             }
+            if(tagCard.cards == null) tagCard.cards = new ArrayList<>();
+            tagCard.cards.add(card);
+            tagRepo.save(tagCard);
+            tags.add(tagCard);
         }
+        card.tags = tags;
 
         if(original.subtasks==null) original.subtasks = new ArrayList<>();
         if(card.subtasks==null) card.subtasks = new ArrayList<>();
@@ -162,5 +165,37 @@ public class CardServiceImpl implements CardService {
         subtask = subtaskRepo.save(subtask);
         cardRepo.save(card);
         return subtask;
+    }
+
+    /**
+     * Reorder subtasks when drag and drop
+     * @param cardId - the card in which to move the subtask
+     * @param subtaskId - the subtask to move
+     * @param subtaskPlace - the place to move it
+     * @return the saved card
+     * Returns null if IDs and position do not exist
+     */
+    @Override
+    public Card reorder(long cardId, long subtaskId, int subtaskPlace) {
+        if (cardId < 0 || !cardRepo.existsById(cardId)) {
+            return  null;
+        }
+        if (subtaskId < 0 || !subtaskRepo.existsById(subtaskId)) return null;
+        Card card = cardRepo.findById(cardId).get();
+        Subtask subtask = subtaskRepo.findById(subtaskId).get();
+        if (!card.subtasks.contains(subtask)) return null;
+        card.subtasks.remove(subtask);
+        if (subtaskPlace < card.subtasks.size()) {
+            card.subtasks.add(subtaskPlace, subtask);
+        } else {
+            card.subtasks.add(subtask);
+        }
+        int place = 1;
+        for(Subtask s : card.subtasks) {
+            s.place = place;
+            place++;
+        }
+        cardRepo.save(card);
+        return card;
     }
 }

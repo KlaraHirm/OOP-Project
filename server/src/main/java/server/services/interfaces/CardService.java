@@ -12,4 +12,5 @@ public interface CardService {
     Card deleteCard(long boardId, long listId, long cardId);
     Card deleteTagFromCard(long cardId, Tag tag);
     Subtask addSubtask(Subtask subtask, long id);
+    Card reorder(long cardId, long subtaskId, int subtaskPlace);
 }

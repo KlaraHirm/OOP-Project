@@ -3,11 +3,10 @@ package server.api;
 import commons.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
-import server.services.CardServiceImpl;
 import server.services.TagServiceImpl;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/tag")
@@ -15,6 +14,11 @@ public class TagController {
 
     @Autowired
     TagServiceImpl tagService;
+
+    @Autowired
+    SimpMessageSendingOperations messageTemplate;
+
+    String update = "updates";
 
     /**
      * Retrieve particular Tag using ID
@@ -47,6 +51,7 @@ public class TagController {
         if (changedTag == null || changedTag.title == null) return ResponseEntity.badRequest().build();
         Tag retrieved = tagService.editTag(changedTag);
         if (retrieved == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(retrieved);
     }
 
@@ -68,6 +73,7 @@ public class TagController {
         if (retrieved  == null) {
             return ResponseEntity.notFound().build();
         }
+        messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(retrieved);
     }
 }

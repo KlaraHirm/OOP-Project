@@ -311,5 +311,40 @@ public class CardControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), sut.addSubtask(new Subtask(null), 1L));
     }
 
+    @Test
+    public void testReorder() {
+        Subtask subtask1 = new Subtask("Subtask1");
+        subtask1.id = 1L;
+        subtask1.place = 1;
+        when(subtaskRepo.existsById(1L)).thenReturn(true);
+        when(subtaskRepo.findById(1L)).thenReturn(Optional.of(subtask1));
+        Card card = new Card("CL1");
+        card.id = 1L;
+        when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        card.subtasks.add(subtask1);
+        assertTrue(Objects.requireNonNull(sut.reorder(1L, 1L,  1).getBody()).subtasks.contains(subtask1));
+        // assertFalse(Objects.requireNonNull(sut.getList(1L).getBody()).subtasks.contains(subtask1));
+    }
 
+    @Test
+    public void testReorder404() {
+        Subtask subtask1 = new Subtask("Subtask1");
+        subtask1.id = 1L;
+        subtask1.place = 1;
+        when(subtaskRepo.existsById(1L)).thenReturn(true);
+        when(subtaskRepo.findById(1L)).thenReturn(Optional.of(subtask1));
+        Card card = new Card("CL1");
+        card.id = 1L;
+        Mockito.lenient().when(cardRepo.existsById(1L)).thenReturn(true);
+        when(cardRepo.findById(1L)).thenReturn(Optional.of(card));
+        assertEquals(ResponseEntity.notFound().build(), sut.reorder(1L, 1L, 1));
+    }
+
+    @Test
+    public void testReorder400() {
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(-1L, 2L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, -2L, 1));
+        assertEquals(ResponseEntity.badRequest().build(), sut.reorder(1L, 2L, -1));
+    }
 }

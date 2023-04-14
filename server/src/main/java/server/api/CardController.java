@@ -1,6 +1,8 @@
 package server.api;
 
 import commons.Card;
+import commons.CardList;
+import commons.Subtask;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -138,6 +140,68 @@ public class CardController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(card.tags);
+    }
+
+    /**
+     * Removes Tag from a Card
+     * @param cardId id of a card
+     * @param tag tag to be removed from card
+     * @return updated card
+     * Gives 400 if cardId < 0 or tag is null or tag.title is null
+     * Gives 404 if card doesn't exist or card doesn't contain the tag or the tag isn't in card
+     */
+    @DeleteMapping("/tag/{id}")
+    public ResponseEntity<Card> deleteTagFromCard(@PathVariable("id") long cardId, @RequestBody Tag tag) {
+        if(cardId < 0 || tag == null || tag.title == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card card = cardService.deleteTagFromCard(cardId, tag);
+        if(card == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(card);
+    }
+
+    /**
+     * Add a Subtask on a card with ID
+     * @param subtask - Subtask object
+     * @param id - ID of the card to add it to
+     * @return the saved card
+     * Gives 404 if the CardList does not exist
+     * Gives 400 if the body is malformed
+     */
+    @PostMapping(path = {"/{id}"})
+    public ResponseEntity<Subtask> addSubtask(@RequestBody Subtask subtask, @PathVariable("id") long id)
+    {
+        if (subtask == null || subtask.title == null) return ResponseEntity.badRequest().build();
+        Subtask ret = cardService.addSubtask(subtask, id);
+        if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
+        return ResponseEntity.ok(ret);
+    }
+
+    /**
+     * Reorder subtasks when drag and drop
+     * @param cardId - the card in which to look
+     * @param subtaskId - the subtask to reorder
+     * @param subtaskPlace - the place to which to move it
+     * @return the saved target list
+     * Returns 404 if IDs and position do not exist
+     */
+    @PutMapping(path = {"/reorder"})
+    public ResponseEntity<Card> reorder(
+            @RequestParam("cardId") long cardId,
+            @RequestParam("subtaskId") long subtaskId,
+            @RequestParam("subtaskPlace") int subtaskPlace) {
+        if(cardId < 0 || subtaskId < 0 || subtaskPlace < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card ret = cardService.reorder(cardId, subtaskId, subtaskPlace);
+        if (ret == null) {
+            return  ResponseEntity.notFound().build();
+        }
+        messageTemplate.convertAndSend("/topic/updates", update);
+        return ResponseEntity.ok(ret);
     }
 
 }

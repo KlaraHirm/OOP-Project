@@ -1,15 +1,9 @@
 package server.services;
 
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.database.BoardRepository;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.database.TagRepository;
+import server.database.*;
 import server.services.interfaces.CardService;
 
 import java.util.ArrayList;
@@ -30,12 +24,21 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private TagRepository tagRepo;
 
-    public CardServiceImpl(CardRepository cardRepo, CardListRepository listRepo, BoardRepository boardRepo, TagRepository tagRepo) {
+    @Autowired
+    private SubtaskRepository subtaskRepo;
 
+    public CardServiceImpl(
+            CardRepository cardRepo,
+            CardListRepository listRepo,
+            BoardRepository boardRepo,
+            TagRepository tagRepo,
+            SubtaskRepository subtaskRepo
+    ) {
         this.cardRepo = cardRepo;
         this.listRepo = listRepo;
         this.boardRepo = boardRepo;
         this.tagRepo = tagRepo;
+        this.subtaskRepo = subtaskRepo;
     }
 
 
@@ -83,6 +86,20 @@ public class CardServiceImpl implements CardService {
             tags.add(tagCard);
         }
         card.tags = tags;
+
+        if(original.subtasks==null) original.subtasks = new ArrayList<>();
+        if(card.subtasks==null) card.subtasks = new ArrayList<>();
+        for(Subtask subtaskOriginal : original.subtasks) {
+            if(!card.subtasks.contains(subtaskOriginal)) {
+                subtaskRepo.save(subtaskOriginal);
+            }
+        }
+        for(Subtask subtaskCard : card.subtasks) {
+            if(!original.subtasks.contains(subtaskCard)) {
+                subtaskRepo.save(subtaskCard);
+            }
+        }
+
         return cardRepo.save(card);
     }
 
@@ -112,5 +129,73 @@ public class CardServiceImpl implements CardService {
         cardRepo.deleteById(cardId);
 
         return deleted;
+    }
+
+    @Override
+    public Card deleteTagFromCard(long cardId, Tag tag) {
+        if(!cardRepo.existsById(cardId)){
+            return null;
+        }
+        Card card = cardRepo.findById(cardId).get();
+        if(!card.tags.contains(tag) || !tag.cards.contains(card)) {
+            return null;
+        }
+        card.tags.remove(tag);
+        tag.cards.remove(card);
+        cardRepo.save(card);
+        tagRepo.save(tag);
+        return card;
+    }
+
+    /**
+     * Add a subtask on a card with ID
+     * @param subtask - Subtask object
+     * @param cardId - ID of the CardList to which Card should be attached
+     * @return the saved card
+     * Gives null if the CardList does not exist
+     * Gives null if the body is malformed
+     */
+    @Override
+    public Subtask addSubtask(Subtask subtask, long cardId) {
+        if (subtask == null || subtask.title == null) return null;
+        if (cardId < 0 || !cardRepo.existsById(cardId)) return null;
+        Card card = cardRepo.findById(cardId).get();
+        card.subtasks.add(subtask);
+        subtask.place = card.subtasks.size();
+        subtask = subtaskRepo.save(subtask);
+        cardRepo.save(card);
+        return subtask;
+    }
+
+    /**
+     * Reorder subtasks when drag and drop
+     * @param cardId - the card in which to move the subtask
+     * @param subtaskId - the subtask to move
+     * @param subtaskPlace - the place to move it
+     * @return the saved card
+     * Returns null if IDs and position do not exist
+     */
+    @Override
+    public Card reorder(long cardId, long subtaskId, int subtaskPlace) {
+        if (cardId < 0 || !cardRepo.existsById(cardId)) {
+            return  null;
+        }
+        if (subtaskId < 0 || !subtaskRepo.existsById(subtaskId)) return null;
+        Card card = cardRepo.findById(cardId).get();
+        Subtask subtask = subtaskRepo.findById(subtaskId).get();
+        if (!card.subtasks.contains(subtask)) return null;
+        card.subtasks.remove(subtask);
+        if (subtaskPlace < card.subtasks.size()) {
+            card.subtasks.add(subtaskPlace, subtask);
+        } else {
+            card.subtasks.add(subtask);
+        }
+        int place = 1;
+        for(Subtask s : card.subtasks) {
+            s.place = place;
+            place++;
+        }
+        cardRepo.save(card);
+        return card;
     }
 }

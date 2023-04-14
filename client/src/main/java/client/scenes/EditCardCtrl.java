@@ -221,6 +221,9 @@ public class EditCardCtrl implements Initializable {
     public void submit() throws IOException {
         card.title = titleField.getText();
         card.description = bodyField.getText();
+        for(Subtask subtask: card.subtasks) {
+            reorderSubtask(subtask, subtask.place-1);
+        }
         server.editCard(card);
         tagBox.getChildren().clear();
         mainCtrl.showOverview(board);

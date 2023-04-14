@@ -126,7 +126,16 @@ public class SubtaskCtrl {
             page.getChildren().remove(subtaskContainer);
             if (!subtaskList.getChildren().contains(subtaskContainer)) {
                 subtaskList.getChildren().add(subtaskContainer);
-                editCtrl.reorderSubtask(subtask, card.subtasks.size()+1);
+                int taskIndex = card.subtasks.indexOf(subtask);
+                card.subtasks.remove(subtask);
+                subtask.place = card.subtasks.size();
+                card.subtasks.add(taskIndex, subtask);
+//                editCtrl.reorderSubtask(subtask, card.subtasks.size()+1);
+            }
+            try {
+                editCtrl.setCard(card);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
@@ -170,7 +179,11 @@ public class SubtaskCtrl {
                 }
                 else {
                     subtaskList.getChildren().add(indexCard, subtaskContainer);
-                    editCtrl.reorderSubtask(subtask, indexCard);
+                    int taskIndex = card.subtasks.indexOf(subtask);
+                    card.subtasks.remove(subtask);
+                    subtask.place = indexCard+1;
+                    card.subtasks.add(taskIndex, subtask);
+//                    editCtrl.reorderSubtask(subtask, indexCard);
                     break;
                 }
             }
@@ -178,7 +191,11 @@ public class SubtaskCtrl {
         if(!subtaskList.getChildren().contains(subtaskContainer)) {
             if(firstIndex!=-1) {
                 subtaskList.getChildren().add(firstIndex, subtaskContainer);
-                editCtrl.reorderSubtask(subtask, firstIndex);
+                int taskIndex = card.subtasks.indexOf(subtask);
+                card.subtasks.remove(subtask);
+                subtask.place = firstIndex+1;
+                card.subtasks.add(taskIndex, subtask);
+//                editCtrl.reorderSubtask(subtask, firstIndex);
             }
         }
         page.getChildren().remove(subtaskContainer);

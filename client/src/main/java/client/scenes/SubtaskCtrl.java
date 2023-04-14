@@ -128,8 +128,8 @@ public class SubtaskCtrl {
                 subtaskList.getChildren().add(subtaskContainer);
                 int taskIndex = card.subtasks.indexOf(subtask);
                 card.subtasks.remove(subtask);
-                subtask.place = card.subtasks.size();
-                card.subtasks.add(taskIndex, subtask);
+//                subtask.place = card.subtasks.size();
+                card.subtasks.add(subtask);
 //                editCtrl.reorderSubtask(subtask, card.subtasks.size()+1);
             }
             try {
@@ -181,8 +181,8 @@ public class SubtaskCtrl {
                     subtaskList.getChildren().add(indexCard, subtaskContainer);
                     int taskIndex = card.subtasks.indexOf(subtask);
                     card.subtasks.remove(subtask);
-                    subtask.place = indexCard+1;
-                    card.subtasks.add(taskIndex, subtask);
+//                    subtask.place = indexCard+1;
+                    card.subtasks.add(indexCard, subtask);
 //                    editCtrl.reorderSubtask(subtask, indexCard);
                     break;
                 }
@@ -193,8 +193,8 @@ public class SubtaskCtrl {
                 subtaskList.getChildren().add(firstIndex, subtaskContainer);
                 int taskIndex = card.subtasks.indexOf(subtask);
                 card.subtasks.remove(subtask);
-                subtask.place = firstIndex+1;
-                card.subtasks.add(taskIndex, subtask);
+//                subtask.place = firstIndex+1;
+                card.subtasks.add(firstIndex, subtask);
 //                editCtrl.reorderSubtask(subtask, firstIndex);
             }
         }

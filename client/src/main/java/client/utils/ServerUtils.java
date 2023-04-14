@@ -3,10 +3,7 @@ package client.utils;
 import client.scenes.MainPageCtrl;
 import client.socket.ClientSocket;
 import client.socket.StompSessionHandler;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -301,6 +298,38 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete(Tag.class);
+    }
+
+    /**
+     * add newly created subtask to db
+     * @param card object of class Card where the subtask is
+     * @param subtask newly create object of class Subtask which is to be added to the db
+     * @return updated card (with updated id)
+     */
+    public Subtask addSubtask(Subtask subtask, Card card) {
+        return client //
+                .target(serverURL).path("api/card/"+card.id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+    }
+
+    /**
+     * edit subtask
+     * @param subtask subtask to be edited
+     * @param card card where subtask is
+     * @param index new place of subtask
+     * @return edited subtask
+     */
+    public Card reorderSubtask(Subtask subtask, Card card, int index) {
+        return client //
+                .target(serverURL).path("api/card/reorder") //
+                .queryParam("cardId", card.id) //
+                .queryParam("subtaskId", subtask.id) //
+                .queryParam("subtaskPlace", index) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(subtask, APPLICATION_JSON), Card.class);
     }
 
     /**

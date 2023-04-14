@@ -94,10 +94,11 @@ public class CardServiceImpl implements CardService {
                 subtaskRepo.save(subtaskOriginal);
             }
         }
+        int place = 1;
         for(Subtask subtaskCard : card.subtasks) {
-            if(!original.subtasks.contains(subtaskCard)) {
-                subtaskRepo.save(subtaskCard);
-            }
+            subtaskCard.place = place;
+            subtaskRepo.save(subtaskCard);
+            place++;
         }
 
         return cardRepo.save(card);
@@ -193,6 +194,7 @@ public class CardServiceImpl implements CardService {
         int place = 1;
         for(Subtask s : card.subtasks) {
             s.place = place;
+            subtaskRepo.save(s);
             place++;
         }
         cardRepo.save(card);

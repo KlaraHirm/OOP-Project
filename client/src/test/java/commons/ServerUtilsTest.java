@@ -303,4 +303,17 @@ public class ServerUtilsTest {
         assertEquals(Arrays.asList("boardId"), webTargetMock.queryParamKeys);
     }
 
+    @Test
+    void testEditSubtaskPosition() {
+        Subtask task = new Subtask("title");
+        Subtask task2 = new Subtask("title");
+        Card card = new Card("card");
+        serverUtils.reorderSubtask(task, card, 2);
+        assertEquals(serverURL, client.url);
+        assertEquals("api/card/reorder", webTargetMock.path);
+        assertEquals("PUT", builderMock.method);
+        assertEquals(task, builderMock.entity.getEntity());
+        assertEquals(Arrays.asList("cardId", "subtaskId", "subtaskPlace"), webTargetMock.queryParamKeys);
+    }
+
 }

@@ -193,6 +193,7 @@ public class CardServiceImpl implements CardService {
         int place = 1;
         for(Subtask s : card.subtasks) {
             s.place = place;
+            subtaskRepo.save(s);
             place++;
         }
         cardRepo.save(card);

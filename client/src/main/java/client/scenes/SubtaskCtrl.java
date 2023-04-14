@@ -126,8 +126,7 @@ public class SubtaskCtrl {
             page.getChildren().remove(subtaskContainer);
             if (!subtaskList.getChildren().contains(subtaskContainer)) {
                 subtaskList.getChildren().add(subtaskContainer);
-                subtask.place = card.subtasks.size();
-                editCtrl.editSubtask(subtask);
+                editCtrl.reorderSubtask(subtask, card.subtasks.size()+1);
             }
             mouseAnchorX = mouseEvent.getSceneX();
             mouseAnchorY = mouseEvent.getSceneY();
@@ -151,7 +150,6 @@ public class SubtaskCtrl {
         AnchorPane.setRightAnchor(subtaskContainer, null);
 
         ScrollPane listScrollPane = (ScrollPane)page.lookup("#scrollPane");
-//        VBox listParent = (VBox)listScrollPane.getParent();
         subtaskContainer.setLayoutX(page.getLayoutX() + x);
         subtaskContainer.setLayoutY(page.getLayoutY() + y + listScrollPane.getLayoutY());
     }
@@ -172,8 +170,7 @@ public class SubtaskCtrl {
                 }
                 else {
                     subtaskList.getChildren().add(indexCard, subtaskContainer);
-                    subtask.place = indexCard;
-                    editCtrl.editSubtask(subtask);
+                    editCtrl.reorderSubtask(subtask, indexCard);
                     break;
                 }
             }
@@ -181,8 +178,7 @@ public class SubtaskCtrl {
         if(!subtaskList.getChildren().contains(subtaskContainer)) {
             if(firstIndex!=-1) {
                 subtaskList.getChildren().add(firstIndex, subtaskContainer);
-                subtask.place = firstIndex;
-                editCtrl.editSubtask(subtask);
+                editCtrl.reorderSubtask(subtask, firstIndex);
             }
         }
         page.getChildren().remove(subtaskContainer);

@@ -302,7 +302,7 @@ public class EditCardCtrl implements Initializable {
         card.subtasks.remove(subtask);
     }
 
-    public void editSubtask(Subtask subtask) {
-        server.editSubtask(subtask);
+    public void reorderSubtask(Subtask subtask, int index) {
+        card = server.reorderSubtask(subtask, card, index);
     }
 }

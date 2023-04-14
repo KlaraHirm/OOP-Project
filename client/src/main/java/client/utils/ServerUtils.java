@@ -317,14 +317,19 @@ public class ServerUtils {
     /**
      * edit subtask
      * @param subtask subtask to be edited
+     * @param card card where subtask is
+     * @param index new place of subtask
      * @return edited subtask
      */
-    public Subtask editSubtask(Subtask subtask) {
+    public Card reorderSubtask(Subtask subtask, Card card, int index) {
         return client //
-                .target(serverURL).path("api/subtask") //
+                .target(serverURL).path("api/card/reorder") //
+                .queryParam("cardId", card.id) //
+                .queryParam("subtaskId", subtask.id) //
+                .queryParam("subtaskPlace", index) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+                .put(Entity.entity(subtask, APPLICATION_JSON), Card.class);
     }
 
     /**

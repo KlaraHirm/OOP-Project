@@ -126,6 +126,7 @@ public class CardListServiceImpl implements CardListService {
         int place = 0;
         for(Card oldListCard : oldList.cards) {
             oldListCard.place = place;
+            cardRepo.save(oldListCard);
             place++;
         }
         if (cardPlace < newList.cards.size()) {
@@ -136,6 +137,7 @@ public class CardListServiceImpl implements CardListService {
         place = 1;
         for(Card newListCard : newList.cards) {
             newListCard.place = place;
+            cardRepo.save(newListCard);
             place++;
         }
         listRepo.save(oldList);

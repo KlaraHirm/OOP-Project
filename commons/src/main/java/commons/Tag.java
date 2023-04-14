@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -58,8 +59,10 @@ public class Tag {
      * @param title - Title of Tag
      */
     public Tag(String title){
+
         this.title = title;
         this.color = "#6FA8DC";
+        this.cards = new ArrayList<>();
     }
 
     /**
@@ -75,6 +78,7 @@ public class Tag {
         return new EqualsBuilder()
                 .append(id, tag.id)
                 .append(title, tag.title)
+                .append(cards, tag.cards)
                 .isEquals();
     }
 
@@ -88,6 +92,7 @@ public class Tag {
         return new HashCodeBuilder(17, 37)
                 .append(id)
                 .append(title)
+                .append(cards)
                 .toHashCode();
     }
 
@@ -101,6 +106,7 @@ public class Tag {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("title", title)
+                .append("cards", cards)
                 .toString();
     }
 }

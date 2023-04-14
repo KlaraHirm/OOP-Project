@@ -92,6 +92,7 @@ public class Card
         this.description = "";
         this.done = false;
         this.subtasks = new ArrayList<Subtask>();
+        this.tags = new ArrayList<Tag>();
     }
 
     /**

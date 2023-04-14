@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.CardList;
 import commons.Subtask;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,6 +176,30 @@ public class CardController {
         if (subtask == null || subtask.title == null) return ResponseEntity.badRequest().build();
         Subtask ret = cardService.addSubtask(subtask, id);
         if (ret == null) return ResponseEntity.notFound().build();
+        messageTemplate.convertAndSend("/topic/updates", update);
+        return ResponseEntity.ok(ret);
+    }
+
+    /**
+     * Reorder subtasks when drag and drop
+     * @param cardId - the card in which to look
+     * @param subtaskId - the subtask to reorder
+     * @param subtaskPlace - the place to which to move it
+     * @return the saved target list
+     * Returns 404 if IDs and position do not exist
+     */
+    @PutMapping(path = {"/reorder"})
+    public ResponseEntity<Card> reorder(
+            @RequestParam("cardId") long cardId,
+            @RequestParam("subtaskId") long subtaskId,
+            @RequestParam("subtaskPlace") int subtaskPlace) {
+        if(cardId < 0 || subtaskId < 0 || subtaskPlace < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card ret = cardService.reorder(cardId, subtaskId, subtaskPlace);
+        if (ret == null) {
+            return  ResponseEntity.notFound().build();
+        }
         messageTemplate.convertAndSend("/topic/updates", update);
         return ResponseEntity.ok(ret);
     }

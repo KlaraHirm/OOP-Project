@@ -78,4 +78,14 @@ public class EditBoardCtrl {
         mainCtrl.showOverview(board);
     }
 
+    public void resetBoard() {
+        fontColor.setValue(Color.web("#2274a5"));
+        backgroundColor.setValue(Color.web("#cae2f0"));
+    }
+
+    public void resetList() {
+        listFontColor.setValue(Color.web("#2274a5"));
+        listBackgroundColor.setValue(Color.web("#eff6fa"));
+    }
+
 }

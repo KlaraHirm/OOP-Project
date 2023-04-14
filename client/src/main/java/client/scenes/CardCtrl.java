@@ -132,7 +132,14 @@ public class CardCtrl {
      */
     public void setFields() {
         title.setText(cardObject.title + " (" + cardObject.id + ")");
-        description.setText(cardObject.description);
+        String descriptionText = "";
+        if (cardObject.subtasks.size() > 0) {
+            descriptionText += cardObject.subtasks.stream().filter(s -> s.done).toArray().length
+                            + "/" + cardObject.subtasks.size();
+            if (!cardObject.description.isBlank()) descriptionText += " - ";
+        }
+        descriptionText += cardObject.description;
+        description.setText(descriptionText);
         done.setSelected(cardObject.done);
         for(Tag tag:cardObject.tags) {
             Circle tagSymbol = new Circle();

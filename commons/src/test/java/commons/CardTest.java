@@ -16,6 +16,7 @@ class CardTest
     public void setUp()
     {
         card = new Card("Test Card", 1, "Description", true);
+        card.subtasks = new ArrayList<>();
         card.tags = new ArrayList<>();
         card.id = 7L;
     }
@@ -26,7 +27,9 @@ class CardTest
     @Test
     public void testConstructor()
     {
+
         assertEquals("Test Card", card.title);
+        assertEquals(0, card.subtasks.size());
     }
 
     /**
@@ -37,6 +40,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 7L;
+        card2.subtasks = new ArrayList<>();
         card2.tags = new ArrayList<>();
         assertEquals(card, card2);
         assertEquals(card.hashCode(), card2.hashCode());
@@ -51,6 +55,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description", true);
         card2.id = 8L;
+        card2.subtasks = new ArrayList<>();
         card2.tags = new ArrayList<>();
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
@@ -78,6 +83,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card 2", 1, "Description", true);
         card2.id = 7L;
+        card2.subtasks = new ArrayList<>();
         card2.tags = new ArrayList<>();
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
@@ -91,6 +97,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 1, "Description 2", true);
         card2.id = 7L;
+        card2.subtasks = new ArrayList<>();
         card2.tags = new ArrayList<>();
         assertNotEquals(card, card2);
         assertNotEquals(card.hashCode(), card2.hashCode());
@@ -103,6 +110,22 @@ class CardTest
     public void testNotEqualsDone()
     {
         Card card2 = new Card("Test Card", 1, "Description", false);
+        card2.id = 7L;
+        card2.subtasks = new ArrayList<>();
+        card2.tags = new ArrayList<>();
+        assertNotEquals(card, card2);
+        assertNotEquals(card.hashCode(), card2.hashCode());
+    }
+
+    /**
+     * Test that the Card Equals method returns false and the hashcodes differ when different subTasks
+     */
+    @Test
+    public void testNotEqualsSubTasks()
+    {
+        Card card2 = new Card("Test Card", 1, "Description", false);
+        card2.subtasks = new ArrayList<>();
+        card2.subtasks.add(new Subtask("Test SubTask"));
         card2.id = 7L;
         Tag tag = new Tag("Test Tag");
         card2.tags.add(tag);
@@ -120,6 +143,7 @@ class CardTest
     {
         Card card2 = new Card("Test Card", 3, "Description", true);
         card2.id = 7L;
+        card2.subtasks = new ArrayList<>();
         card2.tags = new ArrayList<>();
         assertEquals(card, card2);
         assertEquals(card.hashCode(), card2.hashCode());

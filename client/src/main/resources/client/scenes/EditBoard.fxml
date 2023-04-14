@@ -3,6 +3,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="350.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditBoardCtrl">
@@ -19,6 +20,40 @@
                 <Cursor fx:constant="HAND" />
             </cursor></Button>
       <Button alignment="CENTER" layoutX="77.0" layoutY="300.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" textFill="#2274a5">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <ColorPicker fx:id="backgroundColor" editable="true" layoutX="182.0" layoutY="124.0" promptText="Background Color" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="124.0">
+         <value>
+            <Color red="0.7921568751335144" green="0.886274516582489" blue="0.9411764740943909" />
+         </value>
+      </ColorPicker>
+      <Label layoutX="20.0" layoutY="128.0" text="Board Background Color:" textFill="#2274a5" />
+      <Label layoutX="20.0" layoutY="158.0" text="Board Font Color:" textFill="#2274a5" />
+      <ColorPicker fx:id="fontColor" editable="true" layoutX="182.0" layoutY="154.0" AnchorPane.leftAnchor="182.0" AnchorPane.topAnchor="154.0">
+         <value>
+            <Color red="0.13333334028720856" green="0.45490196347236633" blue="0.6470588445663452" />
+         </value>
+      </ColorPicker>
+      <Label layoutX="20.0" layoutY="189.0" text="List Background Color:" textFill="#2274a5" />
+      <Label layoutX="20.0" layoutY="220.0" text="List Font Color:" textFill="#2274a5" />
+      <ColorPicker fx:id="listBackgroundColor" editable="true" layoutX="182.0" layoutY="185.0" promptText="Background Color">
+         <value>
+            <Color red="0.9372549057006836" green="0.9647058844566345" blue="0.9803921580314636" />
+         </value>
+      </ColorPicker>
+      <ColorPicker fx:id="listFontColor" editable="true" layoutX="182.0" layoutY="216.0">
+         <value>
+            <Color red="0.13333334028720856" green="0.45490196347236633" blue="0.6470588445663452" />
+         </value>
+      </ColorPicker>
+      <Button alignment="CENTER" layoutX="350.0" layoutY="140.0" mnemonicParsing="false" onAction="#resetBoard" text="Reset Board Colors" textFill="#2274a5">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button alignment="CENTER" layoutX="350.0" layoutY="201.0" mnemonicParsing="false" onAction="#resetList" prefHeight="26.0" prefWidth="135.0" text="Reset List Colors" textFill="#2274a5">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

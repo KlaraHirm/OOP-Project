@@ -113,4 +113,10 @@ public class ListCtrl {
     public void showEdit() {
         pageCtrl.showEditList(boardObject, listObject);
     }
+
+    public void setColors() {
+        list.setStyle("-fx-background-color: " + boardObject.listBackColor + ";");
+        listContainer.setStyle("-fx-background-color: " + boardObject.listBackColor + ";");
+        listTitle.setStyle("-fx-text-fill: " + boardObject.listFontColor + ";");
+    }
 }

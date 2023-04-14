@@ -31,9 +31,14 @@ public class Tag {
     public List<Card> cards;
 
     /**
-     * Color of tag
+     * Front color of Tag
      */
-    public String color;
+    public String fontColor;
+
+    /**
+     * Back color of Tag
+     */
+    public String backColor;
 
 
     /**
@@ -51,7 +56,9 @@ public class Tag {
      */
     public Tag(String title, String color){
         this.title = title;
-        this.color = color;
+        this.backColor = color;
+        this.fontColor = "#000000";
+        this.cards = new ArrayList<>();
     }
 
     /**
@@ -61,7 +68,8 @@ public class Tag {
     public Tag(String title){
 
         this.title = title;
-        this.color = "#6FA8DC";
+        this.backColor = "#6FA8DC";
+        this.fontColor = "#000000";
         this.cards = new ArrayList<>();
     }
 
@@ -79,6 +87,8 @@ public class Tag {
                 .append(id, tag.id)
                 .append(title, tag.title)
                 .append(cards, tag.cards)
+                .append(backColor, tag.backColor)
+                .append(fontColor, tag.fontColor)
                 .isEquals();
     }
 
@@ -93,6 +103,8 @@ public class Tag {
                 .append(id)
                 .append(title)
                 .append(cards)
+                .append(backColor)
+                .append(fontColor)
                 .toHashCode();
     }
 
@@ -107,6 +119,8 @@ public class Tag {
                 .append("id", id)
                 .append("title", title)
                 .append("cards", cards)
+                .append("backColor", backColor)
+                .append("fontColor", fontColor)
                 .toString();
     }
 }

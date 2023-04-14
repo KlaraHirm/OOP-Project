@@ -36,6 +36,9 @@ public class BoardCtrl implements Initializable {
     @FXML
     private Button newList;
 
+    @FXML
+    private Button customize;
+
     private ObservableList<Tag> dataTags;
 
     @FXML
@@ -94,9 +97,14 @@ public class BoardCtrl implements Initializable {
                     setStyle("");
                 } else {
                     setText(tag.title + " (" + tag.id + ")");
-                    if (tag.color != null && !tag.color.isEmpty()) {
-                        setBackground(new Background(new BackgroundFill(Color.web(tag.color), CornerRadii.EMPTY, Insets.EMPTY)));
-                    } else {
+                    if (tag.backColor != null && !tag.backColor.isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.web(tag.backColor), CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
+                    else if(tag.fontColor != null && !tag.fontColor.isEmpty()) {
+                        setTextFill(Color.web(tag.fontColor));
+                    }
+                    else {
+                        setTextFill(null);
                         setBackground(null);
                     }
                 }
@@ -142,6 +150,11 @@ public class BoardCtrl implements Initializable {
      */
     public void setTitle() {
         boardTitle.setText(boardObject.title + " (" + boardObject.id + ")");
+    }
+
+    public void setColors() {
+        board.setStyle("-fx-background-color: " + boardObject.backColor + ";");
+        boardTitle.setStyle("-fx-text-fill: " + boardObject.fontColor + ";");
     }
 
     /**
@@ -224,18 +237,12 @@ public class BoardCtrl implements Initializable {
 
     public String generateHexColor() {
         Random random = new Random();
-        // Generate random RGB values
         int r = 200 + random.nextInt(56);
         int g = 200 + random.nextInt(56);
         int b = 200 + random.nextInt(56);
 
-        // Ensure alpha value is "ff"
         String alpha = "ff";
 
-        // Convert RGB values to hexadecimal format
-
-        // Return hexadecimal color code
         return String.format("#%02x%02x%02x%s", r, g, b, alpha);
     }
-
 }

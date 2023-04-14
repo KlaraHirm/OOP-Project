@@ -176,9 +176,9 @@ public class MainClientCtrl {
 
     public void showEditTag(Tag tag, Board board) {
         primaryStage.setTitle("Edit Tag");
-        editTagCtrl.setFields(tag);
-        primaryStage.setScene(editTag);
         editTagCtrl.setBoard(board);
         editTagCtrl.setTag(tag);
+        editTagCtrl.setFields();
+        primaryStage.setScene(editTag);
     }
 }

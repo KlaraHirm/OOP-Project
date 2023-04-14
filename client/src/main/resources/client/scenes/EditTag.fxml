@@ -2,9 +2,11 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="tag_title" prefHeight="350.0" prefWidth="700.0" style="-fx-background-color: #e9ecef;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditTagCtrl">
@@ -30,5 +32,17 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <Label layoutX="20.0" layoutY="128.0" text="Tag Background Color:" textFill="#2274a5" AnchorPane.leftAnchor="20.0" />
+      <Label layoutX="23.0" layoutY="158.0" text="Tag Font Color:" textFill="#2274a5" AnchorPane.leftAnchor="23.0" />
+      <ColorPicker fx:id="backgroundColor" layoutX="182.0" layoutY="124.0">
+         <value>
+            <Color red="0.43529412150382996" green="0.658823549747467" blue="0.8627451062202454" />
+         </value>
+      </ColorPicker>
+      <ColorPicker fx:id="fontColor" layoutX="182.0" layoutY="154.0">
+         <value>
+            <Color />
+         </value>
+      </ColorPicker>
    </children>
 </AnchorPane>

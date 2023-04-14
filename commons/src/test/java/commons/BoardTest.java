@@ -103,6 +103,62 @@ class BoardTest
     }
 
     /**
+     * Test that the Board Equals method returns false and the hashcodes differ when different fontColor
+     */
+    @Test
+    public void testNotEqualsFontColor()
+    {
+        Board board2 = new Board("Test Board");
+        board2.tags = new ArrayList<>();
+        board2.id = 7L;
+        board2.fontColor = "#000000";
+        assertNotEquals(board, board2);
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    /**
+     * Test that the Board Equals method returns false and the hashcodes differ when different backColor
+     */
+    @Test
+    public void testNotEqualsBackColor()
+    {
+        Board board2 = new Board("Test Board");
+        board2.tags = new ArrayList<>();
+        board2.id = 7L;
+        board2.backColor = "#000000";
+        assertNotEquals(board, board2);
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    /**
+     * Test that the Board Equals method returns false and the hashcodes differ when different backColor
+     */
+    @Test
+    public void testNotEqualsListFontColor()
+    {
+        Board board2 = new Board("Test Board");
+        board2.tags = new ArrayList<>();
+        board2.id = 7L;
+        board2.listFontColor = "#000000";
+        assertNotEquals(board, board2);
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    /**
+     * Test that the Board Equals method returns false and the hashcodes differ when different backColor
+     */
+    @Test
+    public void testNotEqualsListBackColor()
+    {
+        Board board2 = new Board("Test Board");
+        board2.tags = new ArrayList<>();
+        board2.id = 7L;
+        board2.listBackColor = "#000000";
+        assertNotEquals(board, board2);
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    /**
      * Test that the Board toString method works as expected
      */
     @Test

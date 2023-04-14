@@ -6,7 +6,9 @@ import commons.Board;
 import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
@@ -16,6 +18,12 @@ public class EditTagCtrl {
     private final MainClientCtrl mainCtrl;
     @FXML
     private TextField titleField;
+
+    @FXML
+    private ColorPicker backgroundColor;
+
+    @FXML
+    private ColorPicker fontColor;
 
     private Tag tag;
 
@@ -41,12 +49,16 @@ public class EditTagCtrl {
         this.board = board;
     }
 
-    public void setFields(Tag tag) {
+    public void setFields() {
         titleField.setText(tag.title);
+        backgroundColor.setValue(Color.web(tag.backColor));
+        fontColor.setValue(Color.web(tag.fontColor));
     }
 
     public void submit() throws IOException {
         tag.title = titleField.getText();
+        tag.fontColor = "#" + fontColor.getValue().toString().substring(2, 8);
+        tag.backColor = "#" + backgroundColor.getValue().toString().substring(2, 8);
         tag = server.editTag(tag);
         mainCtrl.showOverview(board);
     }

@@ -3,8 +3,10 @@ package client.scenes;
 import client.scenes.EditCardCtrl;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class TagCtrl {
     //gets box tags go in
@@ -27,7 +29,8 @@ public class TagCtrl {
      * **/
     public void setFields(){
         tagLabel.setText(tag.title);
-        tagHBox.setStyle("-fx-background-color: " + tag.color + ";");
+        tagHBox.setStyle("-fx-background-color: " + tag.backColor + ";");
+        tagLabel.setStyle("-fx-text-fill: " + tag.fontColor + ";");
     }
 
     /**

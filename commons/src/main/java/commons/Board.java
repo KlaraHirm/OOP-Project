@@ -37,6 +37,26 @@ public class Board
     public List<Tag> tags;
 
     /**
+     * Front color of Board
+     */
+    public String fontColor;
+
+    /**
+     * Back color of board
+     */
+    public String backColor;
+
+    /**
+     * Front color of Board lists
+     */
+    public String listFontColor;
+
+    /**
+     * Back color of board lists
+     */
+    public String listBackColor;
+
+    /**
      * Empty constructor for object mappers
      */
    @SuppressWarnings("unused")
@@ -52,6 +72,10 @@ public class Board
        this.title = title;
        this.cardLists = new ArrayList<CardList>();
        this.tags = new ArrayList<>();
+       this.fontColor = "#2274a5";
+       this.backColor = "#CAE2F0";
+       this.listBackColor = "#eff6fa";
+       this.listFontColor = "#2274a5";
    }
 
     /**
@@ -73,6 +97,10 @@ public class Board
                 .append(title, board.title)
                 .append(cardLists, board.cardLists)
                 .append(tags, board.tags)
+                .append(fontColor, board.fontColor)
+                .append(backColor, board.backColor)
+                .append(listFontColor, board.listFontColor)
+                .append(listBackColor, board.listBackColor)
                 .isEquals();
     }
 
@@ -88,6 +116,10 @@ public class Board
                 .append(title)
                 .append(cardLists)
                 .append(tags)
+                .append(fontColor)
+                .append(backColor)
+                .append(listFontColor)
+                .append(listBackColor)
                 .toHashCode();
     }
 
@@ -103,6 +135,10 @@ public class Board
                 .append("title", title)
                 .append("cardLists", cardLists)
                 .append("tags", tags)
+                .append("fontColor", fontColor)
+                .append("backColor", backColor)
+                .append("listFontColor", listFontColor)
+                .append("listBackColor", listBackColor)
                 .toString();
     }
 }

@@ -176,6 +176,7 @@ public class MainPageCtrl implements Initializable {
         boardCtrl.setTitle();
         boardCtrl.setServer(server);
         boardCtrl.refreshTags();
+        boardCtrl.setColors();
         mainPage.getChildren().addAll(parent);
         IDField.setText(Long.toString(board.id));
         return parent;
@@ -263,6 +264,7 @@ public class MainPageCtrl implements Initializable {
         listCtrl.setTitle();
         listCtrl.setScrollPaneId();
         listCtrl.setListId();
+        listCtrl.setColors();
         boardElement.getChildren().addAll(parent);
         HBox.setMargin(parent, new Insets(10, 10, 10, 10));
         refresh();

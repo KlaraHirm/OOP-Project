@@ -130,9 +130,14 @@ public class EditCardCtrl implements Initializable {
                     setStyle("");
                 } else {
                     setText(tag.title + " (" + tag.id + ")");
-                    if (tag.color != null && !tag.color.isEmpty()) {
-                        setBackground(new Background(new BackgroundFill(Color.web(tag.color), CornerRadii.EMPTY, Insets.EMPTY)));
-                    } else {
+                    if (tag.backColor != null && !tag.backColor.isEmpty()) {
+                        setBackground(new Background(new BackgroundFill(Color.web(tag.backColor), CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
+                    else if(tag.fontColor != null && !tag.fontColor.isEmpty()) {
+                        setTextFill(Color.web(tag.fontColor));
+                    }
+                    else {
+                        setTextFill(null);
                         setBackground(null);
                     }
                 }
